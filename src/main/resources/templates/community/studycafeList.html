@@ -81,6 +81,8 @@ nav > div a.nav-item.nav-link:focus
 
 	<div class="container1" style="margin-left:250px; max-width:1180px">
                 <div class="col-xs-12 ">
+					<a th:href="@{'/community/communityList/studycafeWrite/' + ${board_group_no}}">
+						<button class="btn btn-primary f-s-12 rounded-corner" type="button">글쓰기</button></a>
                   <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                       <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">최신</a>
@@ -90,9 +92,9 @@ nav > div a.nav-item.nav-link:focus
                     </div>
                   </nav>
                   <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-                    
+
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    
+
           <div class="container">
 			<div class="row">  
                   

@@ -167,8 +167,21 @@ public class CommunityController {
 		
 		return "community/studycafeList";
 	}
+	/**
+	 * 커뮤니티 StudyCafeList 작성
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 * @author choiseongjun
+	 */
+	@GetMapping("/community/communityList/studycafeWrite/{board_group_no}")
+	public String studyCafeWrite(@PathVariable("board_group_no") long board_group_no) {
+
+		return "community/studycafeWrite";
+	}
 	 /**
-     * 커뮤니티 StudyCafeDetail 조회
+     * 커뮤니티 StudyCafeDetail 상세보기
      *
      * @param 
      * @return
