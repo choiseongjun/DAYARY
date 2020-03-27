@@ -1,13 +1,9 @@
 
 package us.flower.dayary.config;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -29,6 +25,7 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import us.flower.dayary.config.auth.CustomOAuth2UserService;
 import us.flower.dayary.config.handler.LoggingAccessDeniedHandler;
 import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.CustomUserDetailsService;
@@ -36,7 +33,7 @@ import us.flower.dayary.security.JwtAuthenticationEntryPoint;
 import us.flower.dayary.security.JwtAuthenticationFilter;
 
 /**
- * 시큐리티 설정 2019-09월초 by 최성준
+ * �떆�걧由ы떚 �꽕�젙 2019-09�썡珥� by 理쒖꽦以�
  */
 @Configuration
 @EnableWebSecurity
@@ -52,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
 		return new JwtAuthenticationFilter();
 	}
+	
+//	private final CustomOAuth2UserService customOAuth2UserService;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -104,9 +103,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.clearAuthentication(true)
 		.and()
 		.exceptionHandling()
-		.accessDeniedPage("/access-denied"); // 권한이 없을경우 해당 url로 이동
+		.accessDeniedPage("/access-denied")
+		.and()
+			.oauth2Login()
+			.userInfoEndpoint()
+//			.userService(customOAuth2UserService)
+		; // 沅뚰븳�씠 �뾾�쓣寃쎌슦 �빐�떦 url濡� �씠�룞
 
-	;
 
 		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
