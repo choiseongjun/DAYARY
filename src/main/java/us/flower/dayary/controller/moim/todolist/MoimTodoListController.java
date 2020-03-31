@@ -380,9 +380,9 @@ public class MoimTodoListController {
    public Map<String, Object> MoimDeleteOne(@PathVariable("no") long no) {
    
       Map<String, Object> returnData = new HashMap<String, Object>();
-      service.deleteById(no);
+      
       try {
-    	  
+    	   service.deleteById(no);	  
            returnData.put("code", "1");
            returnData.put("message", "삭제되었습니다");
 

@@ -645,11 +645,6 @@ public class MoimController {
 	 */
 	@GetMapping("/moimMakeView")
 	public String moimMakeView() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-
-		System.out.println(auth);
-		System.out.println("@#$#@$@#$@#@#");
 		return "moim/moimMake";
 	}
 
