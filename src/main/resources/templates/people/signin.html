@@ -51,7 +51,7 @@
             Password: <input type="password" name="password"/> <br/><br/>
             <input type="submit" value="Login"/>
         </form>
-
+	<input type="hidden" id="message" th:value="${message}">
 <!-- 	<script src="/js/people/signin.js"></script> -->
 	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -61,6 +61,12 @@
 	<script type="text/javascript"
 		src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script>
+	$(document).ready(function(){
+		if($("#message").val()){
+			alert($("#message").val());	
+			}
+		});
+	
 		/* 구글 */
 		function onSignIn(googleUser) {
 			// Useful data for your client-side scripts:
