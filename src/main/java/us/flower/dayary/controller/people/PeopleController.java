@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import us.flower.dayary.common.BCRYPT;
 import us.flower.dayary.common.FileManager;
 import us.flower.dayary.common.TokenGenerator;
-import us.flower.dayary.common.emailManager;
 import us.flower.dayary.config.NaverLoginBO;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.Role;
@@ -46,7 +46,6 @@ import us.flower.dayary.payload.LoginRequest;
 import us.flower.dayary.payload.SignUpRequest;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.repository.people.RoleRepository;
-import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.JwtTokenProvider;
 import us.flower.dayary.service.people.PeopleService;
 
@@ -100,7 +99,6 @@ public class PeopleController {
 			,HttpServletResponse response,Authentication authentication,ModelAndView mav) throws ServletException {
 			String username = authentication.getName();
 			People dbPeople = peopleRepository.findByName(username);
-//			System.out.println("SFSDFSDFDFSDFSDFSDFSDFSD");
 //			session.setAttribute("peopleId", dbPeople.getId());// NO세션저장
 //			session.setAttribute("peopleName", dbPeople.getName());// 이름세션저장
 //			session.setAttribute("peopleEmail", dbPeople.getEmail());// ID세션저장
@@ -108,13 +106,20 @@ public class PeopleController {
 			if(request.isUserInRole("ROLE_ADMIN")) {
 		    	return "redirect:/admin/admini";
 		    	//mav.setViewName("redirect:/admin/admini");
+		    }else {
+				if(dbPeople.getActivation().equals("Y")) {
+					return "redirect:/";
+				}else {
+					return "redirect:/authlogout";
+				}
 		    }
+			
+			
 //			String savePage = (String)session.getAttribute("savePage");
 //			if(savePage!=null) {
 //				mav.setViewName("redirect:/"+savePage);
 //				session.setAttribute("savePage", null);
 //			}
-		return "redirect:/";
 	}
 	@PostMapping("/signin")
 	@ResponseBody
@@ -306,10 +311,19 @@ public class PeopleController {
 
 	
 
-
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		return "main";
+	/*
+	 * 이메일 인증을 받지않았을떄 이쪽을 탄다
+	 * */
+	@GetMapping("/authlogout")
+	public String logout(HttpServletRequest request,HttpServletResponse response,Model model) {
+		HttpSession session= request.getSession(false);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		session.invalidate();
+		
+		SecurityContextHolder.clearContext();
+	        
+		model.addAttribute("AuthError", true);
+		return "people/authFail";
 	}
 	 // Login form with error
 	@RequestMapping("/loginerror")
@@ -317,4 +331,5 @@ public class PeopleController {
 	    model.addAttribute("loginError", true);
 	    return "people/signin";
 	}
+	
 }

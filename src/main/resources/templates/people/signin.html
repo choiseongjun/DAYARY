@@ -45,7 +45,8 @@
 </style>
 <body>
 	<div th:replace="layout/header::header" />
-	<p th:if="${loginError}" class="error">Wrong user or password</p>
+	<p th:if="${loginError}" class="error">잘못된 아이디 또는 비밀번호입니다</p>
+	
    <form th:action="@{/appLogin}" method="POST">
             User Name : <input type="text" name="email"/> <br/><br/>
             Password: <input type="password" name="password"/> <br/><br/>
