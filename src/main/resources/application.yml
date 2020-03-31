@@ -1,5 +1,7 @@
 spring:
-  mvc:    favicon:      enabled: false
+  mvc:
+    favicon:
+      enabled: false
   servlet:
     multipart:
       max-file-size : 50MB
@@ -62,3 +64,16 @@ communityImagePath : C:/dayary/community/image
 app:
       jwtSecret : JWTSuperSecretKey
       jwtExpirationInMs : 604800000
+      
+google :
+  client :
+    clientId : 218429726963-iv49qi897923b2jouic2m8q3876kp173.apps.googleusercontent.com
+    clientSecret: HyUB1F4Okz0euO8MTTJ00ZIa
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    clientAuthenticationScheme: form
+    scope:
+    - email
+    - profile
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo

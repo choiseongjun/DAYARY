@@ -1,12 +1,20 @@
 
 package us.flower.dayary.config;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,13 +27,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.CompositeFilter;
 
-import us.flower.dayary.config.auth.CustomOAuth2UserService;
+import us.flower.dayary.config.auth.ClientResources;
 import us.flower.dayary.config.handler.LoggingAccessDeniedHandler;
 import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.CustomUserDetailsService;
@@ -37,14 +53,22 @@ import us.flower.dayary.security.JwtAuthenticationFilter;
  */
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Client
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
+	
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;
+	
 	@Autowired
     private LoggingAccessDeniedHandler accessDeniedHandler;
+	
+	@Autowired
+	OAuth2ClientContext oauth2ClientContext;
+	
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
 		return new JwtAuthenticationFilter();
@@ -78,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrf().disable()
 		.authorizeRequests()
 		.antMatchers(
-                 "/",
+                 "/", "/login**",
                  "/js/**",
                  "/css/**",
                  "/img/**",
@@ -88,6 +112,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
 		.antMatchers("/moimMakeView").access("hasAnyRole('USER')")
 		.antMatchers("/moimlistView/moimdetailView/**").access("hasAnyRole('USER')")
+		// filter
+		.anyRequest().authenticated()
+		.and()
+			.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/signup"))
 		.and().formLogin().  //login configuration
                 loginPage("/signinView").
                 failureUrl("/loginerror").
@@ -104,12 +132,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.exceptionHandling()
 		.accessDeniedPage("/access-denied")
+//		.and()
+//			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.and()
-			.oauth2Login()
-			.userInfoEndpoint()
-//			.userService(customOAuth2UserService)
-		; // 沅뚰븳�씠 �뾾�쓣寃쎌슦 �빐�떦 url濡� �씠�룞
-
+			.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class) // ssoFilter 추가
+		; // 
 
 		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -133,4 +160,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 		return null;
 	}
+	
+	@Bean
+    @ConfigurationProperties("google")
+    public ClientResources google() {
+        return new ClientResources();
+    }
+	
+	// 인증 요청에 따른 리다이렉션을 위한 빈 등록
+	@Bean
+	public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+		FilterRegistrationBean registration = new FilterRegistrationBean();
+		registration.setFilter(filter);
+		registration.setOrder(-100); //Spring Security 필터보다 우선순위를 낮게 둔다.
+		return registration;
+	}
+	
+	private Filter ssoFilter() {
+		CompositeFilter filter = new CompositeFilter();
+		List<Filter> filters = new ArrayList<Filter>();
+		
+		filters.add(ssoFilter(google(), "/login/google"));
+		filter.setFilters(filters);
+		return filter;
+	}
+	
+	
+	private Filter ssoFilter(ClientResources client, String path) {
+		// OAuth2ClientAuthenticationProcessingFilter
+		// -> OAuth2 인증 서버에서 OAuth2 액세스 토큰을 획득.
+		// -> 인증 객체를 SecurityContext 에 로드하는 데 사용할 수 있는 OAuth2 클라이언트 필터
+		OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
+		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
+		filter.setRestTemplate(restTemplate);
+		UserInfoTokenServices tokenServices = 
+				new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
+		filter.setTokenServices(tokenServices);
+		return filter;
+	}
+	
+	
+	
+	
 }

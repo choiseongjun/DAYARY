@@ -94,6 +94,7 @@ compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5',
 	
 	compile('org.springframework.security:spring-security-oauth2-client')
 	compile('org.springframework.security:spring-security-oauth2-jose')
+	compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.7.RELEASE'
 }
 // querydsl 적용
 def querydslSrcDir = 'src/main/generated'
