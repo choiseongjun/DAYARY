@@ -74,8 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationFilter();
 	}
 	
-//	private final CustomOAuth2UserService customOAuth2UserService;
-
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
@@ -102,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrf().disable()
 		.authorizeRequests()
 		.antMatchers(
-                 "/", "/login**",
+                 "/",
                  "/js/**",
                  "/css/**",
                  "/img/**",
@@ -112,10 +110,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
 		.antMatchers("/moimMakeView").access("hasAnyRole('USER')")
 		.antMatchers("/moimlistView/moimdetailView/**").access("hasAnyRole('USER')")
-		// filter
-		.anyRequest().authenticated()
-		.and()
-			.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/signup"))
 		.and().formLogin().  //login configuration
                 loginPage("/signinView").
                 failureUrl("/loginerror").
@@ -132,8 +126,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.exceptionHandling()
 		.accessDeniedPage("/access-denied")
-//		.and()
-//			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.and()
 			.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class) // ssoFilter 추가
 		; // 
@@ -142,6 +134,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
+	
+//	@Override
+	protected void configure_b(HttpSecurity http) throws Exception {
+		http
+		.csrf().disable()
+		.authorizeRequests()
+		.antMatchers(
+                 "/",
+                 "/js/**",
+                 "/css/**",
+                 "/img/**",
+                 "/images/**").permitAll()
+		.antMatchers(
+			       "/signup").permitAll()
+		.antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
+		.antMatchers("/moimMakeView").access("hasAnyRole('USER')")
+		.antMatchers("/moimlistView/moimdetailView/**").access("hasAnyRole('USER')")
+		.and().formLogin().  //login configuration
+                loginPage("/signinView").
+                failureUrl("/loginerror").
+                loginProcessingUrl("/appLogin").
+                successHandler(new CustomLoginSuccessHandler("/")).
+                usernameParameter("email").
+                passwordParameter("password").
+                defaultSuccessUrl("/loginSuccess").
+                successHandler(successHandler()).
+		 and().logout()    //logout configuration
+		.logoutUrl("/logout")
+		.invalidateHttpSession(true)
+		.clearAuthentication(true)
+		.and()
+		.exceptionHandling()
+		.accessDeniedPage("/access-denied"); // 권한이 없을경우 해당 url로 이동
+
+	;
+
+		// Add our custom JWT security filter
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+	}
+
 
 	@Bean
 	public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
