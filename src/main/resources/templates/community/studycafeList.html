@@ -77,9 +77,13 @@ nav > div a.nav-item.nav-link:focus
 </head>
 
 <body>
-	
+
 
 	<div class="container1" style="margin-left:250px; max-width:1180px">
+		<div id="write">
+			<a th:href="@{'/community/studycafeWrite/' + ${board_group_no}}">
+				<button type="button" class="btn btn-primary btn-xs">글쓰기</button></a>
+		</div>
                 <div class="col-xs-12 ">
                   <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">

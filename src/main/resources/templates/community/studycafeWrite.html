@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<css th:replace="layout/header::headerCss" />
+<link th:href="@{/css/community/sidemenu.css}" rel="stylesheet" />
+<!-- 사이드메뉴css -->
+<div th:replace="layout/header::header" />
+<style>
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+
+</style>
+<script src="/ckeditor/ckeditor.js"></script>
+<div th:replace="community/sidemenu::sidemenu" />
+
+</head>
+
+<body>
+	
+<article>
+
+		<div class="container1" style="margin-left:250px; max-width:1180px">
+			<h2>글 작성</h2>
+			<form name="form" id="form" role="form" method="post" th:action="@{/community/studycafeWriting/__${board_group_no}__}" enctype="multipart/form-data">
+				<div class="mb-3">
+					<label for="title">제목</label>
+					<input type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
+				</div>
+				<div class="mb-3">
+					<label for="memo">내용</label>
+					<textarea class="form-control" rows="5" name="memo" id="memo" placeholder="내용을 입력해 주세요" ></textarea>
+				</div>
+				<div class="mb-3">
+					<label for="img">이미지</label>
+					<input type="file" class="form-control" name="img" id="img" placeholder="태그를 입력해 주세요">
+				</div>
+				<div class="mb-3">
+					<label for="tag">TAG</label>
+					<input type="text" class="form-control" name="tag" id="tag" placeholder="태그를 입력해 주세요">
+				</div>
+				<div>
+					<button type="submit" class="btn btn-sm btn-primary" id="btnSave">저장</button>
+					<button type="button" class="btn btn-sm btn-primary" id="btnList">목록</button>
+				</div>
+			</form>
+		</div>
+	</article>
+
+<script>
+CKEDITOR.replace("memo",{
+    filebrowserUploadUrl : "${path}/imageUpload.do"
+}); //이미지 업로드 기능을 추가하기위한 코드
+</script>
+
+</body>
+</html>
