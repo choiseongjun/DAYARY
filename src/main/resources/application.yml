@@ -62,3 +62,17 @@ communityImagePath : C:/dayary/community/image
 app:
       jwtSecret : JWTSuperSecretKey
       jwtExpirationInMs : 604800000
+      
+            
+mail:
+    host: smtp.gmail.com
+    port: 587
+    username: choisjjunjun2702@gmail.com
+    password: tjdwns2702!@
+    protocol: smtp
+    default-encoding: UTF-8
+    smtp: 
+      start-tls-enable: true 
+      auth: true
+      
+      
