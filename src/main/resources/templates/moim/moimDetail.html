@@ -235,7 +235,7 @@ body {
                       <span th:if="${moimDetail.joinCondition}=='N'">   <!-- 누구나 가입하는 경우  by choinseognjun 2019-10-07-->
 	                       <span th:if="${joinedpeople}==null">   
 	                        <span
-	                           th:if="${!(session.peopleId==moimDetail.people.id) &&!(totalPeople-1>=moimDetail.peopleLimit-1) }"><!-- 토탈인원보다 작으면 가입 불가능하고 모임장이면서 가입되지 않은 회원 By choiseongjun -->
+	                           th:if="${!(session.peopleId==moimDetail.people.id)  }"><!-- 토탈인원보다 작으면 가입 불가능하고 모임장이면서 가입되지 않은 회원 By choiseongjun -->
 	                           <!-- 미가입자와 운영자가 아닌경우 -->
 	                           <button type="button" id="signup_btn" class="btn btn-primary btn-xs">스터디 가입하기</button>
 	                        </span>

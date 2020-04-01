@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="moimPeople">
+	<select id="selectCountMoimPeople" resultType="map" parameterType="long">
+	 	<![CDATA[
+	       select 
+	       	case when people_limit <= (select count(*) from moim_people b where b.moim_id=a.id) then 'TRUE'
+			else 'FALSE' end as cntPeople from moim a
+			where a.id=#{moimNo}
+		]]>
+	</select>
+</mapper>
