@@ -168,25 +168,28 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
    @Transactional
    public void deleteById(long id) {
       // TODO Auto-generated method stub
-	   System.out.println("id=todowriteId??"+id);
+	
 	   List<ToDoWriteList> list=toDowriteListRepository.findByToDoWrite_id(id);
 	   
 	   
-	   System.out.println("LIst???"+list);
-	   ToDoWriteList todoWriteList = new ToDoWriteList();
-	  
+		/*
+		 * System.out.println("LIst???"+list); ToDoWriteList todoWriteList = new
+		 * ToDoWriteList();
+		 */
 	   
 	   for(int i=0;i<list.size()-1;i++) {
-		  // moimboard.deleteByToDoWriteList_id(list.get(i).getId());
-		   todoWriteList.setId(list.get(i).getId()); 
-		   moimboard.updateDeleteYn(todoWriteList);
+		   moimboard.deleteByToDoWriteList_id(list.get(i).getId());
+			/*
+			 * todoWriteList.setId(list.get(i).getId());
+			 * moimboard.updateDeleteYn(todoWriteList);
+			 */
 	   }
 	 
-	  //toDowriteListRepository.deleteByToDoWrite_id(id);
-	   //삭제말고 delete y = y로
-	   ToDoWrite todowrite=new ToDoWrite();
-	   todowrite.setId(id);
-	   toDowriteListRepository.updateToDoWrite_id(todowrite);//아직 미작업
+	  toDowriteListRepository.deleteByToDoWrite_id(id);
+		/*
+		 * 삭제말고 delete y = y로 ToDoWrite todowrite=new ToDoWrite(); todowrite.setId(id);
+		 * toDowriteListRepository.updateToDoWrite_id(todowrite);
+		 */
 	   toDowriteRepository.deleteById(id);
    }
    @Override
@@ -251,7 +254,6 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	@Override
 	public void changeToDate(ToDoWrite todo) {
 		// TODO Auto-generated method stub
-		System.out.print(todo);
 		Date changeDate=todo.getTo_date2();
 		todo=toDowriteRepository.findById(todo.getId());
 		todo.setTo_date2(changeDate);
@@ -291,7 +293,8 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	      //현재시간이 todo시작 날짜보다 지나고 100% 완료되지 않은경우 미완료로 상태변경
 	      for(int i=0;i< list.size();i++) {
 	         ToDoWrite todo=list.get(i);
-	         if(date.compareTo(todo.getTo_date())>0&&todo.getProgress()!=100) {
+	         Date endDate= (todo.getTo_date2()==null)?todo.getTo_date():todo.getTo_date2();
+	         if(date.compareTo(endDate)>0&&todo.getProgress()!=100) {
 	            todo.setStatus("Suspend");
 	         }
 	         toDowriteRepository.save(todo);

@@ -1,7 +1,5 @@
 spring:
-  mvc:
-    favicon:
-      enabled: false
+  mvc:    favicon:      enabled: false
   servlet:
     multipart:
       max-file-size : 50MB
@@ -77,3 +75,15 @@ google :
     - profile
   resource:
     userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+    
+            
+mail:
+    host: smtp.gmail.com
+    port: 587
+    username: choisjjunjun2702@gmail.com
+    password: tjdwns2702!@
+    protocol: smtp
+    default-encoding: UTF-8
+    smtp: 
+      start-tls-enable: true 
+      auth: true

@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import us.flower.dayary.common.BCRYPT;
 import us.flower.dayary.common.FileManager;
 import us.flower.dayary.common.TokenGenerator;
+import us.flower.dayary.common.emailManager;
 import us.flower.dayary.config.NaverLoginBO;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.Role;
@@ -46,6 +48,7 @@ import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.repository.people.RoleRepository;
 import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.JwtTokenProvider;
+import us.flower.dayary.service.people.PeopleService;
 
 @Controller
 public class PeopleController {
@@ -65,6 +68,8 @@ public class PeopleController {
 	PeopleRepository peopleRepository;
 	@Autowired
 	RoleRepository roleRepository;
+	@Autowired
+	PeopleService service;
 	
 	@Autowired
     private TokenGenerator tokenGenerator;
@@ -127,7 +132,12 @@ public class PeopleController {
 			if (peopleRepository.existsByEmail(loginRequest.getEmail())) {
 				People dbPeople = peopleRepository.findByEmail(loginRequest.getEmail());
 					if (bcrypt.checkpw(loginRequest.getPassword(), dbPeople.getPassword())) {// 비밀번호가맞다면
-				        
+						if(!dbPeople.getActivation().equals("Y")) {
+				        	returnData.put("code", "E4024");
+							returnData.put("message", "이메일인증을 완료해주세요:(");
+							return returnData;
+				        }
+						
 	
 						session.setAttribute("peopleId", dbPeople.getId());// NO세션저장
 						session.setAttribute("peopleName", dbPeople.getName());// 이름세션저장
@@ -216,9 +226,9 @@ public class PeopleController {
 							            e.printStackTrace();
 							        }
 						}
-								
+						String key=service.sendAuthUrlMail(user);
+						user.setActivation(key);
 						People result = peopleRepository.save(user);
-		
 						URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{username}")
 								.buildAndExpand(result.getId()).toUri();
 						returnData.put("code", "1");
@@ -234,7 +244,31 @@ public class PeopleController {
 		}
 		return returnData;
 	}
-
+	
+	
+	
+	/**
+	 * 인증메일
+	 *
+	 * @param
+	 * @return
+	 * @throws @author JY
+	 */
+	@GetMapping("/auth/{key}/{email}")
+	public String authUrl(@PathVariable("key") String key,@PathVariable("email") String email,Model model) {
+		
+		People p=peopleRepository.findByEmail(email);
+		if(p.getActivation().equals(key)) {
+			//인증키 일치시 activate
+			p.setActivation("Y");
+			peopleRepository.save(p);
+			model.addAttribute("message","인증되었습니다.");
+			
+		}else {
+			model.addAttribute("message","잘못된접근입니다.");
+		}
+		return "people/signin";
+	}
 	/**
 	 * 회원가입 뷰
 	 *
