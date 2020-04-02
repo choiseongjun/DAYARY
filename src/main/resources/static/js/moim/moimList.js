@@ -133,7 +133,6 @@ function initMoimElement(opt) {
  * @시/도/구 카테고리 조회 API
  */
 $(function(){
-	
 	$.ajax({
 		type: "get",
 		url: "http://openapi.nsdi.go.kr/nsdi/eios/service/rest/AdmService/admCodeList.json",
@@ -147,6 +146,9 @@ $(function(){
 				html +="<option value='"+data.admVOList.admVOList[i].admCode+"'>"+data.admVOList.admVOList[i].lowestAdmCodeNm+"</option>"
 			}
             $('#sido_code').html(html);
+
+			// Get initial value
+            //$('#sido_code').selectric(html);
 		},
 		error: function(xhr, stat, err) {}
 	});

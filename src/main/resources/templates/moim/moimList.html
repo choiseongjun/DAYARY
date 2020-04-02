@@ -62,7 +62,7 @@
 										
 										<div class="item">
 											<label class="title" for="place_select">시</label>
-											<select name="sido_code" id="sido_code" class="custom_select">
+											<select name="sido_code" id="sido_code" >
 												<option text="">선택</option>
 											</select>
 										</div>
@@ -103,7 +103,7 @@
 						<div class="grid_item_box">
 							<tr th:each="moimList : ${moimList}">
 							<div class="grid_item card">
-								<a href="#none">
+								<a th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
 									<div class="img_box">
 										<img
 												th:src="${moimList.imageName!=null} ? ${'/getMoimImage/'+moimList.imageName+'.'+moimList.imageExtension} : '/images/img_4.jpg'"
@@ -172,15 +172,8 @@
 		</div>
 	</footer>
 </div>
-     <script src="/publ/js/jquery/jquery-3.4.1.min.js"></script>
-      <script src="/publ/js/jquery/jquery-migrate-1.4.1.min.js"></script> 
-     <script src="/publ/js/jquery/jquery-ui-1.12.1.min.js"></script>
-     <script src="/publ/js/jquery/jquery.bxslider.js"></script>
-     <script src="/publ/js/jquery/jquery.easing.1.2.js"></script>
-     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
-     <script src="/publ/js/jquery/jquery.selectric.js"></script>
-     <script src="/publ/js/fruit.js"></script>
-	<script src="/js/moim/moimList.js"></script>
+     
+	 <script src="/js/moim/moimList.js"></script>
 
 	<script type="rv-template" id="categoryItem">
 		<li class="item" data-category={commonCode}>
