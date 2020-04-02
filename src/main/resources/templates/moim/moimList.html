@@ -54,33 +54,22 @@
 											</select>
 										</div>
 										<div class="item">
-											<label class="title" for="state_select">상태</label>
-											<select id="state_select" name="state_select" class="custom_select">
+											<label class="title" for="state_select">모임 상태</label>
+											<select name="status" id="status" class="custom_select">
 												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
+											</select>
+										</div>
+										
+										<div class="item">
+											<label class="title" for="place_select">시</label>
+											<select name="sido_code" id="sido_code" class="custom_select">
+												<option text="">선택</option>
 											</select>
 										</div>
 										<div class="item">
-											<label class="title" for="place_select">위치별</label>
-											<select id="place_select" name="place_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-											</select>
-										</div>
-										<div class="item">
-											<label class="title" for="date_select">날짜</label>
-											<select id="date_select" name="date_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
+											<label class="title" for="date_select">구</label>
+											<select name="sigoon_code" id="sigoon_code" class="custom_select">
+												<option text="">선택</option>
 											</select>
 										</div>
 										<div class="item">
@@ -148,14 +137,15 @@
 							
 						</div>
 						<div class="pager_box">
-							<ul>
-								<li><a href="#none" class="pager_btn prev"><span class="icon">이전 페이지</span></a></li>
-								<li><a href="#none" class="num on">1</a></li>
-								<li><a href="#none" class="num">2</a></li>
-								<li><a href="#none" class="num">3</a></li>
-								<li><span class="loss">…</span></li>
-								<li><a href="#none" class="num">7</a></li>
-								<li><a href="#none" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
+							<ul 
+									th:with="start=${T(Math).floor(moimList.number/10)*10 + 1},
+						                    last=(${start + 9 < moimList.totalPages ? start + 9 : moimList.totalPages})">
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=1)}" class="pager_btn prev" ><span class="icon">이전 페이지</span></a></li>
+								<li th:each="page: ${#numbers.sequence(start, last)}"
+									th:class="${page == moimList.number + 1}">
+									<a th:if="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num on"></a>
+									<a th:unless="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num"></a></li>
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=${moimList.totalPages},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
 							</ul>
 						</div>
 					</div>

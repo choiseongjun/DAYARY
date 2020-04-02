@@ -146,9 +146,7 @@ $(function(){
 			for(var i=0;i<data.admVOList.admVOList.length;i++){ 
 				html +="<option value='"+data.admVOList.admVOList[i].admCode+"'>"+data.admVOList.admVOList[i].lowestAdmCodeNm+"</option>"
 			}
-			
             $('#sido_code').html(html);
-			
 		},
 		error: function(xhr, stat, err) {}
 	});
