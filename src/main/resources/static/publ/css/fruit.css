@@ -38,12 +38,12 @@
 .find_crew .top_box .detail_search .detail_search_inner{display: none; background-color: #f2f2f2; padding: 40px 60px;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box{display: inline-block; width: 100%; margin-bottom: -26px;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item{position: relative; float: left; padding-left: 146px; box-sizing: border-box; margin-bottom: 20px; width: 25%;}
-.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:first-child{padding-left: 86px; width: 18.8%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4n-3){padding-left: 86px; width: 18.8%;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(2){width: 23.6%;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(3){width: 27.6%;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4){width: 30%;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .title{position: absolute; top: 0; left: 60px; height: 42px; line-height: 42px; font-size: 16px; color: #555;}
-.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:first-child .title{left: 0;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4n-3) .title{left: 0;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-label{background-color: #fff; height: 42px; line-height: 42px; padding: 0 35px 0 15px; color: #828282; transition: ease-in-out 0.3s;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric:hover .selectric-label{color: #000; font-weight: 400; line-height: 41px;}
 .find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-button{top: 50%; right: 10px; width: 11px; height: 8px; background: url("../images/contents/fruit_sp.png") no-repeat -129px 0; text-indent: -99999px; border: 0; margin: -4px 0 0 0; padding: 0; transition: ease-in-out 0.3s;}
