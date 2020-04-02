@@ -1,4 +1,17 @@
 $(function(){
+	$(".find_crew .top_box .crew_util_box .control_box a").on("click", function(){
+		var obj_left_first = $(".find_crew .top_box .crew_util_box .tabbtn_box ul li:first-child").offset().left;
+		var obj_left_last = $(".find_crew .top_box .crew_util_box .tabbtn_box ul li:last-child").offset().left;
+		if($(this).hasClass("prev")){
+			$(".find_crew .top_box .crew_util_box .tabbtn_box").stop().animate({
+				scrollLeft: obj_left_first
+			},600);
+		}else{
+			$(".find_crew .top_box .crew_util_box .tabbtn_box").stop().animate({
+				scrollLeft: obj_left_last
+			},600);
+		}
+	});
 	
 	$(".find_crew .top_box .detail_search .search_open_btn").on("click", function(){
 		if($(this).hasClass("open")){
@@ -66,13 +79,24 @@ $(function(){
 		obj.find(".percentage .bar .active").css("width",""+obj.find(".percentage .txt span").text()+"%");
 		if(percent > 60){
 			$(this).find(".percentage").addClass("high");
-		}else if(percent > 30 && percent <= 60){
+		}else if(percent > 30 && percent < 60){
 			$(this).find(".percentage").addClass("mid");
-		}else if(percent > 0 && percent <= 30){
+		}else if(percent > 0 && percent < 30){
 			$(this).find(".percentage").addClass("low");
 		}else if(percent == 0){
 			$(this).find(".percentage").addClass("zero");
 		}
+	});
+	
+	$(".custom_scroll").niceScroll({
+		cursorborder: "0",
+		cursorwidth: "5px",
+		cursorcolor: "#c4c4c4",
+		cursorborderradius: "5px",
+		background: "#e6e6e6",
+		zindex: 5,
+		scrollspeed: 30,
+		railpadding: { top: 0, right: 0, left: 0, bottom: -6 },
 	});
 	
 	$(window).on("resize", function(){

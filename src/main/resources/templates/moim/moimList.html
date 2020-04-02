@@ -20,14 +20,12 @@
 				<div class="find_crew">
 					<div class="top_box">
 						<div class="crew_util_box">
-							<div class="tabbtn_box">
+							<div class="tabbtn_box custom_scroll">
 								<ul>
-									<li class="all on"><a href="#none">ALL</a></li>
-									<li class="tab01"><a href="#none">Tab 1</a></li>
-									<li class="tab02"><a href="#none">Tab 2</a></li>
-									<li class="tab03"><a href="#none">Tab 3</a></li>
-									<li class="tab04"><a href="#none">Tab 4</a></li>
-									<li class="tab05"><a href="#none">Tab 5</a></li>
+									<th:block th:each="category : ${categories}">
+									<li class="all on"  th:if="${category.commCode.toString().equals(commCode)}"><a th:href="@{'/moimlistView/' + ${category.commCode}}">[[${category.commName}]]</a></li>
+									<li th:unless="${category.commCode.toString().equals(commCode)}"><a th:href="@{'/moimlistView/' + ${category.commCode}}">[[${category.commName}]]</a></li>
+									</th:block>
 								</ul>
 							</div>
 							<div class="control_box">
