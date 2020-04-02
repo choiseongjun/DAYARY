@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <title>Fruit</title>
         <css th:fragment="headerCss">
-            <link rel="stylesheet" href="/fonts/icomoon/style.css">
+             <link rel="stylesheet" href="/fonts/icomoon/style.css">
             <link rel="stylesheet" href="/css/bootstrap.min.css">
             <link rel="stylesheet" href="/css/magnific-popup.css">
             <link rel="stylesheet" href="/css/jquery-ui.css">
@@ -15,11 +15,15 @@
             <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
             <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
             <link rel="stylesheet" href="/css/aos.css">
-            <link rel="stylesheet" href="/css/style.css">
-            <link rel="stylesheet" href="/css/headernav.css">
+            <link rel="stylesheet" href="/css/style.css"> 
+            <!-- <link rel="stylesheet" href="/css/headernav.css"> -->
+            <!-- 여기서부터 퍼블리싱한내용들 -->
+            <link rel="stylesheet" href="/publ/css/common.css">
+			<link rel="stylesheet" href="/publ/css/fruit.css">
+			<link rel="stylesheet" href="/publ/css/layout.css">
         </css> 
-        <css th:fragment="moimDetailsubmenu">  
-          <link rel="stylesheet" href="/css/moim/moimDetailsubmenu.css">
+        <!-- <css th:fragment="moimDetailsubmenu"> -->  
+          <!-- <link rel="stylesheet" href="/css/moim/moimDetailsubmenu.css"> -->
           
         </css>
         
@@ -36,7 +40,7 @@
                 <div class="site-mobile-menu-body"></div>
             </div>
 
-            <header class="site-navbar" role="banner">
+            <!-- <header class="site-navbar" role="banner">
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-12 search-form-wrap js-search-form">
@@ -50,18 +54,18 @@
                         </div>
 
                         <div class="col-4 site-logo">
-                            <a href="/" class="text-black h2 mb-0"><img src="/Fruit.png" width="100px" height="80px"/></a>
+                            <a href="/" class="text-black h2 mb-0"><img src="/publ/images/layout/logo.png" width="100px" height="80px"/></a>
                         </div>
 
                         <div class="col-8 text-right">
                             <nav class="site-navigation" role="navigation">
-                            	<div id="socketAlert" class="alert alert-success" role="alert" style="display:none;"></div><!-- 임시 알림창 -->
+                            	<div id="socketAlert" class="alert alert-success" role="alert" style="display:none;"></div>임시 알림창
                                 <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block mb-0">
                                     <li>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                                         <a href="/">Home</a>
                                     </li>
                                     <li>
-                                        <a href="/moimlistView/01">크루 찾기</a> 
+                                        <a href="/moimlistView/11">크루 찾기</a>
                                     </li>
                                     <li>
                                         <a href="/community/timeLine">커뮤니티</a>
@@ -106,65 +110,35 @@
                         </div>
                     </div>
                 </div>
-            </header>
-
-            <!-- 알림창  by choiseongjun-->
-            <div id="notilist"  style="display:none;">
-                <main role="main" class="container bootdey.com">
-                    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-blue rounded box-shadow">
-                        <img class="mr-3" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" width="48" height="48">
-                        <div class="lh-100">
-                            <h6 class="mb-0 text-black lh-100"><td th:text="${session.peopleName}" /> 
-<!--                             <h6 class="mb-0 text-black lh-100">Messages</h6> -->
-                        </div>
-                    </div>
-
-                    <div class="my-3 p-3 bg-white rounded box-shadow">
-                        <h6 class="border-bottom border-gray pb-2 mb-0">알림 목록</h6>
-                        <div class="media text-muted pt-3">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" class="mr-2 rounded"
-                                 width="32" height="32">
-                            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <strong class="d-block text-gray-dark">@username</strong>
-                                Donec id elit non
-                            </p>
-                        </div>
-                        <div class="media text-muted pt-3">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" class="mr-2 rounded"
-                                 width="32" height="32">
-                            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <strong class="d-block text-gray-dark">@username</strong>
-                                Donec id elit non 
-                            </p>
-                        </div>
-                        <div class="media text-muted pt-3">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" class="mr-2 rounded"
-                                 width="32" height="32">
-                            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <strong class="d-block text-gray-dark">@username</strong>
-                                Donec id elit non
-                            </p>
-                        </div>
-                        <div class="media text-muted pt-3">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" class="mr-2 rounded"
-                                 width="32" height="32">
-                            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <strong class="d-block text-gray-dark">@username</strong>
-                                Donec id elit non
-                            </p>
-                        </div>
-                        <small class="d-block text-right mt-3">
-                            <a href="#">All messages</a>
-                        </small>
-                    </div>
-                </main>
-            </div>
-            <!-- 알림창끝 -->
+            </header> -->
+			<header id="header">
+				<div class="inner">
+					<h1 class="logo"><a href="/"><img src="/publ/images/layout/logo.png" alt="Fruit 로고"></a></h1>
+					<div class="gnb_box">
+						<nav id="nav">
+							<ul class="gnb">
+								<li class="gnbA gnbA1"><a href="#none">About Us</a></li>
+								<li class="gnbA gnbA2 on"><a href="/moimlistView/01">크루 찾기</a></li>
+								<li class="gnbA gnbA3"><a href="/community/timeLine">커뮤니티</a></li>
+                                <li class="gnbA gnbA4" sec:authorize="isAnonymous()"><a href="/signupView">회원가입</a></li>
+								<li class="gnbA gnbA4" sec:authorize="isAnonymous()"><a href="/signinView">로그인</a></li>
+								<li class="gnbA gnbA4" sec:authorize="hasAuthority('ROLE_USER')"><a href="/moimMakeView">크루만들기</a></li>
+								<li class="gnbA gnbA4" sec:authorize="hasAuthority('ROLE_USER')"><a href="/myprofileView">내정보</a></li>
+								<li sec:authorize="hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')" class="gnbA gnbA4" ><a href="/logout">로그아웃</a></li>
+							</ul>
+						</nav>
+					</div>
+					<div class="total_search_box">
+						<a href="#none" class="search_btn"><span class="icon">통합검색<span class="text_hidden">열기</span></span></a>
+					</div>
+				</div>
+			</header>
+            
 
 			<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-            <script src="/js/jquery-3.3.1.min.js"></script>
+           <!--  <script src="/js/jquery-3.3.1.min.js"></script> -->
             <script src="/js/jquery-migrate-3.0.1.min.js"></script>
-            <script src="/js/jquery-ui.js"></script>
+            <!-- <script src="/js/jquery-ui.js"></script> -->
             <script src="/js/popper.min.js"></script>
             <script src="/js/bootstrap.min.js"></script>
             <script src="/js/owl.carousel.min.js"></script>
@@ -173,7 +147,9 @@
             <script src="/js/jquery.magnific-popup.min.js"></script>
             <script src="/js/bootstrap-datepicker.min.js"></script>
             <script src="/js/aos.js"></script>
-            <script src="/js/main.js"></script>
+            <script src="/js/main.js"></script> 
+            <!-- 퍼블리셔부분 -->
+       
             <!-- 알림창스크립트임시로 박아놓음 나중에 js폴더로 관리할것 by choiseongjun -->
             <script>
                 $(document).ready(function () {

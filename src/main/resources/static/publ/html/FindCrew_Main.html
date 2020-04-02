@@ -1,15 +1,43 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Fruit</title>
+<title>FindCrew_Main</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=1200" />
+<link rel="stylesheet" type="text/css" href="../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+<link rel="stylesheet" type="text/css" href="../css/fruit.css" />
 </head>
-<css th:replace="layout/header::headerCss" />
-<body onload="initMoimElement();">
-	<div th:replace="layout/header::header" /> 
-	<div id="wrap">
-	<input type="hidden" id="sido_key" value="12685d425f1af0872d756c" />
-	<input type="hidden" id="sigoon_key" value="b0888bae39fbd0463a9252" />
+
+<body>
+<script defer src="../js/jquery/jquery-3.4.1.min.js"></script>
+<script defer src="../js/jquery/jquery-ui-1.12.1.min.js"></script>
+<script defer src="../js/jquery/jquery-migrate-1.4.1.min.js"></script>
+<script defer src="../js/jquery/jquery.easing.1.2.js"></script>
+<script defer src="../js/jquery/jquery.bxslider.js"></script>
+<script defer src="../js/jquery/jquery.selectric.js"></script>
+<script defer src="../js/jquery/jquery.nicescroll.min.js"></script>
+<script defer src="../js/fruit.js"></script>
+<div id="wrap">
+	<header id="header">
+		<div class="inner">
+			<h1 class="logo"><a href="#none"><img src="../images/layout/logo.png" alt="Fruit 로고"></a></h1>
+			<div class="gnb_box">
+				<nav id="nav">
+					<ul class="gnb">
+						<li class="gnbA gnbA1"><a href="#none">About Us</a></li>
+						<li class="gnbA gnbA2 on"><a href="#none">크루 찾기</a></li>
+						<li class="gnbA gnbA3"><a href="#none">커뮤니티</a></li>
+						<li class="gnbA gnbA4"><a href="#none">로그인</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="total_search_box">
+				<a href="#none" class="search_btn"><span class="icon">통합검색<span class="text_hidden">열기</span></span></a>
+			</div>
+		</div>
+	</header>
 	<section id="container">
 		<div class="vis_box">
 			<h2 class="title">Let’s Fruit!</h2>
@@ -111,43 +139,113 @@
 							</div>
 						</div>
 					</div>
-					
 					<div class="bottom_box">
 						<div class="grid_item_box">
-							<tr th:each="moimList : ${moimList}">
+							<div class="grid_item add_team"><a href="#none"><div class="add_box"><div class="add_cont"><span class="icon"></span>새로운 팀을<br />만들어보세요!</div></div></a></div>
 							<div class="grid_item card">
 								<a href="#none">
 									<div class="img_box">
-										<img
-												th:src="${moimList.imageName!=null} ? ${'/getMoimImage/'+moimList.imageName+'.'+moimList.imageExtension} : '/images/img_4.jpg'"
-												alt="Image" class="img-fluid rounded"
-												style="height: 200px; width: 500px" />
+										<img src="../images/contents/card_sample.jpg" alt="sample">
 										<div class="state">
-											<span class="person"><span class="icon"></span>[[${moimList.moimpeople.size()}]]/[[${moimList.peopleLimit}-1]]</span>
-											<span class="type">[[${moimList.category.commName}]]</span>
+											<span class="person"><span class="icon"></span>9/15</span>
+											<span class="type">사진</span>
 										</div>
 									</div>
 									<div class="cont_box">
-										<strong>[[${moimList.title}]]</strong>
-										<p><td
-													th:text="${#strings.length(moimList.intro)>10} ? ${#strings.substring(moimList.intro,0,10)+'...'} : ${moimList.intro}"
-													id="moimtitle" /></p>
+										<strong>실감나는 인물사진 찍기</strong>
+										<p>이 프로젝트는 울랄라 프로젝트입니다. 이 프로젝트는 울랄라 프로젝트입니다. 어서오세요.(48)</p>
 										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
 										<div class="percentage">
 											<div class="bar">
 												<div class="active"></div>
 											</div>
-											<span class="txt"><span>[[${moimList.progresspercent}]]</span>%</span>
+											<span class="txt"><span>40</span>%</span>
 										</div>
 										<div class="util_box">
 											<span class="like"><span class="icon"></span>55</span>
-											<span class="place"><span class="icon"></span>[[${moimList.sidoname}]]&nbsp&nbsp[[${moimList.sigoonname}]]</span>
+											<span class="place"><span class="icon"></span>강남, 홍대, 신촌</span>
 										</div>
 									</div>
 								</a>
 							</div>
-							</tr>
-							
+							<div class="grid_item card">
+								<a href="#none">
+									<div class="img_box">
+										<img src="../images/contents/card_sample.jpg" alt="sample">
+										<div class="state">
+											<span class="person"><span class="icon"></span>9/15</span>
+											<span class="type">사진</span>
+										</div>
+									</div>
+									<div class="cont_box">
+										<strong>실감나는 인물사진 찍기</strong>
+										<p>이 프로젝트는 울랄라 프로젝트입니다. 이 프로젝트는 울랄라 프로젝트입니다. 어서오세요.(48)</p>
+										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
+										<div class="percentage">
+											<div class="bar">
+												<div class="active"></div>
+											</div>
+											<span class="txt"><span>15</span>%</span>
+										</div>
+										<div class="util_box">
+											<span class="like"><span class="icon"></span>55</span>
+											<span class="place"><span class="icon"></span>강남, 홍대, 신촌</span>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="grid_item card">
+								<a href="#none">
+									<div class="img_box">
+										<img src="../images/contents/card_sample.jpg" alt="sample">
+										<div class="state">
+											<span class="person"><span class="icon"></span>9/15</span>
+											<span class="type">사진</span>
+										</div>
+									</div>
+									<div class="cont_box">
+										<strong>실감나는 인물사진 찍기</strong>
+										<p>이 프로젝트는 울랄라 프로젝트입니다. 이 프로젝트는 울랄라 프로젝트입니다. 어서오세요.(48)</p>
+										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
+										<div class="percentage">
+											<div class="bar">
+												<div class="active"></div>
+											</div>
+											<span class="txt"><span>70</span>%</span>
+										</div>
+										<div class="util_box">
+											<span class="like"><span class="icon"></span>55</span>
+											<span class="place"><span class="icon"></span>강남, 홍대, 신촌</span>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="grid_item card">
+								<a href="#none">
+									<div class="img_box">
+										<img src="../images/contents/card_sample.jpg" alt="sample">
+										<div class="state">
+											<span class="person"><span class="icon"></span>9/15</span>
+											<span class="type">사진</span>
+										</div>
+									</div>
+									<div class="cont_box">
+										<strong>실감나는 인물사진 찍기</strong>
+										<p>이 프로젝트는 울랄라 프로젝트입니다. 이 프로젝트는 울랄라 프로젝트입니다. 어서오세요.(48)</p>
+										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
+										<div class="percentage">
+											<div class="bar">
+												<div class="active"></div>
+											</div>
+											<span class="txt"><span>0</span>%</span>
+										</div>
+										<div class="util_box">
+											<span class="like"><span class="icon"></span>55</span>
+											<span class="place"><span class="icon"></span>강남, 홍대, 신촌</span>
+										</div>
+									</div>
+								</a>
+							</div>
 						</div>
 						<div class="pager_box">
 							<ul>
@@ -167,7 +265,7 @@
 	</section>
 	<footer id="footer">
 		<div class="inner">
-			<span class="f_logo"><img src="/publ/images/layout/logo_w.png" alt="Fruit 로고"></span>
+			<span class="f_logo"><img src="../images/layout/logo_w.png" alt="Fruit 로고"></span>
 			<div class="f_cont">
 				<div class="f_util">
 					<ul>
@@ -184,25 +282,5 @@
 		</div>
 	</footer>
 </div>
-     <script src="/publ/js/jquery/jquery-3.4.1.min.js"></script>
-      <script src="/publ/js/jquery/jquery-migrate-1.4.1.min.js"></script> 
-     <script src="/publ/js/jquery/jquery-ui-1.12.1.min.js"></script>
-     <script src="/publ/js/jquery/jquery.bxslider.js"></script>
-     <script src="/publ/js/jquery/jquery.easing.1.2.js"></script>
-     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
-     <script src="/publ/js/jquery/jquery.selectric.js"></script>
-     <script src="/publ/js/fruit.js"></script>
-	<script src="/js/moim/moimList.js"></script>
-
-	<script type="rv-template" id="categoryItem">
-		<li class="item" data-category={commonCode}>
-			<a class="{className}"> <span>{categoryName}</span></a>
-		</li>
-	</script>
-
-	<script type="rv-template" id="moimItem">
-		<!-- moim list templating -->
-	</script>
-
 </body>
 </html>

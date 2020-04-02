@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+body{font-weight:300; color:#333;}
+.inner{width:100%; margin:0 auto; max-width: 1194px;}
+#wrap{position:relative; min-width:1194px; overflow: hidden;}
+
+.text_hidden{position: absolute; width: 0; height: 0; border: 0; text-indent: -99999px; z-index: -1;}
+.next{display: block;}
+
+#header{position: relative; background-color: #fff; height: 94px; border-bottom: 2px solid #03D2B4;}
+#header .logo{float: left;}
+#header .logo a{display: block; height: 94px;}
+#header .logo a img{margin-top: 22px;}
+#header .gnb_box{padding-right: 96px;}
+#header .gnb_box .gnb{float: right;}
+#header .gnb_box .gnb li{float: left;}
+#header .gnb_box .gnb li a{position: relative; display: block; height: 94px; line-height: 94px; padding: 0 35px; color: #707070; font-weight: 400;}
+#header .gnb_box .gnb li a:before{content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: #03D2B4; transition: ease-in-out 0.5s; transform: scaleX(0);}
+#header .gnb_box .gnb li a:hover{color: #03D2B4;}
+#header .gnb_box .gnb li.on a:before, #header .gnb_box .gnb li a:hover:before{transform: scaleX(1);}
+#header .total_search_box .search_btn{position: absolute; top: 0; right: 0; width: 96px; height: 96px;}
+#header .total_search_box .search_btn span.icon{position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; background: url("../images/layout/layout_sp.png") no-repeat 0 0; text-indent: -99999px;}
+#header .total_search_box .search_btn:hover span.icon{background-position: -50px 0;}
+
+#footer{position: relative; background-color: #828282; padding: 43px 0 88px;}
+#footer .inner{position: relative;}
+#footer .f_logo{position: absolute; top: 0; left: 0;}
+#footer .f_cont{text-align: right; padding: 20px 0 0 140px;}
+#footer .f_cont .f_util{}
+#footer .f_cont .f_util ul{display: inline-block;}
+#footer .f_cont .f_util ul li{position: relative; float: left; margin-left: 15px; padding-left: 15px;}
+#footer .f_cont .f_util ul li:first-child{margin-left: 0;}
+#footer .f_cont .f_util ul li a{display: block; color: #fff; font-size: 19px; transition: ease-in-out 0.3s;}
+#footer .f_cont .f_util ul li a:hover{color: #03D2B4;}
+#footer .f_cont .f_util ul li a:before{content: ''; position: absolute; top: 50%; left: 0; width: 1px; height: 20px; background-color: #fff; margin-top: -10px;}
+#footer .f_cont .f_util ul li:first-child a:before{content: none;}
+#footer .f_cont .copy{display: block; color: #fff; font-size: 22px; margin-top: 40px;}
+
+@media screen and (max-width:1194px){
+	.inner{width:97%;}
+}
