@@ -51,7 +51,14 @@
             Password: <input type="password" name="password"/> <br/><br/>
             <input type="submit" value="Login"/>
         </form>
-	<input type="hidden" id="message" th:value="${message}">
+           <div id="find">
+        	해당 이메일로 임시비밀번호를 보내드립니다.<br/>
+        	 	 아이디 : <input type="text" id="emailFind"/> <br/>
+      	  </div>
+            <button id="findButton">비밀번호 찾기</button>
+      	
+     
+	<input type="hidden" id="authMessage" th:value="${authMessage}">
 <!-- 	<script src="/js/people/signin.js"></script> -->
 	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -62,11 +69,34 @@
 		src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script>
 	$(document).ready(function(){
-		if($("#message").val()){
-			alert($("#message").val());	
+		if($("#authMessage").val()){
+			alert($("#authMessage").val());	
 			}
+			$("#find").toggle();
 		});
-	
+	$("#findButton").click(function(){
+		
+		if($("#find").attr("style")=="display: none;")
+			$("#find").toggle();
+		else{
+			 $.ajax({
+			      url:'/auth/findPassword/'+$("#emailFind").val(),		
+			      processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			      contentType: "application/json; charset=utf-8",
+			        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			        success:function(data){
+			        	if(data.code=='1'){
+			        		alert(data.message);
+			        		$("#find").toggle();
+			        		
+			        	}
+			        }
+			        	
+			        });
+			
+		}
+		  
+	});
 		/* 구글 */
 		function onSignIn(googleUser) {
 			// Useful data for your client-side scripts:

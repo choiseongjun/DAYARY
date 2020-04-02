@@ -16,7 +16,7 @@ import us.flower.dayary.domain.People;
 public class PeopleServiceImpl implements PeopleService {
 	 @Autowired
 	    private JavaMailSender mailSender;
-
+	 @Override
 	   public String sendAuthUrlMail(People people) throws  MessagingException{
 		   String key= getKey(false,15);
 		   MimeMessage message=mailSender.createMimeMessage();
@@ -33,6 +33,25 @@ public class PeopleServiceImpl implements PeopleService {
 			   throw e;
 		   }
 	   }
+
+		@Override
+		public String sendAuthFindPassWordMail(People people) throws MessagingException {
+			// TODO Auto-generated method stub
+			String key= getKey(false,6);
+			   MimeMessage message=mailSender.createMimeMessage();
+			   try {
+				   message.setFrom(new InternetAddress("choisjjunjun2702@gmail.com"));
+				   message.setSubject("[임시비밀번호]Fruit임시비밀번호메일","utf-8");
+				   message.setText(new StringBuffer().append("<h2>안녕하세요</h2><h3>").append(people.getName()).append("님</h3> 해당임시비밀번호로 로그인하세요.")
+						   .append("임시비밀번호:").append(key).toString());
+				   message.addRecipient(RecipientType.TO,new InternetAddress(people.getEmail()));
+				   mailSender.send(message);
+				   return key;
+			   } catch (MessagingException e) {
+				   // TODO Auto-generated catch block
+				   throw e;
+			   }
+		}
 	  
 
 		// 이메일 난수 만드는 메서드
@@ -65,5 +84,6 @@ public class PeopleServiceImpl implements PeopleService {
 			this.size = size;
 			return init();
 		}
+
 
 }
