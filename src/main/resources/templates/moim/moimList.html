@@ -38,7 +38,12 @@
 							<div class="detail_search_inner">
 								<form>
 									<div class="top_search_box">
-										
+										<div class="item">
+											<label class="title" for="state_select">관심사</label>
+											<select name="categorybox" id="categorybox" class="custom_select">
+												<option>선택</option>
+											</select>
+										</div>
 										<div class="item">
 											<label class="title" for="state_select">모임 상태</label>
 											<select name="status" id="status" class="custom_select">
@@ -62,7 +67,7 @@
 									</div>
 									<div class="bottom_search_box">
 										<label for="detail_search_input" class="text_hidden">검색어를 입력해주세요</label>
-										<input type="text" id="detail_search_input" name="detail_search_input" placeholder="입력하세요" />
+										<input type="text" id="title" name="title" placeholder="입력하세요" />
 										<button type="submit" class="detail_search_button">Search</button>
 									</div>
 								</form>
@@ -83,6 +88,7 @@
 										<div class="state">
 											<span class="person"><span class="icon"></span>[[${moimList.moimpeople.size()}]]/[[${moimList.peopleLimit}-1]]</span>
 											<span class="type">[[${moimList.category.commName}]]</span>
+											<span class="type" style="margin-left: 160px">[[${moimList.recruitStatus}]]</span>
 										</div>
 									</div>
 									<div class="cont_box">
