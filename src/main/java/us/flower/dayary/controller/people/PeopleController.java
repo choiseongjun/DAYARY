@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -267,13 +268,49 @@ public class PeopleController {
 			//인증키 일치시 activate
 			p.setActivation("Y");
 			peopleRepository.save(p);
-			model.addAttribute("message","인증되었습니다.");
+			model.addAttribute("authMessage","인증되었습니다.");
 			
+		}else if(p.getActivation().contentEquals("Y")) {
+			model.addAttribute("authMessage","로그인하여 이용하세요.");
 		}else {
-			model.addAttribute("message","잘못된접근입니다.");
+			model.addAttribute("authMessage","잘못된접근입니다.");
 		}
 		return "people/signin";
 	}
+	/**
+	 * 비밀번호메일
+	 *
+	 * @param
+	 * @return
+	 * @throws @author JY
+	 */
+	@GetMapping("/auth/findPassword/{email}")
+	@ResponseBody
+	public Map<String, Object> authFindPassword(@PathVariable("email") String email) {
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		try {
+			People p=peopleRepository.findByEmail(email);
+			if(p==null) {
+				returnData.put("code", "2");
+				returnData.put("message", "존재하지않는 회원입니다:)");
+				return returnData;
+			}
+			//임시비밀번호 메일전송
+			String pass=service.sendAuthFindPassWordMail(p);
+			//비밀번호 바꿔저장
+			p.setPassword(bcrypt.hashpw(pass));
+			peopleRepository.save(p);
+			returnData.put("code", "1");
+			returnData.put("message", "메일을 확인해주세요:)");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return returnData;
+	}
+	
 	/**
 	 * 회원가입 뷰
 	 *
