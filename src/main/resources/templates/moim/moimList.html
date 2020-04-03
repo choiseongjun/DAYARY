@@ -38,67 +38,27 @@
 							<div class="detail_search_inner">
 								<form>
 									<div class="top_search_box">
+										
 										<div class="item">
-											<label class="title" for="person_select">인원수</label>
-											<select id="person_select" name="person_select" class="custom_select">
+											<label class="title" for="state_select">모임 상태</label>
+											<select name="status" id="status" class="custom_select">
 												<option>선택</option>
-												<option>1명</option>
-												<option>2명</option>
-												<option>3명</option>
-												<option>4명</option>
-												<option>5명</option>
-												<option>6명</option>
-												<option>7명</option>
-												<option>8명</option>
-												<option>9명</option>
+											</select>
+										</div>
+										
+										<div class="item">
+											<label class="title" for="place_select">시</label>
+											<select name="sido_code" id="sido_code" class="custom_select">
+												<option text="">선택</option>
 											</select>
 										</div>
 										<div class="item">
-											<label class="title" for="state_select">상태</label>
-											<select id="state_select" name="state_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
-												<option>테스트</option>
+											<label class="title" for="date_select">구</label>
+											<select name="sigoon_code" id="sigoon_code" class="custom_select">
+												<option text="">선택</option>
 											</select>
 										</div>
-										<div class="item">
-											<label class="title" for="place_select">위치별</label>
-											<select id="place_select" name="place_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-											</select>
-										</div>
-										<div class="item">
-											<label class="title" for="date_select">날짜</label>
-											<select id="date_select" name="date_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-											</select>
-										</div>
-										<div class="item">
-											<label class="title" for="place_select">위치별</label>
-											<select id="place_select" name="place_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-											</select>
-										</div>
-										<div class="item">
-											<label class="title" for="place_select">위치별</label>
-											<select id="place_select" name="place_select" class="custom_select">
-												<option>선택</option>
-												<option>테스트</option>
-												<option>테스트</option>
-											</select>
-										</div>
+										
 									</div>
 									<div class="bottom_search_box">
 										<label for="detail_search_input" class="text_hidden">검색어를 입력해주세요</label>
@@ -114,7 +74,7 @@
 						<div class="grid_item_box">
 							<tr th:each="moimList : ${moimList}">
 							<div class="grid_item card">
-								<a href="#none">
+								<a th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
 									<div class="img_box">
 										<img
 												th:src="${moimList.imageName!=null} ? ${'/getMoimImage/'+moimList.imageName+'.'+moimList.imageExtension} : '/images/img_4.jpg'"
@@ -148,14 +108,15 @@
 							
 						</div>
 						<div class="pager_box">
-							<ul>
-								<li><a href="#none" class="pager_btn prev"><span class="icon">이전 페이지</span></a></li>
-								<li><a href="#none" class="num on">1</a></li>
-								<li><a href="#none" class="num">2</a></li>
-								<li><a href="#none" class="num">3</a></li>
-								<li><span class="loss">…</span></li>
-								<li><a href="#none" class="num">7</a></li>
-								<li><a href="#none" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
+							<ul 
+									th:with="start=${T(Math).floor(moimList.number/10)*10 + 1},
+						                    last=(${start + 9 < moimList.totalPages ? start + 9 : moimList.totalPages})">
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=1)}" class="pager_btn prev" ><span class="icon">이전 페이지</span></a></li>
+								<li th:each="page: ${#numbers.sequence(start, last)}"
+									th:class="${page == moimList.number + 1}">
+									<a th:if="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num on"></a>
+									<a th:unless="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num"></a></li>
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=${moimList.totalPages},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
 							</ul>
 						</div>
 					</div>
@@ -182,15 +143,8 @@
 		</div>
 	</footer>
 </div>
-     <script src="/publ/js/jquery/jquery-3.4.1.min.js"></script>
-      <script src="/publ/js/jquery/jquery-migrate-1.4.1.min.js"></script> 
-     <script src="/publ/js/jquery/jquery-ui-1.12.1.min.js"></script>
-     <script src="/publ/js/jquery/jquery.bxslider.js"></script>
-     <script src="/publ/js/jquery/jquery.easing.1.2.js"></script>
-     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
-     <script src="/publ/js/jquery/jquery.selectric.js"></script>
-     <script src="/publ/js/fruit.js"></script>
-	<script src="/js/moim/moimList.js"></script>
+     
+	 <script src="/js/moim/moimList.js"></script>
 
 	<script type="rv-template" id="categoryItem">
 		<li class="item" data-category={commonCode}>
