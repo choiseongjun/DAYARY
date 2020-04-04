@@ -271,6 +271,7 @@ public class MoimController {
 		model.addAttribute("meetupList", meetupList);
 		model.addAttribute("chatcount", chatcount);
 		model.addAttribute("picturecount", picturecount);
+		
 		//model.addAttribute("boardGroup", "8L"); // 공지사항 게시판
 		
 		return "moim/moimDetail";
@@ -482,6 +483,7 @@ public class MoimController {
 			model.addAttribute("moimList", moimList);
 			long moimListcount = moimList.getTotalElements();
 			model.addAttribute("moimListcount", moimListcount);
+			model.addAttribute("test", "on");
 		}
 	}
 	model.addAttribute("categories", categories);

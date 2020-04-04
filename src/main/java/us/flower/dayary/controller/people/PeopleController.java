@@ -341,7 +341,7 @@ public class PeopleController {
 		String referrer = request.getHeader("Referer"); 
 		request.getSession().setAttribute("prevPage", referrer);
 
-
+		model.addAttribute("menu5_hover","on");
 
 		return "people/signin";
 	}

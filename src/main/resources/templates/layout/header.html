@@ -118,12 +118,28 @@
 					<h1 class="logo"><a href="/"><img src="/publ/images/layout/logo.png" alt="Fruit 로고"></a></h1>
 					<div class="gnb_box">
 						<nav id="nav">
+						
 							<ul class="gnb" id="menu_list_user">
 									<li class="gnbA gnbA1" id="menu1"></li>
-									<li class="gnbA gnbA2 on" id="menu2"></li>
+									<th:block th:if="${test}==on">
+										<li class="gnbA gnbA2 on" id="menu2"></li>
+									</th:block>
+									<th:block th:unless="${test}==on">
+										<li class="gnbA gnbA2" id="menu2"></li>
+									</th:block>
+									<th:block th:if="${menu3_hover}==on">
+									<li class="gnbA gnbA3 on" id="menu3"></li>
+									</th:block>
+									<th:block th:unless="${menu3_hover}==on">
 									<li class="gnbA gnbA3" id="menu3"></li>
+									</th:block>
 									<li class="gnbA gnbA4" id="menu4" sec:authorize="isAnonymous()"></li>
+									<th:block th:if="${menu5_hover}==on">
+									<li class="gnbA gnbA4 on" id="menu5" sec:authorize="isAnonymous()"></li>
+									</th:block>
+									<th:block th:unless="${menu5_hover}==on">
 									<li class="gnbA gnbA4" id="menu5" sec:authorize="isAnonymous()"></li>
+									</th:block>
 									<li class="gnbA gnbA4" id="menu6" sec:authorize="hasAuthority('ROLE_USER')"></li>
 									<li class="gnbA gnbA4" id="menu7" sec:authorize="hasAuthority('ROLE_USER')"></li>
 							</ul> 
@@ -133,8 +149,11 @@
 					</div>
 					<div class="total_search_box">
 					<a href="#none" class="search_btn"><span class="icon">통합검색<span class="text_hidden">열기</span></span></a>
-	                <a href="#none" class="my_btn"><span class="icon">마이페이지<span class="text_hidden">열기</span></span></a>
-	                <a href="#none" class="alarm_btn"><span class="alarm_num">1</span><span class="icon">알람<span class="text_hidden">열기</span></span></a>
+	                <th block sec:authorize="hasAuthority('ROLE_USER')">
+	                <a href="#none" class="my_btn" ><span class="icon">마이페이지<span class="text_hidden">열기</span></span></a>
+	                <a href="#none" class="alarm_btn">
+	                <span class="alarm_num">1</span><span class="icon">알람<span class="text_hidden">열기</span></span></a>
+	                </th>
 				</div>
 				</div>
 			</header>
@@ -285,6 +304,7 @@
             	        		if(m[i].id==7){
             	        			menu7+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
+            	        		console.log(m[i]);
             	        	}
             	        	$("#menu1").html(menu1);
             	        	$("#menu2").html(menu2);
