@@ -1,3 +1,4 @@
+
 $(".search_btn").click(function(){
 		$("#header").css({"z-index":"99999"})
 		$("body").css({"overflow-y":"hidden"})
@@ -15,34 +16,9 @@ $(".blank").click(function(){
 		$(".search_box").css({"display":"none"})
 	})
 
-$('.slider').on('initialized.owl.carousel changed.owl.carousel', function(e) {
-    if (!e.namespace)  {
-      return;
-    }
-    var carousel = e.relatedTarget;
-    $('.slider-counter').text(carousel.relative(carousel.current()) + 1 + '/' + carousel.items().length);
-  }).owlCarousel({
-    items: 2,
-    loop:true,
-    margin:0,
-   nav: true,
-    autoplay: false,
-    dots: true,
-	slideBy:1,
-	margin:30,
-	stagePadding:15,
-	 navText: ['<img src="../images/layout/prev.png">','<img src="../images/layout/next.png">'],
-	responsiveClass:true,
-	 responsive : {
-			 
-   0 : {
-items: 2,
-    },	 
-   1250 : {
-items: 2,
-    }
-}
-  });
+
+
+
 $(function(){
 	$(".find_crew .top_box .crew_util_box .control_box a").on("click", function(){
 		var obj_left_first = $(".find_crew .top_box .crew_util_box .tabbtn_box ul li:first-child").offset().left;
@@ -149,3 +125,38 @@ $(function(){
 	});
 	
 });
+
+ 
+$('.slider').on('initialized.owl.carousel changed.owl.carousel', function(e) {
+    if (!e.namespace)  {
+      return;
+    }
+    var carousel = e.relatedTarget;
+    $('.slider-counter').text(carousel.relative(carousel.current()) + 1 + '/' + carousel.items().length);
+  }).owlCarousel({
+    items: 2,
+    loop:true,
+    margin:0,
+   nav: true,
+    autoplay: false,
+    dots: true,
+	slideBy:1,
+	margin:30,
+	stagePadding:15,
+	 navText: ['<img src="../images/layout/prev.png">','<img src="../images/layout/next.png">'],
+	responsiveClass:true,
+	 responsive : {
+			 
+   0 : {
+  
+items: 2,
+
+    },	 
+   1250 : {
+  
+items: 2,
+
+    }
+}
+
+  });

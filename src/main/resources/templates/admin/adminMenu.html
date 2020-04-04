@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Fruit</title>
+<css th:replace="layout/adminside::AdminSidebarCss"/> 
+</head>
+<body onload="init()">
+<div th:replace="layout/adminside::sidebar" />
+ 	<div th:fragment="adminhome">
+		<div class="wrapper">
+			<div class="main-panel">
+				<div class="container-fluid">
+					<div class="row">
+						<table class="table table-hover" id="menu_content">
+							<thead id="thead">
+								
+							</thead>
+							<tbody id="tbody">
+								
+							</tbody>
+						</table>
+						메뉴명: <input type="text" name="menu" /> <br />
+						<br />
+						<button onclick="addMenu()">메뉴 추가</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+<script src="/js/common/adminMenu.js"></script>
+
+</html>

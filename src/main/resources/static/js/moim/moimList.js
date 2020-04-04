@@ -88,8 +88,7 @@ function makeSelectElement(item, id) {
 }
 
 // [hyozkim] 모임 상태, 모임 주제, 모임 비공개 데이터 모두 가져오도록 수정.
-function initMoimElement(opt) {
-
+function initMoimElement() {
    $.ajax({
       url:'/moimelemtent',
         type:'get',

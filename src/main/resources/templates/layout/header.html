@@ -118,15 +118,16 @@
 					<h1 class="logo"><a href="/"><img src="/publ/images/layout/logo.png" alt="Fruit 로고"></a></h1>
 					<div class="gnb_box">
 						<nav id="nav">
-							<ul class="gnb">
-								<li class="gnbA gnbA1"><a href="#none">About Us</a></li>
-								<li class="gnbA gnbA2 on"><a href="/moimlistView/01">크루 찾기</a></li>
-								<li class="gnbA gnbA3"><a href="/community/timeLine">커뮤니티</a></li>
-                                <li class="gnbA gnbA4" sec:authorize="isAnonymous()"><a href="/signupView">회원가입</a></li>
-								<li class="gnbA gnbA4" sec:authorize="isAnonymous()"><a href="/signinView">로그인</a></li>
-								<li class="gnbA gnbA4" sec:authorize="hasAuthority('ROLE_USER')"><a href="/moimMakeView">크루만들기</a></li>
-								<li class="gnbA gnbA4" sec:authorize="hasAuthority('ROLE_USER')"><a href="/myprofileView">내정보</a></li>
-								<li sec:authorize="hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')" class="gnbA gnbA4" ><a href="/logout">로그아웃</a></li>
+							<ul class="gnb" id="menu_list_user">
+									<li class="gnbA gnbA1" id="menu1"></li>
+									<li class="gnbA gnbA2 on" id="menu2"></li>
+									<li class="gnbA gnbA3" id="menu3"></li>
+									<li class="gnbA gnbA4" id="menu4" sec:authorize="isAnonymous()"></li>
+									<li class="gnbA gnbA4" id="menu5" sec:authorize="isAnonymous()"></li>
+									<li class="gnbA gnbA4" id="menu6" sec:authorize="hasAuthority('ROLE_USER')"></li>
+									<li class="gnbA gnbA4" id="menu7" sec:authorize="hasAuthority('ROLE_USER')"></li>
+							</ul> 
+							<ul class="gnb" id="menu_list_anony" sec:authorize="isAnonymous()">
 							</ul>
 						</nav>
 					</div>
@@ -203,15 +204,7 @@
 			            </div>
 			        </div>
 			    </div>
-            <script src="/publ/js/jquery/jquery-3.4.1.min.js"></script>
-		    <!--  <script src="/publ/js/jquery/jquery-migrate-1.4.1.min.js"></script>  -->
-		     <script src="/publ/js/jquery/jquery-ui-1.12.1.min.js"></script>
-		     <script src="/publ/js/jquery/jquery.bxslider.js"></script>
-		     <script src="/publ/js/jquery/jquery.easing.1.2.js"></script>
-		     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
-		     <script src="/publ/js/jquery/jquery.selectric.js"></script>
-		     <script src="/publ/js/fruit.js"></script>
-		     <script src="/publ/js/owl.carousel.min.js"></script>
+          	<script src="/publ/js/jquery/jquery-3.4.1.min.js"></script>
 		    <script src="/js/jquery-migrate-3.0.1.min.js"></script>
             <script src="/js/jquery-ui.js"></script>
             <script src="/js/popper.min.js"></script>
@@ -222,9 +215,17 @@
             <script src="/js/jquery.magnific-popup.min.js"></script>
             <script src="/js/bootstrap-datepicker.min.js"></script>
             <script src="/js/aos.js"></script>
-            <script src="/js/main.js"></script> 
+            <script src="/js/main.js"></script>
+            <script src="/publ/js/owl.carousel.min.js"></script>
+		    <!--  <script src="/publ/js/jquery/jquery-migrate-1.4.1.min.js"></script>  -->
+		     <script src="/publ/js/jquery/jquery-ui-1.12.1.min.js"></script>
+		     <script src="/publ/js/jquery/jquery.bxslider.js"></script>
+		     <script src="/publ/js/jquery/jquery.easing.1.2.js"></script>
+		     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
+		     <script src="/publ/js/jquery/jquery.selectric.js"></script>
+		     <script src="/publ/js/fruit.js"></script> 
           <!--  <script src="/js/jquery-3.3.1.min.js" ></script> --> 
-         <!--    <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+         <!--     <script src="/js/jquery-migrate-3.0.1.min.js"></script>
             <script src="/js/jquery-ui.js"></script>
             <script src="/js/popper.min.js"></script>
             <script src="/js/bootstrap.min.js"></script>
@@ -233,12 +234,69 @@
             <script src="/js/jquery.countdown.min.js"></script>
             <script src="/js/jquery.magnific-popup.min.js"></script>
             <script src="/js/bootstrap-datepicker.min.js"></script>
-            <script src="/js/aos.js"></script> -->
+            <script src="/js/aos.js"></script>  -->
             <!-- <script src="/js/main.js"></script>  -->
             <!-- 퍼블리셔부분 -->
             <!-- 알림창스크립트임시로 박아놓음 나중에 js폴더로 관리할것 by choiseongjun -->
             <script>
                 $(document).ready(function () {
+                	var hasRoleUser = $('#hasRoleUser').val();
+                	
+                	console.log(hasRoleUser)
+                	$.ajax({
+              	      url:'/Menulist',
+              	        type:'get',
+              	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+              	        contentType: false,
+              	        dataType:'json',
+              	        cache: false,
+              	        //data: formData,
+              	        success:function(data) {
+              	        	console.log(data)
+              	        	var m=data;
+            	        	console.log(m)
+                    		var html=""
+                    		var menu1="";
+            	        	var menu2="";
+            	        	var menu3="";
+            	        	var menu4="";
+            	        	var menu5="";
+            	        	var menu6="";
+            	        	var menu7="";
+            	        	for(var i=0;i<m.length;i++){
+            	        		if(m[i].id==1){
+            	        			menu1+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==2){
+            	        			menu2+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==3){
+            	        			menu3+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==4){
+            	        			menu4+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==5){
+            	        			menu5+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==6){
+            	        			menu6+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        		if(m[i].id==7){
+            	        			menu7+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
+            	        		}
+            	        	}
+            	        	$("#menu1").html(menu1);
+            	        	$("#menu2").html(menu2);
+            	        	$("#menu3").html(menu3);
+            	        	$("#menu4").html(menu4);
+            	        	$("#menu5").html(menu5);
+            	        	$("#menu6").html(menu6);
+            	        	$("#menu7").html(menu7);
+              	       }
+              	   });
+                	
+                	
                 	connectStomp();
                 	
                 	
