@@ -1,17 +1,21 @@
 @charset "utf-8";
 
 body{font-weight:300; color:#333;}
-.inner{width:100%; margin:0 auto; max-width: 1194px;}
+.inner{width:100%; margin:0 auto;width: 1194px;}
+.inner_2{width:100%; margin:0 auto;width: 1194px;}
+.inner_popup{width:100%; margin:0 auto;width: 988px;}
 #wrap{position:relative; min-width:1194px; overflow: hidden;}
 
 .text_hidden{position: absolute; width: 0; height: 0; border: 0; text-indent: -99999px; z-index: -1;}
 .next{display: block;}
 
 #header{position: relative; background-color: #fff; height: 94px;}
+#header .inner { height:94px; position:relative}
+.total_search_box { position:absolute; right:0}
 #header .logo{float: left;}
 #header .logo a{display: block; height: 94px;}
 #header .logo a img{margin-top: 22px;}
-#header .gnb_box{padding-right: 96px;}
+#header .gnb_box{padding-right: 288px;}
 #header .gnb_box .gnb{float: right;}
 #header .gnb_box .gnb li{float: left;}
 #header .gnb_box .gnb li a{position: relative; display: block; height: 94px; line-height: 94px; padding: 0 35px; color: #707070; font-weight: 400;}
@@ -21,6 +25,13 @@ body{font-weight:300; color:#333;}
 #header .total_search_box .search_btn{position: absolute; top: 0; right: 0; width: 96px; height: 96px;}
 #header .total_search_box .search_btn span.icon{position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; background: url("../images/layout/layout_sp.png") no-repeat 0 0; text-indent: -99999px;}
 #header .total_search_box .search_btn:hover span.icon{background-position: -50px 0;}
+
+#header .total_search_box .my_btn{position: absolute; top: 0; right: 96px; width: 96px; height: 96px;}
+#header .total_search_box .my_btn span.icon{position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; background: url("../images/layout/layout_my.png") no-repeat 0 0; text-indent: -99999px;}
+#header .total_search_box .my_btn:hover span.icon{background-position: -50px 0;}
+#header .total_search_box .alarm_btn{position: absolute; top: 0; right: 192px; width: 96px; height: 96px;}
+#header .total_search_box .alarm_btn span.icon{position: absolute; top: 50%; left: 50%; width: 20px; height: 24px; margin: -10px 0 0 -10px; background: url("../images/layout/layout_alarm.png") no-repeat 0 0; text-indent: -99999px;}
+#header .total_search_box .alarm_btn:hover span.icon{background-position: -50px 0;}
 
 #footer{position: relative; background-color: #828282; padding: 43px 0 88px;}
 #footer .inner{position: relative;}
