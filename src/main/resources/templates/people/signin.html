@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"    
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <meta name="google-signin-scope" content="profile email">
@@ -7,51 +9,98 @@
 	content="	681877465979-hbu3jluica1eddcndkvl52n6h10jq6sf.apps.googleusercontent.com">
 <title>Insert title here</title>
 <css th:replace="layout/header::headerCss" />
+
 </head>
-<style>
-#login {
-	width: 50%;
-	float: left;
-}
 
-#social {
-	width: 50%;
-	float: right;
-	vertical-align: top;
-	margin-top: 35px;
-}
-
-#button {
-	width: 100%;
-	float: right;
-	margin: 0 auto;
-	margin-top: 10px;
-}
-
-#kakao-login-btn {
-	width: 203.5px;
-	height: 44px;
-}
-
-.g-signin2 {
-	width: 203.5px;
-	height: 44px;
-}
-
-#google_img {
-	width: 203.5px;
-	height: 44px;
-}
-</style>
 <body>
 	<div th:replace="layout/header::header" />
 	<p th:if="${loginError}" class="error">잘못된 아이디 또는 비밀번호입니다</p>
+	<form th:action="@{/appLogin}" method="POST">
+	<div class="login_popup">
+			<p class="popup_main_text"><span>프룻</span>에 오신 것을 환영합니다!</p>
+	        <p class="popup_sub_text">
+	        	<span>프룻</span>은 ~이러한 <br>
+	플랫폼 서비스입니다.
+	        </p>
+	        <div class="btn_box">
+	        	<a href="#"><img src="/publ/images/layout/google.png" alt="Fruit 로고">Google</a>
+	            <a href="#"><img src="/publ/images/layout/facebook.png" alt="Fruit 로고">Facebook</a>
+	        </div>
+	        <ul class="input_login_box">
+	        	<li><input type="text" name="email" id="email" placeholder="이메일"></li>
+	            <li><input type="password" name="password" id="password" placeholder="비밀번호"></li>
+	        </ul>
+	        <input type="submit" class="login_btn" value="로그인"/>
+	        <div class="footer_login_btn">
+	        	<a href="#" class="join_btn">회원가입</a>
+	            <a href="#" class="find_login">비밀번호를 잊으셨다면</a>
+	        </div>
+	</div>
+	</form>
+	<div class="find_login_popup">
+			<p class="popup_main_text"><span>프룻</span>회원가입</p>
+	        <p class="popup_sub_text">
+	        	Fruit은 ~이러한<br>
+	플랫폼 서비스입니다.
+	        </p>
+	        <div class="btn_box">
+	        	<a href="#"><img src="/publ/images/layout/google.png" alt="Fruit 로고">Google</a>
+	            <a href="#"><img src="/publ/images/layout/facebook.png" alt="Fruit 로고">Facebook</a>
+	        </div>
+	        <ul class="input_login_box">
+	        	<li><input type="text" placeholder="이메일"></li>
+	            <li><input type="password" placeholder="비밀번호"></li>
+	            <li><input type="password" placeholder="비밀번호 확인"></li>
+	        </ul>
+	        <div class="join_chk_box">
+	        		<input type="checkbox" id="join_chk" class="cb2"><label for="join_chk"></label>
+	                <p><span>프룻</span> 이용약관 및 <span>개인정보취급방침</span>에 동의합니다.</p>
+	        </div>
+	        <a href="#" class="login_btn finish_join">회원가입</a>
+	        <div class="footer_login_btn">
+	        	<a href="#" class="back_loing finish_join">로그인화면으로 가기</a>
+	        </div>
+	</div>
 	
-   <form th:action="@{/appLogin}" method="POST">
+	
+	<div class="my_type_popup">
+			<p class="popup_main_text"><span>당신을 알려주세요</span></p>
+	        <p class="popup_sub_text">
+	        	‘닉네임’의 관심사에 맞게 <br>
+	프룻이 추천해드릴게요!
+	        </p>
+	        <ul class="my_type_cho_ul">
+	        	<li>
+	            	<p>성별</p>
+	                 <select id="type1" name="type1" class="select_pp" >
+	                     <option value="0">남자</option>
+	                     <option value="0">남자</option>
+	                     <option value="1">여자</option>
+	                  </select>
+	            </li>
+	            <li>
+	            	<p>직업</p>
+	                 <select id="type2" name="type2" class="select_pp" >
+	                     <option value="0">직업1</option>
+	                     <option value="0">직업1</option>
+	                     <option value="1">직업3</option>
+	                  </select>
+	            </li>
+	            <li>
+	            	<p>관심사</p>
+	                 <select id="type3" name="type3" class="select_pp" >
+	                     <option value="0">관심사1</option>
+	                     <option value="0">관심사1</option>
+	                     <option value="1">관심사2</option>
+	                  </select>
+	            </li>
+	        </ul>
+	        <a href="#" class="login_btn join_go_btn">완료!</a>
+	
+	</div>
             User Name : <input type="text" name="email"/> <br/><br/>
             Password: <input type="password" name="password"/> <br/><br/>
             <input type="submit" value="Login"/>
-        </form>
            <div id="find">
         	해당 이메일로 임시비밀번호를 보내드립니다.<br/>
         	 	 아이디 : <input type="text" id="emailFind"/> <br/>
@@ -66,10 +115,10 @@
 	<script type="text/javascript"
 		src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
 		charset="utf-8"></script>
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	
 	<script>
 	$(document).ready(function(){
+		$(".login_popup").show()
 		if($("#authMessage").val()){
 			alert($("#authMessage").val());	
 			}
@@ -98,6 +147,24 @@
 		}
 		  
 	});
+	$(".open_login_popup").click(function(){
+		$(".login_popup").show()
+		
+		})
+	$(".join_go_btn").click(function(){
+			$(".my_type_popup").hide()
+			$(".find_login_popup").show()
+		
+		})	
+	$(".join_btn").click(function(){
+			$(".login_popup").hide()
+			$(".my_type_popup").show()
+		
+		})
+	$(".finish_join").click(function(){
+			$(".find_login_popup").hide()
+		
+		})
 		/* 구글 */
 		function onSignIn(googleUser) {
 			// Useful data for your client-side scripts:
