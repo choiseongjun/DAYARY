@@ -8,9 +8,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
 import us.flower.dayary.common.FileManager;
 import us.flower.dayary.common.TokenGenerator;
 import us.flower.dayary.domain.*;
+import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
@@ -22,10 +25,21 @@ import us.flower.dayary.service.moim.todo.ToDoWriteService;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
+
+@Slf4j
 @Service
 public class ToDoWriteServiceimpl implements ToDoWriteService {
+	
+	
+	@Autowired
+	EntityManager em;
+	
    @Autowired
     private PeopleRepository peopleRepository;
    @Autowired
@@ -192,6 +206,8 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
 		 */
 	   toDowriteRepository.deleteById(id);
    }
+   
+   
    @Override
    public Page<ToDoWrite> findByMoim_idAndStatus(long id, String status,Pageable pageable) {
       // TODO Auto-generated method stub
@@ -332,4 +348,36 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
           toDowriteListRepository.save(todolist);
        }
 	}
+	
+	
+	@Override
+	@Transactional
+	public BaseResponse updateBoardById(long boardid, String memo) {
+		
+		BaseResponse baseResponse = new BaseResponse();
+		
+		try {
+			log.debug("MoimBoard memo 수정. : {}", memo);
+			moimboard.updateBoardMemo(boardid, memo);
+			
+		} catch (Exception e) {
+			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");
+		}
+		return baseResponse;
+	}
+	
+	
+	@Override
+	@Transactional
+	public BaseResponse deleteBoardById(long boardid) {
+		
+		BaseResponse baseResponse = new BaseResponse();
+		try {
+			moimboard.deleteById(boardid);
+		} catch (Exception e) {
+			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");
+		}
+		return baseResponse;
+	}
+	
 }

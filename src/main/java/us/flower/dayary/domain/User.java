@@ -42,6 +42,9 @@ public class User implements Serializable {
 
     @Column
     private String pincipal;
+    
+    @Column
+    private String picture;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -54,7 +57,7 @@ public class User implements Serializable {
     private LocalDateTime updatedDate;
 
     @Builder
-    public User(String name, String password, String email, String pincipal, SocialType socialType, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public User(String name, String password, String email, String picture, String pincipal, SocialType socialType, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -62,5 +65,6 @@ public class User implements Serializable {
         this.socialType = socialType;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
+        this.picture = picture;
     }
 }

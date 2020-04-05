@@ -5,13 +5,28 @@ var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
+var editor = document.getElementById("content-body");
+
+var openBtn = document.getElementById("openBtn");
+var modal_content= document.getElementById("modal_content");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
+$(document).ready(function() {
+  $('#summernote').summernote({
+    	placeholder: 'content',
+        minHeight: 370,
+        maxHeight: null,
+        focus: true, 
+        lang : 'ko-KR'
+  });
+});
+
 // When the user clicks the button, open the modal 
 function modal_view(plan,writer,id,parent,email){
 	modal.style.display = "block";
+	modal_content.style.display ="block";
 	  $("#title").text(plan);
 	  $("#writer").text(writer);
 	 
@@ -29,9 +44,12 @@ function modal_view(plan,writer,id,parent,email){
 	               console.log(m)
 	               var html="<div class='container'><div class='row'><ul class='cbp_tmtimeline' style='background-color : white; width:1200px'>";
 	               for(var i=0;i<m.length;i++){
-	            	   html+="<li><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
+	            	   html+="<li style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
 	            	   html+=' <div class="cbp_tmicon bg-info"><i class="zmdi zmdi-label"></i></div><div class="cbp_tmlabel">'
-	            	   html+=' <blockquote><p class="blockquote blockquote-primary">'+m[i].memo+"</p></blockquote></li>"
+	            	   html+=' <blockquote><p class="blockquote blockquote-primary">'+m[i].memo+"</p></blockquote></div>"
+	            	   html+=' <button type="button" id="del" onclick="del_content('+m[i].id+')" class="btn" style="float: right; margin-right: 1rem;">삭제</button>'
+	            	   html+=' <button type="button" id="del" onclick="update_content('+m[i].id+',\''+m[i].memo+'\')" class="btn" style="float: right; margin-right: 1rem;">수정</button>'
+	            	   html+="</li>"
 	            	   console.log(i)
 	            	   if(typeof  m[i].moimBoardfile[0]!= 'undefined' && m[i].moimBoardfile[0].real_name != 'undefined'){
 	            		  for(var j in m[i].moimBoardfile){
@@ -57,8 +75,7 @@ function modal_view(plan,writer,id,parent,email){
 	        }, error:function(e){
 
 	        }
-});
-	
+	});
 }
 
 // When the user clicks on <span> (x), close the modal
@@ -72,16 +89,37 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+function showEditor(){
+	editor.style.display = "block";
+	openBtn.style.display ="none";
+	modal_content.style.display ="none";
+}
+
+function showBoard(){
+	editor.style.display = "none";
+	openBtn.style.display ="block";
+	modal_content.style.display ="block";
+}
+
 //글 작성
 function submit(){
 	
-	if($("#message").val()==''&&array.length==0){
+	var content = $("#summernote").val();
+	if(content.trim() == ''){
 		alert("내용을 작성하세요");
 		return;
 	}
+	
+//	if($("#message").val()==''&&array.length==0){
+//		alert("내용을 작성하세요");
+//		return;
+//	}
 	var MoimBoard={};
 	MoimBoard.title=$("#title")[0].textContent;
-	MoimBoard.memo=$("#message").val();
+//	MoimBoard.memo=$("#message").val();
+	MoimBoard.memo= content;
+	alert(content);
 	
 	let formData = new FormData();
 	if(array.length>0){
@@ -107,7 +145,8 @@ function submit(){
 	        	 if(data.code==1){
 	        		 modal.style.display = "none";
 	        		 get_detail($("#toDoWriteId").val());
-	        		 $("#message").val("");
+//	        		 $("#message").val("");
+	        		 $("#summernote").val("");
 	        		 $("#file").val("");
 	        		 $("#imgList").html("");
 	        		 array=[];
@@ -118,8 +157,7 @@ function submit(){
 
 	        }
 	    });
-
-	
+	showBoard();
 }
 $("#file").on("change",handleImgFileSelect);
 var count=0;
@@ -162,6 +200,49 @@ $("#imgList").on("click","span",function(e) {
 		 }
 	  }
 });
+
+//todo 리스트 내의 게시판글 수정 by suyn 2020-04-04
+function update_content(id, memo){
+	
+	alert("수정됩니다 : " +id+"/"+memo);
+	
+	var content = memo;
+	showEditor(content);
+	$('#summernote').val()= cotent;
+//		placeholder = content
+//	});
+//	location.reload();
+	
+}
+
+// todo 리스트 내의 게시판글 삭제
+function del_content(id){
+	
+	alert("삭제됩니다 : " +id);
+	
+//	var baseResponse = {};
+//	baseResponse.message = message;
+//	baseResponse.code = code;
+	
+	 $.ajax({
+         url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
+         type : "DELETE",
+         processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+         contentType: false,
+//         data: baseResponse,
+          success:function(data){
+            if(data.code==1){
+            	alert(data.message);
+            	location.reload();         
+           }else{
+              alert(data.message);
+           }
+          },
+          error:function(e){
+        	  alert(e);
+          }
+      });
+}
 
 
 function expand(div){
