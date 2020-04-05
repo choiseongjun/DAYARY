@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import us.flower.dayary.domain.Common;
 import us.flower.dayary.domain.Moim;
 
-public interface MoimRepository extends JpaRepository<Moim, Long>, JpaSpecificationExecutor<Moim> {
+public interface MoimRepository extends JpaRepository<Moim, Long>,MoimRepositoryCustom, JpaSpecificationExecutor<Moim> {
 
     boolean existsByImageName(String imageName);
 
@@ -73,7 +73,8 @@ public interface MoimRepository extends JpaRepository<Moim, Long>, JpaSpecificat
 
 	Page<Moim> findAllByCategory(Common common, Pageable pageable);
 
-
+	Page<Moim> findAllByCategoryQuery(Common common, Pageable pageable);
+	
 	Page<Moim> findAllByCategoryAndTitleLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, Common common,
 			String string, String string2, String string3);
 
