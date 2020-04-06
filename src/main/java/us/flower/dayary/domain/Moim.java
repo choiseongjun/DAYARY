@@ -1,5 +1,6 @@
 package us.flower.dayary.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -130,7 +131,7 @@ public class Moim extends DateAudit{
 	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "moim")
 	@JsonIgnore
 	private List<Meetup> meetup;
-	
+
 	//가입조건  N은 누구나 Y는 승인해야함
 	@Column(name="JOIN_CONDITION" ,nullable=false, columnDefinition = "char(1) default 'N'")
 	private char joinCondition;
