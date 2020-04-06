@@ -1,5 +1,6 @@
 package us.flower.dayary.controller.moim;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,10 @@ import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.repository.chat.MoimChatRepository;
+import us.flower.dayary.repository.moim.HashTagRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.meetup.MoimMeetUpRepository;
@@ -68,6 +71,9 @@ public class MoimController {
 
 	@Autowired
 	private MoimChatRepository moimchatRepository;
+	@Autowired
+	private HashTagRepository hashTagRepository;
+	
 	@Autowired
 	private MoimBoardFileRepository moimboardfileRepository;
 	private static final Logger logger = LoggerFactory.getLogger(MoimController.class);
@@ -174,14 +180,29 @@ public class MoimController {
 			returnData.put("message", "모임 상태를 선택해주세요");
 			return returnData;
 		}
+		System.out.println(moim.getHashtag());
+		String hashtag = moim.getHashtag();
+		String[] hashtagArr = hashtag.split("#");
+		List<Moim> list=new ArrayList<Moim>();
+		list.add(moim);
+		for(int i=0;i<hashtagArr.length;i++) {
+			System.out.println(hashtagArr[i]);
+			Tag tag =new Tag();
+			tag.setName(hashtagArr[i]);
+			tag.setMoims(list);
+			moimRepository.save(moim);
+			hashTagRepository.save(tag);
+		}
+		
+		
 		char joinCondition='Y';//참가자 승인후 Y Defualt Value
 		try {
-			moimService.saveMoim(id, subject, moim, file);
+			//moimService.saveMoim(id, subject, moim, file);
 			
-			long MoimId = moimService.selectMaxMoimId();
+			//long MoimId = moimService.selectMaxMoimId();
 			char maker='Y';//만든사람여부
 			//모임참가자 서비스를 들고와서 재사용한다(모임참가자테이블에도넣기위함 알림을 모임참가자테이블로 보내기에 모임장도 넣어야한다 ) by choiseongjun 20191221
-			moimService.moimParticipant(peopleId,MoimId,joinCondition,maker);
+			//moimService.moimParticipant(peopleId,MoimId,joinCondition,maker);
 			returnData.put("code", "1");
 			returnData.put("message", "저장되었습니다");
 

@@ -143,4 +143,6 @@ public class Moim extends DateAudit{
 	private double progresspercent;
 	@Transient
 	private long todocount;//계획카운트
+	@Transient
+	private String hashtag;//해시태그 이름
 }
