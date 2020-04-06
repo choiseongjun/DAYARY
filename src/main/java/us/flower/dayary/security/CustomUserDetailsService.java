@@ -28,9 +28,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		  People user = peopleRepository.findById(id).orElseThrow(
 		            () -> new UsernameNotFoundException("User not found with id : " + id)
 		        );
-		      
-
-		        return UserPrincipal.create(user);
+		  return UserPrincipal.create(user);
+		  
 	}
 
 	

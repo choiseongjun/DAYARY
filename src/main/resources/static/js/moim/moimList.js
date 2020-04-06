@@ -83,7 +83,7 @@ function makeSelectElement(item, id) {
         var code  = item[n].commCode;
         var name = item[n].commName;
 
-        $('#'+id).append('<option value="' + code + '">' + name + '</option>');
+        $('#'+id).append('<option value="' + code + '">' + name + '</option>').selectric();
     }
 }
 
@@ -133,7 +133,6 @@ function initMoimElement(opt) {
  * @시/도/구 카테고리 조회 API
  */
 $(function(){
-	
 	$.ajax({
 		type: "get",
 		url: "http://openapi.nsdi.go.kr/nsdi/eios/service/rest/AdmService/admCodeList.json",
@@ -146,9 +145,10 @@ $(function(){
 			for(var i=0;i<data.admVOList.admVOList.length;i++){ 
 				html +="<option value='"+data.admVOList.admVOList[i].admCode+"'>"+data.admVOList.admVOList[i].lowestAdmCodeNm+"</option>"
 			}
-			
-            $('#sido_code').html(html);
-			
+            $('#sido_code').html(html).selectric();
+
+			// Get initial value
+            //$('#sido_code').selectric(html);
 		},
 		error: function(xhr, stat, err) {}
 	});
@@ -170,7 +170,7 @@ $(function(){
 					html +="<option value='"+data.admVOList.admVOList[i].admCode+"'>"+data.admVOList.admVOList[i].lowestAdmCodeNm+"</option>"
 				}
 				
-	            $('#sigoon_code').html(html);
+	            $('#sigoon_code').html(html).selectric();
 				
 			},
 			error: function(xhr, stat, err) {}

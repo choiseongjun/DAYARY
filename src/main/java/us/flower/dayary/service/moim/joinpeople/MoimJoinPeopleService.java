@@ -1,6 +1,7 @@
 package us.flower.dayary.service.moim.joinpeople;
 
 import java.util.List;
+import java.util.Map;
 
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
@@ -13,5 +14,7 @@ public interface MoimJoinPeopleService {
 	void banMoimpeople(People people, Moim moim);
 
 	List<Long> searchJoinedPeople(long moimNo);
+
+	Map<String, String> selectCountMoimPeople(long moimNo);
 
 }

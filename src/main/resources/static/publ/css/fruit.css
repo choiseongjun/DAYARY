@@ -1,0 +1,131 @@
+@charset "utf-8";
+
+.vis_box{padding: 164px 0 280px; text-align: center; background: url("../images/contents/main_vis.jpg") no-repeat center center; background-size: cover;}
+.vis_box h2{display: block; font-size: 76px; line-height: 76px; font-weight: 600; color: #fff;}
+.vis_box p{display: block; font-size: 26px; line-height: 40px; max-width: 1000px; margin: 50px auto 0; color: #fff;}
+
+#content{position: relative; padding: 100px 0;}
+
+.find_crew{position: relative;}
+
+.find_crew .top_box{}
+.find_crew .top_box .crew_util_box{padding-right: 200px; height: 60px;}
+.find_crew .top_box .crew_util_box .tabbtn_box{border-bottom: 1px solid #F2F2F2; overflow: auto;}
+.find_crew .top_box .crew_util_box .tabbtn_box ul{display: inline-block; white-space: nowrap;}
+.find_crew .top_box .crew_util_box .tabbtn_box ul li{display: inline-block;}
+.find_crew .top_box .crew_util_box .tabbtn_box ul li a{position: relative; display: block; height: 60px; line-height: 60px; text-align: center; padding: 0 45px; color: #BDBDBD; transition: ease-in-out 0.5s;}
+.find_crew .top_box .crew_util_box .tabbtn_box ul li a:before{content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; background-color: #03D2B4; transition: ease-in-out 0.5s; transform: scaleX(0);}
+.find_crew .top_box .crew_util_box .tabbtn_box ul li.on a, .find_crew .top_box .crew_util_box .tabbtn_box ul li a:hover{color: #03D2B4;}
+.find_crew .top_box .crew_util_box .tabbtn_box ul li.on a:before, .find_crew .top_box .crew_util_box .tabbtn_box ul li a:hover:before{transform: scaleX(1);}
+.find_crew .top_box .crew_util_box .control_box{position: absolute; top: 0; right: 80px;}
+.find_crew .top_box .crew_util_box .control_box a{position: relative; float: left; width: 60px; height: 60px; background-color: #fff; border: 1px solid #fafafa; box-sizing: border-box; z-index: 0;}
+.find_crew .top_box .crew_util_box .control_box a:focus{z-index: 1;}
+.find_crew .top_box .crew_util_box .control_box a span.icon{position: absolute; top: 50%; left: 50%; width: 9px; height: 15px; background: url("../images/contents/fruit_sp.png") no-repeat -232px 0; text-indent: -99999px; margin: -7.5px 0 0 -4.5px;}
+.find_crew .top_box .crew_util_box .control_box a.prev span.icon{background-position: -232px 0;}
+.find_crew .top_box .crew_util_box .control_box a.next span.icon{background-position: -267px 0;}
+.find_crew .top_box .crew_util_box .control_box a.prev:hover span.icon{background-position: -232px -40px;}
+.find_crew .top_box .crew_util_box .control_box a.next:hover span.icon{background-position: -267px -40px;}
+.find_crew .top_box .detail_search{}
+.find_crew .top_box .detail_search .search_open_btn{position: absolute; top: 0; right: 0; width: 80px; height: 60px; overflow: hidden; box-sizing: border-box;}
+.find_crew .top_box .detail_search .search_open_btn.open{background-color: #1fc5ad;}
+.find_crew .top_box .detail_search .search_open_btn span.icon{position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; background: url("../images/contents/fruit_sp.png") no-repeat -135px -120px; text-indent: -99999px; margin: -10px 0 0 -10px;}
+.find_crew .top_box .detail_search .search_open_btn.close{background-color: #f2f2f2;}
+.find_crew .top_box .detail_search .search_open_btn.close span.icon{position: static; width: 0; height: 0; background: none; margin: 0; top: auto; left: auto;}
+.find_crew .top_box .detail_search .search_open_btn.close span.icon:before{content: ''; position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; background: url("../images/contents/fruit_sp.png") no-repeat -87px 0; text-indent: -99999px;}
+/*.find_crew .top_box .detail_search .search_open_btn.open:hover span.icon{background-position: -92px -120px;}*/
+.find_crew .top_box .detail_search .search_open_btn.close:hover span.icon:before{transform: rotate(360deg); transition: ease-in-out 0.8s;}
+
+.find_crew .top_box .detail_search .detail_search_inner{display: none; background-color: #f2f2f2; padding: 40px 60px;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box{display: inline-block; width: 100%; margin-bottom: -26px;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item{position: relative; float: left; padding-left: 146px; box-sizing: border-box; margin-bottom: 20px; width: 25%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4n-3){padding-left: 86px; width: 18.8%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(2){width: 23.6%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(3){width: 27.6%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4){width: 30%;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .title{position: absolute; top: 0; left: 60px; height: 42px; line-height: 42px; font-size: 16px; color: #555;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item:nth-child(4n-3) .title{left: 0;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-label{background-color: #fff; height: 42px; line-height: 42px; padding: 0 35px 0 15px; color: #828282; transition: ease-in-out 0.3s;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric:hover .selectric-label{color: #000; font-weight: 400; line-height: 41px;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-button{top: 50%; right: 10px; width: 11px; height: 8px; background: url("../images/contents/fruit_sp.png") no-repeat -129px 0; text-indent: -99999px; border: 0; margin: -4px 0 0 0; padding: 0; transition: ease-in-out 0.3s;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-open .selectric-button{transform: rotateX(180deg);}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-items .selectric-scroll{max-height: 160px;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-items .selectric-scroll.over_scroll{padding-bottom: 20px;}
+.find_crew .top_box .detail_search .detail_search_inner .top_search_box > .item .selectric-items li{padding: 8px 12px;}
+
+.find_crew .top_box .detail_search .detail_search_inner .bottom_search_box{position: relative; padding-right: 160px; margin-top: 40px;}
+.find_crew .top_box .detail_search .detail_search_inner .bottom_search_box input[type="text"]{display: block; width: 100%; box-sizing: border-box; padding: 0 15px; height: 42px; line-height: 42px; border: 0; margin: 0; background-color: #fff; color: #bdbdbd; font-size: 16px; font-weight: 100;}
+.find_crew .top_box .detail_search .detail_search_inner .bottom_search_box button[type="submit"]{position: absolute; top: 0; right: 0; width: 140px; height: 42px; line-height: 42px; border: 0; padding: 0; margin: 0; color: #fff; border-radius: 8px; background: linear-gradient(90deg, #38E584 0%, #03D2B4 96.67%); font-size: 19px; font-weight: 400; cursor: pointer;}
+
+.find_crew .bottom_box{margin-top: 40px;}
+
+.find_crew .bottom_box .grid_item_box{display: inline-block; width: 100%; margin-bottom: 60px;}
+.find_crew .bottom_box .grid_item_box .grid_item{position: relative; float: left; width: 31.6%; margin: 2.6% 0 0 2.6%; box-sizing: border-box;}
+.find_crew .bottom_box .grid_item_box .grid_item:nth-child(3n-2){margin-left: 0;}
+.find_crew .bottom_box .grid_item_box .grid_item:nth-child(n):nth-child(-n+3){margin-top: 0;}
+.find_crew .bottom_box .grid_item_box .grid_item a{position: relative; top: 0; display: block; border-radius: 12px; background-color: #fff; box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15); overflow: hidden; transition: ease-in-out 0.5s;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a:hover{top: -18px;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team{height: 448px;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a{display: block; height: 100%; text-align: center; box-sizing: border-box; padding: 10px;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a .add_box{display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; box-sizing: border-box; border: 3px solid; border-image: url("../images/contents/dashed.png") 6 / 1.5 round; transition: ease-in-out 0.5s;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a:hover .add_box{border-image: url("../images/contents/dashed_hover.png") 6 / 1.5 round;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a .add_box .add_cont{font-size: 20px; color: #828282; line-height: 30px; vertical-align: middle;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a .add_box .add_cont span.icon{position: relative; display: block; width: 96px; height: 96px; margin: 0 auto 45px;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a .add_box .add_cont span.icon:before{content: ''; position: absolute; top: 50%; left: 50%; width: 96px; height: 8px; background-color: #e0e0e0; margin: -4px 0 0 -48px; transition: ease-in-out 0.5s;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a .add_box .add_cont span.icon:after{content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 96px; background-color: #e0e0e0; margin: -48px 0 0 -4px; transition: ease-in-out 0.5s;}
+.find_crew .bottom_box .grid_item_box .grid_item.add_team a:hover .add_box .add_cont span.icon:before, .find_crew .bottom_box .grid_item_box .grid_item.add_team a:hover .add_box .add_cont span.icon:after{background-color: #03D2B4;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box{position: relative;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box:after{content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #A0A0A0 0%, rgba(255, 255, 255, 0) 117.36%); mix-blend-mode: multiply;}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .find_crew .bottom_box .grid_item_box .grid_item.card a .img_box:after{content: none;}
+}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box img{width: 100%;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state{position: absolute; top: 19px; left: 24px; z-index: 1;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state > span{float: left; margin-left: 5px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.8); height: 24px; line-height: 24px; color: #fff; font-size: 14px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state > span:first-child{margin-left: 0;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state .person{padding: 0 9px; background-color: rgba(3,210,180,0.8); border: 0; height: 28px; line-height: 28px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state .person span.icon{display: inline-block; width: 13px; height: 14px; vertical-align: middle; margin: -3px 6px 0 0; background: url("../images/contents/fruit_sp.png") no-repeat -301px -80px; text-indent: -99999px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .img_box .state .type{padding: 0 13px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box{position: relative; padding: 30px 20px 24px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box strong{display: block; font-size: 24px; color: #000; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; margin-bottom: 16px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box p{font-size: 16px; color: #000; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height: 44px; margin-bottom: 8px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .tag{font-size: 14px; color: #828282; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .tag span{margin-right: 5px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage{position: relative; margin: 46px 0 65px; padding-right: 50px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage .bar{position: relative; height: 4px; background-color: #e0e0e0; border-radius: 50px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage .bar .active{position: absolute; top: 50%; left: 0; width: 0; min-width: 8px; height: 8px; border-radius: 50px; background-color: #fff; margin-top: -4px; transition: ease-in-out 1s;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.high .bar .active{background: #03D2B4; background: linear-gradient(90deg, #38E584 0%, #03D2B4 96.67%);}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.mid .bar .active{background: #FFB033;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.low .bar .active{background: #FF8080;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.zero .bar .active{background: #828282;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage .txt{position: absolute; top: 50%; right: 0; width: 40px; font-size: 10px; font-weight: 400; color: #03D2B4; text-align: right; transform: translateY(-50%); vertical-align: bottom; white-space: nowrap;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.high .txt{color: #03D2B4;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.mid .txt{color: #FFB033;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.low .txt{color: #FF8080;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage.zero .txt{color: #828282;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .percentage .txt span{font-size: 16px; margin-right: 1px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box{display: inline-block; width: 100%; margin-bottom: -6px; font-size: 13px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box > span.like{float: left;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box > span.place{float: right;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box > span span.icon{display: inline-block; background: url("../images/contents/fruit_sp.png") no-repeat 0 0; margin: -3px 8px 0 0; vertical-align: middle;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box > span.like span.icon{width: 20px; height: 19px; background-position: 0 -120px;}
+.find_crew .bottom_box .grid_item_box .grid_item.card a .cont_box .util_box > span.place span.icon{width: 16px; height: 20px; background-position: -46px 0;}
+
+.find_crew .bottom_box .pager_box{position: relative; text-align: center;}
+.find_crew .bottom_box .pager_box ul{display: inline-block; margin-bottom: -6px;}
+.find_crew .bottom_box .pager_box ul li{float: left; margin-left: 25px;}
+.find_crew .bottom_box .pager_box ul li:first-child{margin-left: 0;}
+.find_crew .bottom_box .pager_box ul li a{display: block; width: 29px; height: 29px; line-height: 29px; border-radius: 4px; font-size: 15px;}
+.find_crew .bottom_box .pager_box ul li a.on{background-color: #03D2B4; color: #fff;}
+.find_crew .bottom_box .pager_box ul li a.pager_btn{position: relative;}
+.find_crew .bottom_box .pager_box ul li a.pager_btn span.icon{position: absolute; top: 50%; left: 50%; width: 8px; height: 12px; background: url("../images/contents/fruit_sp.png") no-repeat -165px 0; text-indent: -99999px; margin: -6px 0 0 -4px;}
+.find_crew .bottom_box .pager_box ul li a.pager_btn.prev span.icon{background-position: -165px 0;}
+.find_crew .bottom_box .pager_box ul li a.pager_btn.next span.icon{background-position: -199px 0;}
+
+
+
+
+
+
+
+
+

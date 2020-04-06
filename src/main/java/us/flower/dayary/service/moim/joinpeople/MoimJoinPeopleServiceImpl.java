@@ -2,7 +2,9 @@ package us.flower.dayary.service.moim.joinpeople;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,8 @@ public class MoimJoinPeopleServiceImpl implements MoimJoinPeopleService{
 
 	@Autowired
 	MoimPeopleRepository moimpeopleRepository;
-	
+	@Autowired
+	SqlSession sqlSession;
 	@Override
 	public void deleteMoimPeople(long moimPeopleNo) {
 		moimpeopleRepository.deleteById(moimPeopleNo);
@@ -46,6 +49,11 @@ public class MoimJoinPeopleServiceImpl implements MoimJoinPeopleService{
 		}
 		
 		return peopleId;
+	}
+
+	@Override
+	public Map<String, String> selectCountMoimPeople(long moimNo) {
+		return sqlSession.selectOne("moimPeople.selectCountMoimPeople",moimNo);
 	}
 
 }

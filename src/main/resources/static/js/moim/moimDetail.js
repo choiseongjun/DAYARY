@@ -83,12 +83,10 @@ $('#signup_btn').off().on('click', function () {//스터디 가입하기 by choi
         		var peopleEmail = $('#sessionUserEmail').attr("data-sessionUserEmail");
             	var moimTitle = $('#moimTitle').attr("data-moimTitle");
             	
-            	console.log("moimPeopleList>>", moimPeopleList);
         	  
        		//textarea 값이 없을 땐 return;
        		//if()
             var moimPeopleListstr=moimPeopleList.join(',');
-            console.log(moimPeopleListstr);
 //       		if(!isStomp && socket.readyState!==1) return;
 //       		let peopleId=$('#peopleId').attr("data-peopleId");
 //       		let msg=$('#inputmsg').val();
@@ -101,6 +99,8 @@ $('#signup_btn').off().on('click', function () {//스터디 가입하기 by choi
 //       			socket.send(msg);
 //       		}
        		$('#inputmsg').val('');
+         }else if(data.code==2){
+        	 alert(data.message);
          }else{
             alert(data.message);
          }
@@ -153,10 +153,10 @@ $('#signup_btnY').off().on('click', function () {//스터디 가입하기 by cho
 //}
 
 $('#withdraw_btn').off().on('click', function () {//스터디 탈퇴하기 by choiseongjun 2019-09-20
-
+	 
+	 var moimNo = $('#moimNo').attr("data-moimNo");
      var moimPeopleNo = $('#moimPeopleNo').attr("data-moimPeopleNo");
      moimPeopleNo*=1;
-     console.log(moimPeopleNo);
      $.ajax({
           url : '/moimParticipant/deletejoinedPeople/'+moimPeopleNo, 
           type : "DELETE",   
@@ -167,10 +167,9 @@ $('#withdraw_btn').off().on('click', function () {//스터디 탈퇴하기 by ch
           data      : JSON.stringify(moimPeopleNo),
           success:function(data){
               if(data.code==1){
-                  console.log("success callback data");
                   alert(data.message);
-                  location.href='/moimlistView';
-               }else{
+                  location.href='/moimlistView/moimdetailView/'+moimNo;
+              }else{
                   alert(data.message);
                }
            },

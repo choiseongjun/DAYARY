@@ -85,7 +85,7 @@ public class People extends DateAudit{
        private String imageExtension;
 	
 	
-	@Column(name="ACTIVATION")
+	@Column(name="ACTIVATION",columnDefinition = "char(1) default 'N'")
 	private String activation;
 	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "people")
 	@JsonIgnore

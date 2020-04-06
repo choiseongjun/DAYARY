@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +37,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import us.flower.dayary.common.BCRYPT;
 import us.flower.dayary.common.FileManager;
 import us.flower.dayary.common.TokenGenerator;
-import us.flower.dayary.common.emailManager;
 import us.flower.dayary.config.NaverLoginBO;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.Role;
@@ -46,7 +47,6 @@ import us.flower.dayary.payload.LoginRequest;
 import us.flower.dayary.payload.SignUpRequest;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.repository.people.RoleRepository;
-import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.JwtTokenProvider;
 import us.flower.dayary.service.people.PeopleService;
 
@@ -100,7 +100,6 @@ public class PeopleController {
 			,HttpServletResponse response,Authentication authentication,ModelAndView mav) throws ServletException {
 			String username = authentication.getName();
 			People dbPeople = peopleRepository.findByName(username);
-//			System.out.println("SFSDFSDFDFSDFSDFSDFSDFSD");
 //			session.setAttribute("peopleId", dbPeople.getId());// NO세션저장
 //			session.setAttribute("peopleName", dbPeople.getName());// 이름세션저장
 //			session.setAttribute("peopleEmail", dbPeople.getEmail());// ID세션저장
@@ -108,13 +107,20 @@ public class PeopleController {
 			if(request.isUserInRole("ROLE_ADMIN")) {
 		    	return "redirect:/admin/admini";
 		    	//mav.setViewName("redirect:/admin/admini");
+		    }else {
+				if(dbPeople.getActivation().equals("Y")) {
+					return "redirect:/";
+				}else {
+					return "redirect:/authlogout";
+				}
 		    }
+			
+			
 //			String savePage = (String)session.getAttribute("savePage");
 //			if(savePage!=null) {
 //				mav.setViewName("redirect:/"+savePage);
 //				session.setAttribute("savePage", null);
 //			}
-		return "redirect:/";
 	}
 	@PostMapping("/signin")
 	@ResponseBody
@@ -262,13 +268,49 @@ public class PeopleController {
 			//인증키 일치시 activate
 			p.setActivation("Y");
 			peopleRepository.save(p);
-			model.addAttribute("message","인증되었습니다.");
+			model.addAttribute("authMessage","인증되었습니다.");
 			
+		}else if(p.getActivation().contentEquals("Y")) {
+			model.addAttribute("authMessage","로그인하여 이용하세요.");
 		}else {
-			model.addAttribute("message","잘못된접근입니다.");
+			model.addAttribute("authMessage","잘못된접근입니다.");
 		}
 		return "people/signin";
 	}
+	/**
+	 * 비밀번호메일
+	 *
+	 * @param
+	 * @return
+	 * @throws @author JY
+	 */
+	@GetMapping("/auth/findPassword/{email}")
+	@ResponseBody
+	public Map<String, Object> authFindPassword(@PathVariable("email") String email) {
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		try {
+			People p=peopleRepository.findByEmail(email);
+			if(p==null) {
+				returnData.put("code", "2");
+				returnData.put("message", "존재하지않는 회원입니다:)");
+				return returnData;
+			}
+			//임시비밀번호 메일전송
+			String pass=service.sendAuthFindPassWordMail(p);
+			//비밀번호 바꿔저장
+			p.setPassword(bcrypt.hashpw(pass));
+			peopleRepository.save(p);
+			returnData.put("code", "1");
+			returnData.put("message", "메일을 확인해주세요:)");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return returnData;
+	}
+	
 	/**
 	 * 회원가입 뷰
 	 *
@@ -306,10 +348,19 @@ public class PeopleController {
 
 	
 
-
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		return "main";
+	/*
+	 * 이메일 인증을 받지않았을떄 이쪽을 탄다
+	 * */
+	@GetMapping("/authlogout")
+	public String logout(HttpServletRequest request,HttpServletResponse response,Model model) {
+		HttpSession session= request.getSession(false);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		session.invalidate();
+		
+		SecurityContextHolder.clearContext();
+	        
+		model.addAttribute("AuthError", true);
+		return "people/authFail";
 	}
 	 // Login form with error
 	@RequestMapping("/loginerror")
@@ -317,4 +368,5 @@ public class PeopleController {
 	    model.addAttribute("loginError", true);
 	    return "people/signin";
 	}
+	
 }

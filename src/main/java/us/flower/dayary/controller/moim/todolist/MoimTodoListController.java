@@ -423,9 +423,9 @@ public class MoimTodoListController {
    public Map<String, Object> MoimDeleteOne(@PathVariable("no") long no) {
    
       Map<String, Object> returnData = new HashMap<String, Object>();
-      service.deleteById(no);
+      
       try {
-    	  
+    	   service.deleteById(no);	  
            returnData.put("code", "1");
            returnData.put("message", "삭제되었습니다");
 
@@ -438,19 +438,5 @@ public class MoimTodoListController {
       return returnData;
    }
    
-   /**
-    * 모임 해야할일(ToDoList) 현재시간 통해 상태 update
-    *
-    * @param 
-    * @return
-    * @throws 
-    * @author JY
-    */
-//   @ResponseBody
-//   @GetMapping("/moimDetail/moimTodoList/status/{no}")
-//   public void status(@PathVariable("no")long no) {
-//   	Date date=new java.sql.Date(System.currentTimeMillis());
-//	 service.updateById(no, date);
-//   }
 
 }
