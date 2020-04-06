@@ -162,11 +162,15 @@ public class MoimJoinPeopleController {
 		char joinCondition='Y';//참가자 승인후 Y
 		Map<String,Object> returnData = new HashMap<String,Object>();
 
-		Map<String,String> CountMoimPeople = moimjoinPeopleService.selectCountMoimPeople(moimNo);
+		
 		
 		
 		
 		try {	
+			Map<String,String> CountMoimPeople = moimjoinPeopleService.selectCountMoimPeople(moimNo);
+			
+			System.out.println("SRWERWER"+CountMoimPeople);
+			
 			if(CountMoimPeople.get("cntPeople").equals("TRUE")) {
 				returnData.put("code","2");  
 				returnData.put("message","인원 초과했어요:)");

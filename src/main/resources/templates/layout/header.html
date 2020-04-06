@@ -20,6 +20,7 @@
             <!-- 여기서부터 퍼블리싱한내용들 -->
             <link rel="stylesheet" href="/publ/css/common.css">
 			<link rel="stylesheet" href="/publ/css/fruit.css">
+			<link rel="stylesheet" href="/publ/css/jquery.selectlist.css">
 			<link rel="stylesheet" href="/publ/css/layout.css">
 			<link rel="stylesheet" href="/publ/css/owl.carousel.min.css">
 			<link rel="stylesheet" href="/publ/css/owl.theme.default.min.css">
@@ -27,7 +28,6 @@
         <!-- <css th:fragment="moimDetailsubmenu"> -->  
           <!-- <link rel="stylesheet" href="/css/moim/moimDetailsubmenu.css"> -->
           
-        </css>
         
             </head>
     <body>
@@ -54,11 +54,9 @@
                                 </button>
                             </form>
                         </div>
-
                         <div class="col-4 site-logo">
                             <a href="/" class="text-black h2 mb-0"><img src="/publ/images/layout/logo.png" width="100px" height="80px"/></a>
                         </div>
-
                         <div class="col-8 text-right">
                             <nav class="site-navigation" role="navigation">
                             	<div id="socketAlert" class="alert alert-success" role="alert" style="display:none;"></div>임시 알림창
@@ -91,14 +89,12 @@
                                       </a>
                                     </li>
                              
-
                                     <li sec:authorize="hasAuthority('ROLE_USER')">
                                         <div class="notification notishow">
                                             <span>Inbox</span>
                                             <span class="badge">3</span>
                                         </div>
                                     </li>
-
                                     <li class="d-none d-lg-inline-block">
                                         <a href="#" class="js-search-toggle">
                                             <span class="icon-search"></span>
@@ -152,6 +148,10 @@
 	                <th block sec:authorize="hasAuthority('ROLE_USER')">
 	                <a href="#none" class="my_btn" ><span class="icon">마이페이지<span class="text_hidden">열기</span></span></a>
 	                <a href="#none" class="alarm_btn">
+	                <ul class="my_page_box">
+	                	<li><a href="#">마이페이지</a></li>
+	                    <li><a href="#">로그아웃</a></li>
+	                </ul>
 	                <span class="alarm_num">1</span><span class="icon">알람<span class="text_hidden">열기</span></span></a>
 	                </th>
 				</div>
@@ -243,6 +243,7 @@
 		     <script src="/publ/js/jquery/jquery.nicescroll.min.js"></script>
 		     <script src="/publ/js/jquery/jquery.selectric.js"></script>
 		     <script src="/publ/js/fruit.js"></script> 
+		     <script src="/publ/js/jquery.selectlist.js"></script> 
           <!--  <script src="/js/jquery-3.3.1.min.js" ></script> --> 
          <!--     <script src="/js/jquery-migrate-3.0.1.min.js"></script>
             <script src="/js/jquery-ui.js"></script>
@@ -259,9 +260,7 @@
             <!-- 알림창스크립트임시로 박아놓음 나중에 js폴더로 관리할것 by choiseongjun -->
             <script>
                 $(document).ready(function () {
-                	var hasRoleUser = $('#hasRoleUser').val();
                 	
-                	console.log(hasRoleUser)
                 	$.ajax({
               	      url:'/Menulist',
               	        type:'get',
@@ -271,9 +270,7 @@
               	        cache: false,
               	        //data: formData,
               	        success:function(data) {
-              	        	console.log(data)
               	        	var m=data;
-            	        	console.log(m)
                     		var html=""
                     		var menu1="";
             	        	var menu2="";
@@ -304,7 +301,6 @@
             	        		if(m[i].id==7){
             	        			menu7+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		console.log(m[i]);
             	        	}
             	        	$("#menu1").html(menu1);
             	        	$("#menu2").html(menu2);

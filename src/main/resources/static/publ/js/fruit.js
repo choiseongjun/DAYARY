@@ -1,3 +1,31 @@
+$(".open_login_popup").click(function(){
+	$(".login_popup").show()
+	
+	})
+$(".join_go_btn").click(function(){
+		$(".my_type_popup").hide()
+		$(".find_login_popup").show()
+	
+	})	
+$(".join_btn").click(function(){
+		$(".login_popup").hide()
+		$(".my_type_popup").show()
+	
+	})
+$(".finish_join").click(function(){
+		$(".find_login_popup").hide()
+	
+	})
+	
+$(".my_btn").click(function(){
+		if($(".my_page_box").css("display")=="none"){
+			$(".my_page_box").show()
+			}else{
+				$(".my_page_box").hide()
+		}
+	})
+
+
 
 $(".search_btn").click(function(){
 		$("#header").css({"z-index":"99999"})
@@ -16,7 +44,13 @@ $(".blank").click(function(){
 		$(".search_box").css({"display":"none"})
 	})
 
-
+$(function(){
+		$('.select_pp').selectlist({
+			Index: 10,
+			width: 315,
+			height: 46
+		});		
+	})
 
 
 $(function(){
@@ -126,7 +160,7 @@ $(function(){
 	
 });
 
- 
+
 $('.slider').on('initialized.owl.carousel changed.owl.carousel', function(e) {
     if (!e.namespace)  {
       return;

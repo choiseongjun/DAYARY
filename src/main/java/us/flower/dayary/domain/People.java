@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -69,9 +70,17 @@ public class People extends DateAudit{
 
 	@Column(name="NAME")
 	private String name;
-
+	@Column(name="JOB")
+	private String job;
+	@Column(name="SEX")
+	private String sex;
+	@Column(name="INTERESTS")
+	private String interests;
 	@Column(name="PHOTO")
 	private String photo;
+	@Lob //길이 제한 없음
+	@Column(name="INTRODUCE")
+	private String introduce;
 	 //이미지경로
    	@Column(name = "IMAGE_PATH", nullable = true)
        private String imagePath;

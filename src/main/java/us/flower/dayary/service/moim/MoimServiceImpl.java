@@ -26,6 +26,7 @@ import us.flower.dayary.domain.DTO.TempData;
 import us.flower.dayary.repository.CommonRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
+import us.flower.dayary.repository.moim.MoimRepositoryCustom;
 import us.flower.dayary.repository.people.PeopleRepository;
 
 @Service
@@ -250,7 +251,8 @@ public class MoimServiceImpl implements moimService{
 		
 		Common common =new Common();
 		common.setCommCode(commCode);
-		return moimRepository.findAllByCategory(common,pageable);
+		//return moimRepository.findAllByCategory(common,pageable);
+		return moimRepository.findAllByCategoryQuery(common,pageable);
 	}
 	@Autowired
 	SqlSession sqlSession;
