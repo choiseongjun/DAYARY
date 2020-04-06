@@ -15,8 +15,7 @@ var span = document.getElementsByClassName("close")[0];
 
 $(document).ready(function() {
   $('#summernote').summernote({
-    	placeholder: 'content',
-        minHeight: 370,
+        minHeight: 250,
         maxHeight: null,
         focus: true, 
         lang : 'ko-KR'
@@ -81,16 +80,28 @@ function modal_view(plan,writer,id,parent,email){
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
+  showBoard();
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    showBoard();
   }
 }
 
-function showEditor(){
+function showEditor(memo){
+	var content = memo;
+	
+	if(!content){
+		alert("content Null: "+content);
+		$("#summernote").val("");
+	}else{
+		alert("content is Not Null: "+content);
+		$("#summernote").val(content);
+		alert("summer content "+$("#summernote").val());
+	}
 	editor.style.display = "block";
 	openBtn.style.display ="none";
 	modal_content.style.display ="none";
@@ -100,6 +111,7 @@ function showBoard(){
 	editor.style.display = "none";
 	openBtn.style.display ="block";
 	modal_content.style.display ="block";
+	$("#summernote").val("");
 }
 
 //글 작성
@@ -204,14 +216,10 @@ $("#imgList").on("click","span",function(e) {
 //todo 리스트 내의 게시판글 수정 by suyn 2020-04-04
 function update_content(id, memo){
 	
-	alert("수정됩니다 : " +id+"/"+memo);
+	alert("수정됩니다 : " +id+"/ "+memo);
 	
 	var content = memo;
 	showEditor(content);
-	$('#summernote').val()= cotent;
-//		placeholder = content
-//	});
-//	location.reload();
 	
 }
 
