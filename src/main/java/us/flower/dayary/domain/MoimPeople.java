@@ -27,7 +27,6 @@ import us.flower.dayary.domain.common.DateAudit;
  */
 @Entity
 @Table(name = "MOIM_PEOPLE")
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

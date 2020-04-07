@@ -35,10 +35,8 @@ import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
-import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.repository.chat.MoimChatRepository;
-import us.flower.dayary.repository.moim.HashTagRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.meetup.MoimMeetUpRepository;
@@ -69,8 +67,8 @@ public class MoimController {
 	@Autowired
 	private MoimChatRepository moimchatRepository;
 	
-	@Autowired
-	private HashTagRepository hashTagRepository;
+//	@Autowired
+//	private HashTagRepository hashTagRepository;
 	
 	@Autowired
 	private MoimBoardFileRepository moimboardfileRepository;
@@ -334,13 +332,13 @@ public class MoimController {
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-				List<Tag> tags = moimList.getContent().get(i).getTags();
+//				Set<Tag> tags = moimList.getContent().get(i).getTags();
 				String hashtag="";
-				for(Tag t: tags) {
-					Map<String, Object> tempMap = new HashMap<String, Object>();
-					tempMap.put("hashname", t.getName());
-					hashtag +="#"+t.getName();
-				}
+//				for(Tag t: tags) {
+//					Map<String, Object> tempMap = new HashMap<String, Object>();
+//					tempMap.put("hashname", t.getName());
+//					hashtag +="#"+t.getName();
+//				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -387,13 +385,13 @@ public class MoimController {
 				double progress = 0;
 				long count = 0; 
 				
-				List<Tag> tags = moimList.getContent().get(i).getTags();
+//				Set<Tag> tags = moimList.getContent().get(i).getTags();
 				String hashtag="";
-				for(Tag t: tags) {
-					Map<String, Object> tempMap = new HashMap<String, Object>();
-					tempMap.put("hashname", t.getName());
-					hashtag +="#"+t.getName();
-				}
+//				for(Tag t: tags) {
+//					Map<String, Object> tempMap = new HashMap<String, Object>();
+//					tempMap.put("hashname", t.getName());
+//					hashtag +="#"+t.getName();
+//				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -438,13 +436,13 @@ public class MoimController {
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-				List<Tag> tags = moimList.getContent().get(i).getTags();
+				//Set<Tag> tags = moimList.getContent().get(i).getTags();
 				String hashtag="";
-				for(Tag t: tags) {
-					Map<String, Object> tempMap = new HashMap<String, Object>();
-					tempMap.put("hashname", t.getName());
-					hashtag +="#"+t.getName();
-				}
+//				for(Tag t: tags) {
+//					Map<String, Object> tempMap = new HashMap<String, Object>();
+//					tempMap.put("hashname", t.getName());
+//					hashtag +="#"+t.getName();
+//				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -492,13 +490,13 @@ public class MoimController {
 				double progress = 0;
 				long count = 0;
 				
-				List<Tag> tags = moimList.getContent().get(i).getTags();
+				//Set<Tag> tags = moimList.getContent().get(i).getTags();
 				String hashtag="";
-				for(Tag t: tags) {
-					Map<String, Object> tempMap = new HashMap<String, Object>();
-					tempMap.put("hashname", t.getName());
-					hashtag +="#"+t.getName();
-				}
+//				for(Tag t: tags) {
+//					Map<String, Object> tempMap = new HashMap<String, Object>();
+//					tempMap.put("hashname", t.getName());
+//					hashtag +="#"+t.getName();
+//				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
