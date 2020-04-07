@@ -1,7 +1,11 @@
 package us.flower.dayary.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import us.flower.dayary.domain.common.DateAudit;
 
 /**
@@ -130,7 +135,16 @@ public class Moim extends DateAudit{
 	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "moim")
 	@JsonIgnore
 	private List<Meetup> meetup;
-	
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//    name = "MOIM_TAG",                              // 연결테이블 이름
+//    joinColumns = @JoinColumn(name = "MOIM_ID"),        // 태그와 매핑할 조인 컬럼 정보를 지정
+//    inverseJoinColumns = @JoinColumn(name = "TAG_ID") // 모임와 매핑할 조인 컬럼 정보를 지정
+//    )
+//    private Set<Tag> tags=new HashSet<>();
+	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "moim")
+	private List<MoimTag> moimtag;
 	//가입조건  N은 누구나 Y는 승인해야함
 	@Column(name="JOIN_CONDITION" ,nullable=false, columnDefinition = "char(1) default 'N'")
 	private char joinCondition;
@@ -142,4 +156,6 @@ public class Moim extends DateAudit{
 	private double progresspercent;
 	@Transient
 	private long todocount;//계획카운트
+	@Transient
+	private String hashtag;//해시태그 이름
 }

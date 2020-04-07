@@ -34,7 +34,7 @@
 							</div> 
 						</div>
 						<div class="detail_search">
-							<a href="#none" class="search_open_btn open"><span class="icon"></span><span class="text_hidden">상세검색 <span class="ment">열기</span></span></a>
+							<a  class="search_open_btn open"><span class="icon"></span><span class="text_hidden">상세검색 <span class="ment">열기</span></span></a>
 							<div class="detail_search_inner">
 								<form>
 									<div class="top_search_box">
@@ -62,7 +62,7 @@
 									</div>
 									<div class="bottom_search_box">
 										<label for="detail_search_input" class="text_hidden">검색어를 입력해주세요</label>
-										<input type="text" id="detail_search_input" name="detail_search_input" placeholder="입력하세요" />
+										<input type="text" id="detail_search_input" name="title" placeholder="입력하세요" />
 										<button type="submit" class="detail_search_button">Search</button>
 									</div>
 								</form>
@@ -90,7 +90,8 @@
 										<p><td
 													th:text="${#strings.length(moimList.intro)>10} ? ${#strings.substring(moimList.intro,0,10)+'...'} : ${moimList.intro}"
 													id="moimtitle" /></p>
-										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
+										<div class="tag"><span>
+														[[${moimList.hashtag}]]</span></div>
 										<div class="percentage">
 											<div class="bar">
 												<div class="active"></div>
