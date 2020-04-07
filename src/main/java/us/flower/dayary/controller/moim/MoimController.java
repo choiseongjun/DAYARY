@@ -35,6 +35,7 @@ import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.repository.chat.MoimChatRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
@@ -322,7 +323,9 @@ public class MoimController {
 			if(title==null) {
 				title="";
 			}
-			
+			if(sigoon_code.equals("선택")) {
+				sigoon_code="";
+			}
 			Page<Moim> moimList = moimService.selecttitleList(pageable, title, sido_code, sigoon_code);// 조건을 받아서 출력한다
 			for(int i=0;i<moimList.getNumberOfElements();i++) {
 				
@@ -332,13 +335,12 @@ public class MoimController {
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-//				Set<Tag> tags = moimList.getContent().get(i).getTags();
+				
 				String hashtag="";
-//				for(Tag t: tags) {
-//					Map<String, Object> tempMap = new HashMap<String, Object>();
-//					tempMap.put("hashname", t.getName());
-//					hashtag +="#"+t.getName();
-//				}
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+				Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+					hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -385,13 +387,12 @@ public class MoimController {
 				double progress = 0;
 				long count = 0; 
 				
-//				Set<Tag> tags = moimList.getContent().get(i).getTags();
 				String hashtag="";
-//				for(Tag t: tags) {
-//					Map<String, Object> tempMap = new HashMap<String, Object>();
-//					tempMap.put("hashname", t.getName());
-//					hashtag +="#"+t.getName();
-//				}
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+				Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+					System.out.println("Name은????"+tags.getName());
+					hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());

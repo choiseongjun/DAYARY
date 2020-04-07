@@ -78,6 +78,11 @@ public interface MoimRepository extends JpaRepository<Moim, Long>,MoimRepository
 	Page<Moim> findAllByCategoryAndTitleLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, Common common,
 			String string, String string2, String string3);
 
+	Page<Moim> findAllDistinctByMoimtagTagNameLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, String string,
+			String string2, String string3);
+
+
+
 
 //	Page<Moim> findAllByTagsContainingAndSidocodeLikeAndSigooncodeLike(Pageable pageable, String string, String string2,
 //			String string3);
