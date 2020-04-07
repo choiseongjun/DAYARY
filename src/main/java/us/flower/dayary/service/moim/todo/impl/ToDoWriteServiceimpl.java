@@ -348,7 +348,6 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	
 	@Override
 	@Transactional
-//	public BaseResponse updateBoardById(long boardid, String memo) {
 	public BaseResponse updateBoardById(MoimBoard moimBoard) {
 		
 		BaseResponse baseResponse = new BaseResponse();

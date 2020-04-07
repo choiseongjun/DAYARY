@@ -19,9 +19,34 @@ $(document).ready(function() {
         minHeight: 250,
         maxHeight: null,
         focus: true, 
-        lang : 'ko-KR'
+        lang : 'ko-KR',
+        callbacks: {
+        	onImageUpload: function(files, editor, welEditable) {
+        		for (var i = files.length - 1; i >= 0; i--) {
+                    sendFile(files[i], this);
+                  }
+        	}
+        }
   });
 });
+
+function sendFile(file, el) {
+    let form_data = new FormData();
+    form_data.append('file', file);
+    $.ajax({
+      data: form_data,
+      type: "POST",
+      url: '/moimDetail/moimTodoList/image',
+      cache: false,
+      contentType: false,
+      enctype: 'multipart/form-data',
+      processData: false,
+      success: function(url) {
+	        $(el).summernote('editor.insertImage', url);
+	        $('#imageBoard > ul').append('<li><img src="'+url+'" width="480" height="auto"/></li>');
+        }
+    });
+}
 
 // When the user clicks the button, open the modal 
 function modal_view(plan,writer,id,parent,email){
@@ -112,6 +137,9 @@ function showEditor(memo, editFlag){
 		$('#submit').hide();
 		$('#editBtn').show();
 	}
+	
+	//이미지 모달창 위치 조절
+	$('.modal-dialog').css('transform', 'translate(0, 400px)');
 }
 
 // 글목록 보이기
