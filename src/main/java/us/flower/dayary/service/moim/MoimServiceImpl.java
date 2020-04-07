@@ -21,9 +21,11 @@ import us.flower.dayary.domain.Common;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.DTO.TempData;
 import us.flower.dayary.repository.CommonRepository;
+import us.flower.dayary.repository.moim.HashTagRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.MoimRepositoryCustom;
@@ -44,7 +46,8 @@ public class MoimServiceImpl implements moimService{
     private CommonRepository commonRepository;
 	@Autowired
 	private MoimPeopleRepository moimpeopleRepository;
-	
+	@Autowired
+	private HashTagRepository hashTagRepository;
 	@Autowired
     private TokenGenerator tokenGenerator;
 	@Autowired
@@ -103,6 +106,17 @@ public class MoimServiceImpl implements moimService{
         moim.setUpdateDate(new java.sql.Date(System.currentTimeMillis()));
 
         moimRepository.save(moim);
+        
+        //해시태그
+        String hashtag = moim.getHashtag();
+		String[] hashtagArr = hashtag.split("#");
+		for(int i=0;i<hashtagArr.length;i++) {
+			Tag tag =new Tag();
+			tag.setName(hashtagArr[i]);
+			moim.getTags().add(tag);
+			
+			hashTagRepository.save(tag);
+		}
     }
  
 

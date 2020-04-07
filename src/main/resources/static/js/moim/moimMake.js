@@ -148,7 +148,7 @@ $('#moimMake_btn').off().on('click', function () {
         success:function(data){
             if(data.code==1){
                 alert(data.message);
-                //location.href='/moimlistView/11';
+                location.href='/moimlistView/11';
             }else{
                 alert(data.message);
             }
