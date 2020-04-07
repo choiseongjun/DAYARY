@@ -15,7 +15,7 @@
 <body>
 	<div th:replace="layout/header::header" />
 	
-	<form th:action="@{/appLogin}" method="POST">
+	<form th:action="@{/appLogin}">
 	<div class="login_popup">
 			<p class="popup_main_text"><span>프룻</span>에 오신 것을 환영합니다!</p>
 	        <p class="popup_sub_text">
@@ -27,11 +27,12 @@
 	            <a href="#"><img src="/publ/images/layout/facebook.png" alt="Fruit 로고">Facebook</a>
 	        </div>
 	        <ul class="input_login_box">
-	        	<li><input type="text" name="email" id="email" placeholder="이메일"></li>
-	            <li><input type="password" name="password" id="password" placeholder="비밀번호"></li>
+	        	<li><input type="text" name="email"  placeholder="이메일"></li>
+	            <li><input type="password" name="password"  placeholder="비밀번호"></li>
 	        </ul>
 	        <input type="submit" class="login_btn" value="로그인"/>
 	        <p th:if="${loginError}" class="error" style="color: red;">잘못된 아이디 또는 비밀번호입니다</p>
+	       <p th:if="${code}" class="error" style="color: blue;" th:text="${message}"></p>
   <br>
 	        <div class="footer_login_btn">
 	<a href="#" class="join_btn">회원가입</a>
@@ -52,6 +53,7 @@
 		        	 	 <button id="find_btn" class="login_btn">전송</button>
 		      	  </div>
 	</div>
+	<form  name="signUp" action="/signup" method="POST" enctype='multipart/form-data'>
 	<div class="find_login_popup">
 			<p class="popup_main_text"><span>프룻</span>회원가입</p>
 	        <p class="popup_sub_text">
@@ -63,15 +65,15 @@
 	            <a href="#"><img src="/publ/images/layout/facebook.png" alt="Fruit 로고">Facebook</a>
 	        </div>
 	        <ul class="input_login_box">
-	        	<li><input type="email" id="email" placeholder="이메일"></li>
-	            <li><input type="password" id="password" placeholder="비밀번호"></li>
+	        	<li><input type="email" id="email" name="email" placeholder="이메일"></li>
+	            <li><input type="password" id="password" name="password"  placeholder="비밀번호"></li>
 	            <li><input type="password" id="passwordCk" placeholder="비밀번호 확인"></li>
 	        </ul>
 	        <div class="join_chk_box">
-	        		<input type="checkbox" id="join_chk" class="cb2"><label for="join_chk"></label>
+	        		<input type="checkbox" name="joinChk" id="join_chk"class="cb2"><label for="join_chk"></label>
 	                <p><span>프룻</span> 이용약관 및 <span>개인정보취급방침</span>에 동의합니다.</p>
 	        </div>
-	     		      <a href="#" class="login_btn finish_join">회원가입</a>
+	     		      <a href="#" class="login_btn" id="finish_join">회원가입</a>
 	        <div class="footer_login_btn">
 	        	<a href="#" class="back_loing finish_join">로그인화면으로 가기</a>
 	        </div>
@@ -84,6 +86,9 @@
 	        	‘닉네임’의 관심사에 맞게 <br>
 	프룻이 추천해드릴게요!
 	        </p>
+	          <ul class="input_login_box">
+	        	<li><input type="text" id="name" name="name" placeholder="닉네임"></li>
+	     	   </ul>
 	        <ul class="my_type_cho_ul">
 	        	<li>
 	            	<p>성별</p>
@@ -104,21 +109,21 @@
 	            <li>
 	            	<p>관심사</p>
 	                  <span th:each="list : ${interests}" th:if="${list.commName !='전체'}">
-	               	   <input type="checkbox" id="interest" name="interest" value="${list.commCode}">
+	               	   <input type="checkbox"  name="interest" th:value="${list.commCode}">
 	               	   <span th:text="${list.commName}"></span>
 	                  </span>
-	                <input type="hidden" name="intersts">
+	                <input type="hidden" name="interests" id="interests">
 	                  
 	            </li>
 	        </ul>
 	        <a href="#" class="login_btn join_go_btn">완료!</a>
 	
 	</div>
-            User Name : <input type="text" name="email"/> <br/><br/>
+     <!--        User Name : <input type="text" name="email"/> <br/><br/>
             Password: <input type="password" name="password"/> <br/><br/>
             <input type="submit" value="Login"/>
-       
-     
+        -->
+    </form> 
 	<input type="hidden" id="authMessage" th:value="${authMessage}">
 <!-- 	<script src="/js/people/signin.js"></script> -->
 	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
@@ -155,7 +160,7 @@
 		});
 		  
 	$("#findFormbtn").click(function(){
-		$(".login_popup").hide();
+		$(".login_popup").toggle();
 		$("#find").toggle();
 		})
 	$(".open_login_popup").click(function(){
@@ -163,17 +168,99 @@
 		
 		})
 	$(".join_go_btn").click(function(){
-			$(".my_type_popup").hide()
-			$(".find_login_popup").show()
+			if($("#name").val()==""){
+				alert("닉네임을 입력하세요.");
+				return;
+			}
+			 $.ajax({
+			      url:'/auth/checkName/'+$("#name").val(),		
+			      processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			      contentType: "application/json; charset=utf-8",
+			        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			        async: false,
+			        success:function(data){
+			        	if(data.code=="true"){
+			        		alert(data.message);
+			        		$("#name").val("");
+				        	flag= false;
+			        		
+			        	}else
+			        		flag=true;
+			        }
+			        	
+			        });
+				if(flag){
+					if($("input[name=interest]:checked").length==0){
+						alert("관심사를 체크해주세요.");
+						return;
+					}
+					
+					//관심사들 모아서 값 설정
+					var interests="";
+					$("input[name=interest]:checked").each(function(i){
+
+						interests+=$(this).val()+",";
+
+						});
+					$("#interests").val(interests.slice(0,-1));
+					$(".my_type_popup").toggle()
+					$(".find_login_popup").show()
+				}
+		
 		
 		})	
 	$(".join_btn").click(function(){
-			$(".login_popup").hide()
+			$(".login_popup").toggle()
 			$(".my_type_popup").show()
 		
 		})
 	$(".finish_join").click(function(){
-			$(".find_login_popup").hide()
+			$(".find_login_popup").toggle()
+		
+		})
+
+	$("#finish_join").click(function(){
+		//비밀번호 확인과 비밀번호 일치 체크
+		var email = $("#email").val();
+		var exptext =  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+		if(email.match(exptext)==null){
+
+		//이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우			
+		alert("이 메일형식이 올바르지 않습니다.");
+		return;
+		}
+		//메일 존재할경우 code가 true되고 flag false되서 return
+			 $.ajax({
+			      url:'/auth/checkEmail/'+$("#email").val(),		
+			      processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			      contentType: "application/json; charset=utf-8",
+			        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+			        async: false,
+			        success:function(data){
+			        	if(data.code=="true"){
+			        		alert(data.message);
+			        		$("#email").val("");
+							flag=false;
+			        	}else
+			        		flag=true;
+			        }
+			        	
+			        });
+		
+		if(flag){ 
+			if($("#password").val()!=$("#passwordCk").val()){
+			alert("비밀번호와 비밀번호 확인이 일치하지 않습니다");
+			$("#passwordCk").val("");
+			return;
+		}else	if($("input[name=joinChk]:checked").length==0){
+			alert("이용약관에 동의하여야 이용가능합니다:(");
+			return;
+		}
+		
+		        	document.signUp.submit();
+			
+		}		
 		
 		})
 		/* 구글 */
