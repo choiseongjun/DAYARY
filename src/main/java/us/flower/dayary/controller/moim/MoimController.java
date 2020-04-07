@@ -323,8 +323,16 @@ public class MoimController {
 			if(title==null) {
 				title="";
 			}
-			if(sigoon_code.equals("선택")) {
+			if(sigoon_code==null) {
 				sigoon_code="";
+			}else if(sigoon_code.equals("선택")) {
+				sigoon_code="";
+			}
+			if(sido_code==null) {
+				sido_code="";
+			}
+			if(status==null) {
+				status="";
 			}
 			Page<Moim> moimList = moimService.selecttitleList(pageable, title, sido_code, sigoon_code);// 조건을 받아서 출력한다
 			for(int i=0;i<moimList.getNumberOfElements();i++) {

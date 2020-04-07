@@ -144,7 +144,7 @@
 						</nav>
 					</div>
 					<div class="total_search_box">
-					<a href="#none" class="search_btn"><span class="icon">통합검색<span class="text_hidden">열기</span></span></a>
+					<a class="search_btn"><span class="icon">통합검색<span class="text_hidden">열기</span></span></a>
 	                <th block sec:authorize="hasAuthority('ROLE_USER')">
 	                <a href="#none" class="my_btn" ><span class="icon">마이페이지<span class="text_hidden">열기</span></span></a>
 	                <a href="#none" class="alarm_btn"><span class="alarm_num">1</span><span class="icon">알람<span class="text_hidden">열기</span></span>
@@ -157,10 +157,11 @@
 				</div>
 			</header>
 			<div class="blank"></div>
+			   <form action="/moimlistView/11">
 			    <div class="search_box">
 			    	<div class="inner_popup">
 			        	<div>
-			        		<input placeholder="sample"><button>Search</button>
+			        		<input type="text" name="title" placeholder="입력하세요"><button>Search</button>
 			            </div>
 			            <ul class="search_chart_ul">
 			            	<li>추천</li>
@@ -174,7 +175,7 @@
 			            </ul>
 			        </div>
 			    </div>
-			    
+			   </form>
 			    <div class="alarm_list_box">
 			    	<div class="inner_popup">
 			        	
