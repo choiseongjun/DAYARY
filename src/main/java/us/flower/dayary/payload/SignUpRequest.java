@@ -28,6 +28,8 @@ public class SignUpRequest {
 	
 	private String sex;
 	
+	private String introduce;
+	
 	
     
 }

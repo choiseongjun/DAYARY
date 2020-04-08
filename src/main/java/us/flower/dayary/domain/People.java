@@ -131,7 +131,7 @@ public class People extends DateAudit{
 	}
 
     
-    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests) {
+    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce) {
     	this.email=email;
     	this.password=password;
     	this.name=name;
@@ -140,6 +140,7 @@ public class People extends DateAudit{
     	this.job = job;
     	this.sex = sex;
     	this.interests = interests;
+    	this.introduce = introduce;
     }
 
 	
