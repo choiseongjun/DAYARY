@@ -222,7 +222,7 @@ public class PeopleController {
 				// Creating user's account
 				People user = new People(signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getName(),
 						signUpRequest.getPhoto(), signUpRequest.getActivation(), signUpRequest.getJob(),
-						signUpRequest.getSex(), signUpRequest.getInterests());
+						signUpRequest.getSex(), signUpRequest.getInterests(),signUpRequest.getIntroduce());
 
 				user.setPassword(bcrypt.hashpw(user.getPassword()));
 
