@@ -15,7 +15,7 @@
 <body>
 	<div th:replace="layout/header::header" />
 	
-	<form th:action="@{/appLogin}">
+	<form th:action="@{/appLogin}" method="POST">
 	<div class="login_popup">
 			<p class="popup_main_text"><span>프룻</span>에 오신 것을 환영합니다!</p>
 	        <p class="popup_sub_text">
@@ -86,10 +86,10 @@
 	        	‘닉네임’의 관심사에 맞게 <br>
 	프룻이 추천해드릴게요!
 	        </p>
-	          <ul class="input_login_box">
-	        	<li><input type="text" id="name" name="name" placeholder="닉네임"></li>
-	     	   </ul>
 	        <ul class="my_type_cho_ul">
+	            	
+	        	<li class="input_login_box"><p>닉네임</p><input type="text" id="name" name="name" placeholder="닉네임" ></li>
+	        	<li><p>소개</p><textarea id="introduce" name="introduce" placeholder="소개를 작성해주세요" cols="35"></textarea></li>
 	        	<li>
 	            	<p>성별</p>
 	                 <select id="sex" name="sex" class="select_pp" >
