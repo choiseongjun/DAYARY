@@ -131,12 +131,16 @@ public class People extends DateAudit{
 	}
 
     
-    public People(String email,String password,String name,String photo,String activation) {
+    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce) {
     	this.email=email;
     	this.password=password;
     	this.name=name;
     	this.photo=photo;
     	this.activation=activation;
+    	this.job = job;
+    	this.sex = sex;
+    	this.interests = interests;
+    	this.introduce = introduce;
     }
 
 	

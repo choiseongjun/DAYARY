@@ -24,7 +24,7 @@ public class PeopleServiceImpl implements PeopleService {
 			   message.setFrom(new InternetAddress("choisjjunjun2702@gmail.com"));
 			   message.setSubject("[본인인증]Fruit인증메일","utf-8");
 			   message.setText(new StringBuffer().append("<h2>안녕하세요</h2><h3>").append(people.getName()).append("님</h3>사이트 이용을 위해 히단의 url을 눌러 인증을 진행하세요.")
-					   .append("<a href='http://52.79.57.173/auth/").append(key).append("/").append(people.getEmail()).append(">메일인증</a>").toString());
+					   .append("<a href='http://52.79.57.173/auth/").append(key).append("/").append(people.getEmail()).append("'>메일인증</a>").toString());
 			   message.addRecipient(RecipientType.TO,new InternetAddress(people.getEmail()));
 			   mailSender.send(message);
 			   return key;

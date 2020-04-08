@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,7 +71,7 @@ public class PeopleController {
 	@Autowired
 	PeopleRepository peopleRepository;
 	@Autowired
-	CommonRepository commonRepository ;
+	CommonRepository commonRepository;
 	@Autowired
 	RoleRepository roleRepository;
 	@Autowired
@@ -95,7 +96,7 @@ public class PeopleController {
 	@RequestMapping("/people/signinWarning")
 	public ModelAndView needLogin() throws Exception {
 		ModelAndView mav = new ModelAndView("/people/signinwarning");
-		
+
 		return mav;
 	}
 
@@ -185,72 +186,77 @@ public class PeopleController {
 		return returnData;
 	}
 
-	@PostMapping("/signup")
+	@GetMapping("/auth/checkName/{name}")
 	@ResponseBody
-	public Map<String, Object> registerUser(@Valid @RequestPart("signUpRequest") SignUpRequest signUpRequest,
-			@RequestPart(name = "file", required = false) MultipartFile file) {
-
+	public Map<String, Object> checkName(@PathVariable("name") String name) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
-		try {
-			if (!peopleRepository.existsByEmail(signUpRequest.getEmail())) {
-				if (peopleRepository.existsByName(signUpRequest.getName())) {
-					returnData.put("code", "3");
-					returnData.put("message", "이미 존재하는 닉네임입니다.변경해주세요:(");
-
-				} else {
-					// Creating user's account
-					People user = new People(signUpRequest.getEmail(), signUpRequest.getPassword(),
-							signUpRequest.getName(), signUpRequest.getPhoto(), signUpRequest.getActivation());
-
-					user.setPassword(bcrypt.hashpw(user.getPassword()));
-
-					Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(
-							() -> new AppException("먼저 Role테이블에 insert문으로 데이터 넣어주세요.트렐로에 필수 INSERT문 넣었습니다"));
-
-					user.setRoles(Collections.singleton(userRole));
-
-					if (file != null) { // 파일이 null이 아니면
-						// 이미지파일이름생성
-						String imageName = "";
-						while (true) {
-							imageName = tokenGenerator.getToken();
-							// DB에 파일이름이 존재하지 않으면 moim domain에 set
-							if (!peopleRepository.existsByImageName(imageName)) {
-								user.setImageName(imageName);
-								break;
-							}
-						}
-
-						// 이미지파일확장자추출
-						String originalFileName = file.getOriginalFilename();
-						String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1)
-								.toLowerCase();
-						user.setImageExtension(fileExtension);
-
-						// 파일업로드
-						try {
-							fileManager.fileUpload(file, moimImagePath + "/" + imageName + "." + fileExtension);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					String key = service.sendAuthUrlMail(user);
-					user.setActivation(key);
-					People result = peopleRepository.save(user);
-					URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{username}")
-							.buildAndExpand(result.getId()).toUri();
-					returnData.put("code", "1");
-					returnData.put("message", "가입완료:)");
-				}
-			} else {
-				returnData.put("code", "2");
-				returnData.put("message", "이미 가입 된 아이디입니다:(");
-			}
-		} catch (Exception e) {
-			returnData.put("code", "E3290");
-			returnData.put("message", "잠시 후, 다시 시도해주세요:(");
+		if (peopleRepository.existsByName(name)) {
+			returnData.put("message", "이미 존재하는 닉네임입니다.변경해주세요:(");
+			returnData.put("code", "true");
 		}
+		else
+			returnData.put("code", "false");
+			
 		return returnData;
+	}
+	@GetMapping("/auth/checkEmail/{email}")
+	@ResponseBody
+	public Map<String, Object> checkMail(@PathVariable("email") String email) {
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		if (peopleRepository.existsByEmail(email)) {
+			
+			returnData.put("message", "이미 가입된 메일입니다:)");
+			returnData.put("code", "true");
+		}
+		else
+			returnData.put("code", "false");
+		
+		return returnData;
+	}
+
+	@PostMapping("/signup")
+	public String registerUser(@Valid @ModelAttribute SignUpRequest signUpRequest, Model model) {
+		System.out.println(signUpRequest);
+		try {
+
+				// Creating user's account
+				People user = new People(signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getName(),
+						signUpRequest.getPhoto(), signUpRequest.getActivation(), signUpRequest.getJob(),
+						signUpRequest.getSex(), signUpRequest.getInterests(),signUpRequest.getIntroduce());
+
+				user.setPassword(bcrypt.hashpw(user.getPassword()));
+
+				Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new AppException("먼저 Role테이블에 insert문으로 데이터 넣어주세요.트렐로에 필수 INSERT문 넣었습니다"));
+
+				user.setRoles(Collections.singleton(userRole));
+
+				/*
+				 * if (file != null) { // 파일이 null이 아니면 // 이미지파일이름생성 String imageName = "";
+				 * while (true) { imageName = tokenGenerator.getToken(); // DB에 파일이름이 존재하지 않으면
+				 * moim domain에 set if (!peopleRepository.existsByImageName(imageName)) {
+				 * user.setImageName(imageName); break; } }
+				 * 
+				 * // 이미지파일확장자추출 String originalFileName = file.getOriginalFilename(); String
+				 * fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")
+				 * + 1) .toLowerCase(); user.setImageExtension(fileExtension);
+				 * 
+				 * // 파일업로드 try { fileManager.fileUpload(file, moimImagePath + "/" + imageName +
+				 * "." + fileExtension); } catch (IOException e) { e.printStackTrace(); } }
+				 */
+				String key = service.sendAuthUrlMail(user);
+				user.setActivation(key);
+				People result = peopleRepository.save(user);
+				URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{username}")
+						.buildAndExpand(result.getId()).toUri();
+				model.addAttribute("message", "회원가입이 완료되었습니다. 인증메일을 확인하고 로그인하세요:)");
+				
+		} catch (Exception e) {
+			model.addAttribute("message", "잠시 후, 다시 시도해주세요:(");
+		}
+		model.addAttribute("code", "true");
+		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		return "people/signin";
 	}
 
 	/**
@@ -275,6 +281,7 @@ public class PeopleController {
 		} else {
 			model.addAttribute("authMessage", "잘못된접근입니다.");
 		}
+		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
 		return "people/signin";
 	}
 
@@ -342,7 +349,7 @@ public class PeopleController {
 		model.addAttribute("message", request.getServletContext());
 		String referrer = request.getHeader("Referer");
 		request.getSession().setAttribute("prevPage", referrer);
-		model.addAttribute("interests",commonRepository.findByCommHead("CA1"));
+		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
 		model.addAttribute("menu5_hover", "on");
 
 		return "people/signin";
@@ -367,6 +374,7 @@ public class PeopleController {
 	@RequestMapping("/loginerror")
 	public String loginError(Model model) {
 		model.addAttribute("loginError", true);
+		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
 		return "people/signin";
 	}
 
@@ -375,13 +383,12 @@ public class PeopleController {
 	@ResponseBody
 	public Map<String, Object> changePassword(@RequestBody Map<String, Object> param) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
-		long peopleId=Long.parseLong(param.get("peopleId").toString());
+		long peopleId = Long.parseLong(param.get("peopleId").toString());
 		People p = peopleRepository.findById(peopleId).get();
-		
-			p.setPassword(bcrypt.hashpw(param.get("change").toString()));
-			peopleRepository.save(p);
-			returnData.put("message", "비밀번호가 변경되었습니다.");
-		
+
+		p.setPassword(bcrypt.hashpw(param.get("change").toString()));
+		peopleRepository.save(p);
+		returnData.put("message", "비밀번호가 변경되었습니다.");
 
 		return returnData;
 	}

@@ -21,5 +21,15 @@ public class SignUpRequest {
 	private String photo;
 
 	private String activation;
+	
+	private String interests;
+	
+	private String job;
+	
+	private String sex;
+	
+	private String introduce;
+	
+	
     
 }
