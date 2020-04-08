@@ -274,8 +274,7 @@ public class MoimServiceImpl implements moimService{
 		
 		Common common =new Common();
 		common.setCommCode(commCode);
-		//return moimRepository.findAllByCategory(common,pageable);
-		return moimRepository.findAllByCategoryQuery(common,pageable);
+		return moimRepository.findAllByCategory(common,pageable);
 	}
 	@Autowired
 	SqlSession sqlSession;
