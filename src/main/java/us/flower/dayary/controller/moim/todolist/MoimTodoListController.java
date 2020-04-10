@@ -17,10 +17,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +33,7 @@ import net.minidev.json.JSONObject;
 import us.flower.dayary.domain.MoimBoard;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
+import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
 import us.flower.dayary.service.moim.moimService;
@@ -250,6 +254,48 @@ public class MoimTodoListController {
 		
 		return returnData;
 	}
+
+	/**
+	 * 모달창 todowrite 게시판 글 수정
+	 * @param id
+	 * @return
+	 * @author suyn
+	 */
+	@ResponseBody
+	@PutMapping("/moimDetail/moimTodoList/updateModalBoard/{id}")
+	public Map<String, Object> updateModalView(@PathVariable("id")long id,
+//			@PathVariable("memo")String memo,
+			@RequestBody MoimBoard moimBoard
+			){
+		moimBoard.setId(id);
+		BaseResponse baseResponse = service.updateBoardById(moimBoard);
+		Map<String, Object> returnData = new HashMap<String, Object>();
+
+		returnData.put("code", baseResponse.getCode());
+		returnData.put("message", baseResponse.getMessage());
+		
+		return returnData;
+	}
+	
+	/**
+	 * 모달창 todowrite 게시판 글 삭제
+	 * @param id
+	 * @return
+	 * @author suyn
+	 */
+	@ResponseBody
+	@DeleteMapping("/moimDetail/moimTodoList/deleteModalBoard/{id}")
+//	public BaseResponse deleteModalView(@PathVariable("id")long id){
+	public Map<String, Object> deleteModalView(@PathVariable("id")long id){
+		BaseResponse baseResponse = service.deleteBoardById(id);
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		
+		returnData.put("code", baseResponse.getCode());
+		returnData.put("message", baseResponse.getMessage());
+		
+		return returnData;
+	}
+	
 	/**
 	 * 모임 일정관리(ToDoList) 작성하기
 	 *
@@ -380,9 +426,9 @@ public class MoimTodoListController {
    public Map<String, Object> MoimDeleteOne(@PathVariable("no") long no) {
    
       Map<String, Object> returnData = new HashMap<String, Object>();
-      service.deleteById(no);
+      
       try {
-    	  
+    	   service.deleteById(no);	  
            returnData.put("code", "1");
            returnData.put("message", "삭제되었습니다");
 
@@ -395,19 +441,5 @@ public class MoimTodoListController {
       return returnData;
    }
    
-   /**
-    * 모임 해야할일(ToDoList) 현재시간 통해 상태 update
-    *
-    * @param 
-    * @return
-    * @throws 
-    * @author JY
-    */
-//   @ResponseBody
-//   @GetMapping("/moimDetail/moimTodoList/status/{no}")
-//   public void status(@PathVariable("no")long no) {
-//   	Date date=new java.sql.Date(System.currentTimeMillis());
-//	 service.updateById(no, date);
-//   }
 
 }

@@ -5,11 +5,13 @@ package us.flower.dayary.service.moim.todo;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import us.flower.dayary.domain.CommunityBoard;
@@ -18,6 +20,7 @@ import us.flower.dayary.domain.MoimBoard;
 import us.flower.dayary.domain.MoimBoardFile;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
+import us.flower.dayary.domain.DTO.BaseResponse;
 public interface ToDoWriteService {
 
 	public void saveList(ToDoWriteList toDoWriteList,String id,long no);
@@ -38,4 +41,8 @@ public interface ToDoWriteService {
 	 public List<MoimBoardFile> findByToDoWriteList_id(long id);
 	 public void updateById(java.util.Date date);
 	 public void saveListTodoRest(ToDoWriteList todo, long peopleNo, long no);//Rest풀(리액트네이티브) 일정작성
+	 
+	 public BaseResponse deleteBoardById(long boardId);
+	 public BaseResponse updateBoardById(MoimBoard moimBoard);
+	 
 	 }

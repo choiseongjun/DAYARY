@@ -8,9 +8,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
 import us.flower.dayary.common.FileManager;
 import us.flower.dayary.common.TokenGenerator;
 import us.flower.dayary.domain.*;
+import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
@@ -22,10 +25,17 @@ import us.flower.dayary.service.moim.todo.ToDoWriteService;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
+
+@Slf4j
 @Service
 public class ToDoWriteServiceimpl implements ToDoWriteService {
+	
    @Autowired
     private PeopleRepository peopleRepository;
    @Autowired
@@ -168,27 +178,32 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
    @Transactional
    public void deleteById(long id) {
       // TODO Auto-generated method stub
-	   System.out.println("id=todowriteId??"+id);
+	
 	   List<ToDoWriteList> list=toDowriteListRepository.findByToDoWrite_id(id);
 	   
 	   
-	   System.out.println("LIst???"+list);
-	   ToDoWriteList todoWriteList = new ToDoWriteList();
-	  
+		/*
+		 * System.out.println("LIst???"+list); ToDoWriteList todoWriteList = new
+		 * ToDoWriteList();
+		 */
 	   
 	   for(int i=0;i<list.size()-1;i++) {
-		  // moimboard.deleteByToDoWriteList_id(list.get(i).getId());
-		   todoWriteList.setId(list.get(i).getId()); 
-		   moimboard.updateDeleteYn(todoWriteList);
+		   moimboard.deleteByToDoWriteList_id(list.get(i).getId());
+			/*
+			 * todoWriteList.setId(list.get(i).getId());
+			 * moimboard.updateDeleteYn(todoWriteList);
+			 */
 	   }
 	 
-	  //toDowriteListRepository.deleteByToDoWrite_id(id);
-	   //삭제말고 delete y = y로
-	   ToDoWrite todowrite=new ToDoWrite();
-	   todowrite.setId(id);
-	   toDowriteListRepository.updateToDoWrite_id(todowrite);//아직 미작업
+	  toDowriteListRepository.deleteByToDoWrite_id(id);
+		/*
+		 * 삭제말고 delete y = y로 ToDoWrite todowrite=new ToDoWrite(); todowrite.setId(id);
+		 * toDowriteListRepository.updateToDoWrite_id(todowrite);
+		 */
 	   toDowriteRepository.deleteById(id);
    }
+   
+   
    @Override
    public Page<ToDoWrite> findByMoim_idAndStatus(long id, String status,Pageable pageable) {
       // TODO Auto-generated method stub
@@ -251,7 +266,6 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	@Override
 	public void changeToDate(ToDoWrite todo) {
 		// TODO Auto-generated method stub
-		System.out.print(todo);
 		Date changeDate=todo.getTo_date2();
 		todo=toDowriteRepository.findById(todo.getId());
 		todo.setTo_date2(changeDate);
@@ -291,7 +305,8 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	      //현재시간이 todo시작 날짜보다 지나고 100% 완료되지 않은경우 미완료로 상태변경
 	      for(int i=0;i< list.size();i++) {
 	         ToDoWrite todo=list.get(i);
-	         if(date.compareTo(todo.getTo_date())>0&&todo.getProgress()!=100) {
+	         Date endDate= (todo.getTo_date2()==null)?todo.getTo_date():todo.getTo_date2();
+	         if(date.compareTo(endDate)>0&&todo.getProgress()!=100) {
 	            todo.setStatus("Suspend");
 	         }
 	         toDowriteRepository.save(todo);
@@ -329,4 +344,36 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
           toDowriteListRepository.save(todolist);
        }
 	}
+	
+	
+	@Override
+	@Transactional
+	public BaseResponse updateBoardById(MoimBoard moimBoard) {
+		
+		BaseResponse baseResponse = new BaseResponse();
+		
+		try {
+			log.debug("MoimBoard memo 수정. : {}", moimBoard.getMemo());
+			moimboard.updateBoardMemo(moimBoard.getId(), moimBoard.getMemo());
+			
+		} catch (Exception e) {
+			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");
+		}
+		return baseResponse;
+	}
+	
+	
+	@Override
+	@Transactional
+	public BaseResponse deleteBoardById(long boardid) {
+		
+		BaseResponse baseResponse = new BaseResponse();
+		try {
+			moimboard.deleteById(boardid);
+		} catch (Exception e) {
+			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");
+		}
+		return baseResponse;
+	}
+	
 }
