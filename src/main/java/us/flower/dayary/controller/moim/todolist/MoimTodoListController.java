@@ -262,7 +262,6 @@ public class MoimTodoListController {
 	 * @author suyn
 	 */
 	@ResponseBody
-
 	@PutMapping("/moimDetail/moimTodoList/updateModalBoard/{id}")
 	public Map<String, Object> updateModalView(@PathVariable("id")long id,
 //			@PathVariable("memo")String memo,

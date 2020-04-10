@@ -52,7 +52,7 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
    @Autowired 
    private ToDoWriteListRepository toDowriteListRepository;
    @Autowired 
-   private MoimBoardRepository moimboard;
+   private MoimBoardRepository moimboardRepository;
    @Autowired
 	private MoimBoardFileRepository mbRepository;
    
@@ -192,7 +192,7 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
 		 */
 	   
 	   for(int i=0;i<list.size()-1;i++) {
-		   moimboard.deleteByToDoWriteList_id(list.get(i).getId());
+		   moimboardRepository.deleteByToDoWriteList_id(list.get(i).getId());
 			/*
 			 * todoWriteList.setId(list.get(i).getId());
 			 * moimboard.updateDeleteYn(todoWriteList);
@@ -238,7 +238,7 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 		boardGroup.setId(8);
 		board.setBoardGroup(boardGroup);
 		board.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
-		board=moimboard.save(board);
+		board=moimboardRepository.save(board);
 		
 		if(file.length>0) {
 			for(int i=0;i<file.length;i++) {
@@ -279,7 +279,7 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	public List<MoimBoardFile> findByToDoWriteList_id(long id) {
 		// TODO Auto-generated method stub
 		
-			List<MoimBoard> list=moimboard.findByToDoWriteList_id(id);
+			List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(id);
 			List<MoimBoardFile> returnData=new ArrayList<MoimBoardFile>();
 			for(int i=0;i<list.size();i++) {
 	//			MoimBoardFile e=new MoimBoardFile();
@@ -359,9 +359,12 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 		BaseResponse baseResponse = new BaseResponse();
 		
 		try {
-
+			MoimBoard moimBoardlist = moimboardRepository.findById(moimBoard.getId());
+			moimBoardlist.setMemo(moimBoard.getMemo());
+			
+			moimboardRepository.save(moimBoardlist);
 			log.debug("MoimBoard memo 수정. : {}", moimBoard.getMemo());
-			moimboard.updateBoardMemo(moimBoard.getId(), moimBoard.getMemo());
+			//moimboard.updateBoardMemo(moimBoard.getId(), moimBoard.getMemo());
 
 			
 		} catch (Exception e) {
@@ -377,11 +380,12 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 		
 		BaseResponse baseResponse = new BaseResponse();
 		try {
-			moimboard.deleteById(boardid);
+			moimboardRepository.deleteById(boardid);
 		} catch (Exception e) {
 			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");
 		}
 		return baseResponse;
 	}
+	
 	
 }
