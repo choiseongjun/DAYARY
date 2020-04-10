@@ -36,10 +36,10 @@ import javax.persistence.EntityManager;
 @Service
 public class ToDoWriteServiceimpl implements ToDoWriteService {
 	
-	
+
 	@Autowired
 	EntityManager em;
-	
+
    @Autowired
     private PeopleRepository peopleRepository;
    @Autowired
@@ -352,13 +352,17 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 	
 	@Override
 	@Transactional
-	public BaseResponse updateBoardById(long boardid, String memo) {
+
+	public BaseResponse updateBoardById(MoimBoard moimBoard) {
+
 		
 		BaseResponse baseResponse = new BaseResponse();
 		
 		try {
-			log.debug("MoimBoard memo 수정. : {}", memo);
-			moimboard.updateBoardMemo(boardid, memo);
+
+			log.debug("MoimBoard memo 수정. : {}", moimBoard.getMemo());
+			moimboard.updateBoardMemo(moimBoard.getId(), moimBoard.getMemo());
+
 			
 		} catch (Exception e) {
 			baseResponse = new BaseResponse("E3290", "데이터 확인 후 다시 시도해주세요.");

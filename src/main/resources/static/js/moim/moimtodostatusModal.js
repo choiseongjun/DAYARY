@@ -15,8 +15,10 @@ var span = document.getElementsByClassName("close")[0];
 
 $(document).ready(function() {
   $('#summernote').summernote({
-    	placeholder: 'content',
-        minHeight: 370,
+
+	  	placeholder: "contents",
+        minHeight: 250,
+
         maxHeight: null,
         focus: true, 
         lang : 'ko-KR'
@@ -48,7 +50,7 @@ function modal_view(plan,writer,id,parent,email){
 	            	   html+=' <div class="cbp_tmicon bg-info"><i class="zmdi zmdi-label"></i></div><div class="cbp_tmlabel">'
 	            	   html+=' <blockquote><p class="blockquote blockquote-primary">'+m[i].memo+"</p></blockquote></div>"
 	            	   html+=' <button type="button" id="del" onclick="del_content('+m[i].id+')" class="btn" style="float: right; margin-right: 1rem;">삭제</button>'
-	            	   html+=' <button type="button" id="del" onclick="update_content('+m[i].id+',\''+m[i].memo+'\')" class="btn" style="float: right; margin-right: 1rem;">수정</button>'
+	            	   html+=' <button type="button" onclick="update_content('+m[i].id+',\''+m[i].memo+'\')" class="btn" style="float: right; margin-right: 1rem;">수정</button>'
 	            	   html+="</li>"
 	            	   console.log(i)
 	            	   if(typeof  m[i].moimBoardfile[0]!= 'undefined' && m[i].moimBoardfile[0].real_name != 'undefined'){
@@ -81,25 +83,47 @@ function modal_view(plan,writer,id,parent,email){
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
+  showBoard();
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    showBoard();
   }
 }
 
-function showEditor(){
+
+function showEditor(memo, editFlag){
+	var content = memo;
+	if(!content){
+		alert("param Null: "+content);
+		$("#summernote").summernote('code',  '');
+	}else{
+		alert("param is Not Null: "+content);
+		$("#summernote").summernote('code',  content);
+	}
+	
 	editor.style.display = "block";
 	openBtn.style.display ="none";
 	modal_content.style.display ="none";
+	
+	// 수정버튼 작동일 경우
+	if(editFlag){
+		$('#submit').hide();
+		$('#editBtn').show();
+	}
 }
+
 
 function showBoard(){
 	editor.style.display = "none";
 	openBtn.style.display ="block";
 	modal_content.style.display ="block";
+
+	$("#summernote").val("");
+
 }
 
 //글 작성
@@ -111,13 +135,10 @@ function submit(){
 		return;
 	}
 	
-//	if($("#message").val()==''&&array.length==0){
-//		alert("내용을 작성하세요");
-//		return;
-//	}
+
 	var MoimBoard={};
 	MoimBoard.title=$("#title")[0].textContent;
-//	MoimBoard.memo=$("#message").val();
+
 	MoimBoard.memo= content;
 	alert(content);
 	
@@ -145,7 +166,7 @@ function submit(){
 	        	 if(data.code==1){
 	        		 modal.style.display = "none";
 	        		 get_detail($("#toDoWriteId").val());
-//	        		 $("#message").val("");
+
 	        		 $("#summernote").val("");
 	        		 $("#file").val("");
 	        		 $("#imgList").html("");
@@ -159,6 +180,8 @@ function submit(){
 	    });
 	showBoard();
 }
+
+
 $("#file").on("change",handleImgFileSelect);
 var count=0;
 var array=[];
@@ -204,15 +227,43 @@ $("#imgList").on("click","span",function(e) {
 //todo 리스트 내의 게시판글 수정 by suyn 2020-04-04
 function update_content(id, memo){
 	
-	alert("수정됩니다 : " +id+"/"+memo);
+
+	alert("수정됩니다 : " +id+"/ "+memo);
 	
 	var content = memo;
-	showEditor(content);
-	$('#summernote').val()= cotent;
-//		placeholder = content
-//	});
-//	location.reload();
+	showEditor(content, true);
+	$('#boardId').val(id);
+}
+
+//글수정
+function edit(){
 	
+	let moimBoard = {};
+	moimBoard.memo = $("#summernote").val();
+	
+	var id = $('#boardId').val();
+	
+	alert("수정버튼!! 실행");
+	$.ajax({
+		url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
+        type:'PUT',
+        contentType: 'application/json; charset=UTF-8',
+        processData: false,
+        dataType: 'json',
+        data:JSON.stringify(moimBoard),
+        success:function(data){
+            if(data.code == 1){
+                alert(data.message);
+                location.reload();
+            }else{
+                alert(data.message);
+            }
+        },
+        error:function(e){
+      	  alert(e);
+        }
+    });
+
 }
 
 // todo 리스트 내의 게시판글 삭제
