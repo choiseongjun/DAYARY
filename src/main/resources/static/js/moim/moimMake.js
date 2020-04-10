@@ -124,7 +124,7 @@ $('#moimMake_btn').off().on('click', function () {
     // [hyozkim] 모임 상태(모집중,모집완료), 비공개 설정 추가
     moim.recruitStatus = status.options[status.selectedIndex].text;
    // moim.secretCondition = (secretmode.options[secretmode.selectedIndex].text === '공개') ? 'N' : 'Y';
-    
+    moim.hashtag = $('#hashtag').val();
     let category = {};
     category.commName = cate.options[cate.selectedIndex].text;
     moim.category = category;

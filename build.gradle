@@ -54,6 +54,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1') // MyBatis 라이브러리
+	compile('org.springframework.boot:spring-boot-starter-aop') //aop
     def querydslVersion = "4.1.4"
     implementation ("com.querydsl:querydsl-core:$querydslVersion")
     implementation ("com.querydsl:querydsl-apt:$querydslVersion")
@@ -64,12 +65,15 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
-compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
+  compile("org.springframework.boot:spring-boot-starter-mail")
+  	compile "org.springframework:spring-context-support"
+  	compile "com.sun.mail:javax.mail"
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
@@ -94,6 +98,7 @@ compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5',
 	
 	compile('org.springframework.security:spring-security-oauth2-client')
 	compile('org.springframework.security:spring-security-oauth2-jose')
+	compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.7.RELEASE'
 }
 // querydsl 적용
 def querydslSrcDir = 'src/main/generated'

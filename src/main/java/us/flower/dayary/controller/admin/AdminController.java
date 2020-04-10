@@ -15,12 +15,17 @@ public class AdminController {
 
 	@GetMapping("/admini")
 	public String admini() {
-		return "admin/adminmain";
+		return "adminmain";
 	}
 	@GetMapping("/adminPeople")
 	public String adminPeople(HttpSession session) {
  		
 		
 		return "admin/adminPeopleTableList";
+	}
+	@GetMapping("/adminMenu")
+	public String adminMenu() {
+		
+		return "admin/adminMenu";
 	}
 }

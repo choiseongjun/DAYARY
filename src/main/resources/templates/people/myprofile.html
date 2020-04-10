@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
@@ -65,8 +66,20 @@
 </head>
 <body>
 <div th:replace="layout/header::header"/>
+<div class="login_popup">
+			<p class="popup_main_text"><span>프룻</span>에 오신 것을 환영합니다!</p>
+	        <p class="popup_sub_text">
+	        	<span>비밀번호 변경</span>을 위해 입력하세요.
+	        </p>
+	        <ul class="input_login_box">
+	        	<li><input type="password" name="change" id="change" placeholder="새 비밀번호"></li>
+	            <li><input type="password" name="changeCk" id="changeCk" placeholder="새 비밀번호 확인"></li>
+	        </ul>
+	        <button class="change_btn" >확인</button>
+	        <p th:if="${loginError}" class="error" style="color: red;">일치하지 않는 비밀번호입니다</p>
+	</div>
 <body onload="myMoimList()"><!-- 인원수 세는것 by choiseongjun -->
- <div id="peopleId" th:data-peopleId="${peopleinfo.id}"></div> 
+ <div id="peopleId" th:data="${peopleinfo.id}"></div> 
 <div class="container">
 <div class="row">
         <div class="col-lg-4">
@@ -79,7 +92,7 @@
 											alt="Image" class="img-fluid rounded"
 											style="height: 200px; width: 500px"> 
               </div>
-              <h5 class="mb-1 text-white">최성준</h5>
+              <h5 class="mb-1 text-white" th:text="${peopleinfo.name}"></h5>
               <h6 class="text-light">Web Developer</h6>
              </div>
               <div class="card-body">
@@ -98,7 +111,7 @@
                     <i class="fa fa-envelope"></i>
                   </div>
                   <div class="list-details">
-                    <span>info@example.com</span>
+                    <span th:text="${peopleinfo.email}"></span>
                     <small>Email Address</small>
                   </div>
                 </li>
@@ -154,6 +167,7 @@
             <div class="tab-content p-3">
                 <div class="tab-pane active show" id="profile">
                     <h5 class="mb-3">User Profile</h5>
+                    <button id="open_popup">비밀번호 변경</button>
                     <div class="row">
                         <div class="col-md-6">
                             <h6>About</h6>
@@ -346,7 +360,37 @@ function openForm() {
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
-
+$("#open_popup").click(function(){
+	$(".login_popup").show()
+	
+	})
+	$(".change_btn").click(function(){	
+		
+		if($("#change").val()!=$("#changeCk").val()){
+				alert("새비밀번호와 확인이 일치하지 않습니다");
+				$("#changeCk").val("");
+				return;
+			}
+	var param={
+			change: $("#change").val(),
+			peopleId: $("#peopleId").attr("data")
+	}
+			 $.ajax({
+			      url:'/auth/changePassword',		
+			      contentType: "application/json; charset=utf-8",
+			      data : JSON.stringify(param),
+			    	type: "POST",
+			        dataType: "json",
+			        success:function(data){
+			        	alert(data.message);
+			        	$(".login_popup").toggle();
+			        }
+			        	
+			        });
+			
+		});
+		  
+	
 /* 작성한글보기 팝업창 끝 by choiseongjun */
 </script>
 </body>

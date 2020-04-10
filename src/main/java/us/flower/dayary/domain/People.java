@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -69,9 +70,17 @@ public class People extends DateAudit{
 
 	@Column(name="NAME")
 	private String name;
-
+	@Column(name="JOB")
+	private String job;
+	@Column(name="SEX")
+	private String sex;
+	@Column(name="INTERESTS")
+	private String interests;
 	@Column(name="PHOTO")
 	private String photo;
+	@Lob //길이 제한 없음
+	@Column(name="INTRODUCE")
+	private String introduce;
 	 //이미지경로
    	@Column(name = "IMAGE_PATH", nullable = true)
        private String imagePath;
@@ -85,7 +94,7 @@ public class People extends DateAudit{
        private String imageExtension;
 	
 	
-	@Column(name="ACTIVATION")
+	@Column(name="ACTIVATION",columnDefinition = "char(1) default 'N'")
 	private String activation;
 	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "people")
 	@JsonIgnore
@@ -122,12 +131,16 @@ public class People extends DateAudit{
 	}
 
     
-    public People(String email,String password,String name,String photo,String activation) {
+    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce) {
     	this.email=email;
     	this.password=password;
     	this.name=name;
     	this.photo=photo;
     	this.activation=activation;
+    	this.job = job;
+    	this.sex = sex;
+    	this.interests = interests;
+    	this.introduce = introduce;
     }
 
 	

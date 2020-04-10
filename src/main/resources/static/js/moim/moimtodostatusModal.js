@@ -15,8 +15,10 @@ var span = document.getElementsByClassName("close")[0];
 
 $(document).ready(function() {
   $('#summernote').summernote({
+
 	  	placeholder: "contents",
         minHeight: 250,
+
         maxHeight: null,
         focus: true, 
         lang : 'ko-KR'
@@ -92,7 +94,7 @@ window.onclick = function(event) {
   }
 }
 
-// 에디터 보이기
+
 function showEditor(memo, editFlag){
 	var content = memo;
 	if(!content){
@@ -114,12 +116,14 @@ function showEditor(memo, editFlag){
 	}
 }
 
-// 글목록 보이기
+
 function showBoard(){
 	editor.style.display = "none";
 	openBtn.style.display ="block";
 	modal_content.style.display ="block";
+
 	$("#summernote").val("");
+
 }
 
 //글 작성
@@ -131,8 +135,10 @@ function submit(){
 		return;
 	}
 	
+
 	var MoimBoard={};
 	MoimBoard.title=$("#title")[0].textContent;
+
 	MoimBoard.memo= content;
 	alert(content);
 	
@@ -160,6 +166,7 @@ function submit(){
 	        	 if(data.code==1){
 	        		 modal.style.display = "none";
 	        		 get_detail($("#toDoWriteId").val());
+
 	        		 $("#summernote").val("");
 	        		 $("#file").val("");
 	        		 $("#imgList").html("");
@@ -220,6 +227,7 @@ $("#imgList").on("click","span",function(e) {
 //todo 리스트 내의 게시판글 수정 by suyn 2020-04-04
 function update_content(id, memo){
 	
+
 	alert("수정됩니다 : " +id+"/ "+memo);
 	
 	var content = memo;
@@ -255,6 +263,7 @@ function edit(){
       	  alert(e);
         }
     });
+
 }
 
 // todo 리스트 내의 게시판글 삭제

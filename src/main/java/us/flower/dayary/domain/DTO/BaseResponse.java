@@ -18,5 +18,6 @@ public class BaseResponse {
 		this.code = code;
 		this.message = message;
 	}
+
 	
 }

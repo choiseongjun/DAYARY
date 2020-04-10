@@ -20,9 +20,9 @@ spring:
   thymeleaf:
     enabled: true
   datasource:
-      #driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      #url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
-      url: "jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
+      driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
+      #url: "jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
       username: csj2702
       password: tjdwns2702
   jpa:
@@ -47,7 +47,7 @@ logging:
                           pagination: debug
                          
 server:
-    port: 8081
+    port: 8080
    
     servlet:
         
@@ -62,3 +62,28 @@ communityImagePath : C:/dayary/community/image
 app:
       jwtSecret : JWTSuperSecretKey
       jwtExpirationInMs : 604800000
+      
+google :
+  client :
+    clientId : 218429726963-iv49qi897923b2jouic2m8q3876kp173.apps.googleusercontent.com
+    clientSecret: HyUB1F4Okz0euO8MTTJ00ZIa
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    clientAuthenticationScheme: form
+    scope:
+    - email
+    - profile
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+    
+            
+mail:
+    host: smtp.gmail.com
+    port: 587
+    username: choisjjunjun2702@gmail.com
+    password: tjdwns2702!@
+    protocol: smtp
+    default-encoding: UTF-8
+    smtp: 
+      start-tls-enable: true 
+      auth: true

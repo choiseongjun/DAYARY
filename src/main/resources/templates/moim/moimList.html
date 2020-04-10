@@ -3,319 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <title>Fruit</title>
-<css th:replace="layout/header::headerCss" />
-<style>
-/* Style the buttons 카테고리리스트 styling*/
-.btn {
-	border: none;
-	outline: none;
-	padding: 12px 16px;
-	background-color: white;
-	cursor: pointer;
-}
-
-.btn:hover {
-	background-color: #ddd;
-}
-
-.btn.active {
-	background-color: #666;
-	color: white;
-}
-/*검색 바 스타일 start*/
-* {
-	box-sizing: border-box;
-}
-
-form.example input[type=text] {
-	padding: 10px;
-	font-size: 17px;
-	border: 1px solid grey;
-	float: left;
-	width: 80%;
-	background: #f1f1f1;
-}
-
-form.example button {
-	float: left;
-	width: 20%;
-	padding: 10px;
-	background: #2196F3;
-	color: white;
-	font-size: 17px;
-	border: 1px solid grey;
-	border-left: none;
-	cursor: pointer;
-}
-
-form.example button:hover {
-	background: #0b7dda;
-}
-
-form.example::after {
-	content: "";
-	clear: both;
-	display: table;
-}
-/*검색 바 스타일 End*/
-.select_element_tab>li {
-	display: inline-block;
-}
-
-.header_category_tab .category_tab_lst>li .anchor {
-	display: inline-block;
-	margin-right: 13px;
-	padding: 10px 4.5px 10px 4px;
-	color: #000;
-	box-sizing: border-box;
-	line-height: 20px
-}
-
-.header_category_tab .category_tab_lst>li .anchor.active {
-	padding: 10px 4.5px 9px 4px;
-	color: #0aba16;
-	border-bottom: 2px solid #0aba16;
-	font-weight: 600
-}
-
-.category_tab_lst {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	margin-left: 550px;
-}
-
-.item {
-	margin: 0 0 0 0;
-	padding: 0 0 0 0;
-	border: 0;
-	float: left;
-}
-
-.select_element_tab {
-	display: inline;
-	margin-left: 550px;
-}
-</style>
 </head>
+<css th:replace="layout/header::headerCss" />
 <body onload="initMoimElement();">
-	<div th:replace="layout/header::header" />
-	<!-- <div id="moimPeopleList" th:data-moimPeopleList="${moimList.peopleList}"></div> -->
-	<header>
-		
-		
-		
-
-		<div class="header_filter_tab">
-			<input type="hidden" id="sido_key" value="12685d425f1af0872d756c" />
-			<input type="hidden" id="sigoon_key" value="b0888bae39fbd0463a9252" />
-			<!-- [2020.01.27][hyozkim] TABUI -->
-		<div class="header_category_tab">
-			<ul class="category_tab_lst">
-				<li class="item" th:attr="data-category=${category.commCode}" th:each="category : ${categories}">
-					<a th:if="${category.commCode.toString().equals(commCode)}" class="anchor active" th:href="@{'/moimlistView/' + ${category.commCode}}"> 	<span th:text="${category.commName}" ></a>
-					<a th:unless="${category.commCode.toString().equals(commCode)}" class="anchor" th:href="@{'/moimlistView/' + ${category.commCode}}"> <span th:text="${category.commName}" /></a>
-				</li>
-			</ul>
+	<div th:replace="layout/header::header" /> 
+	<div id="wrap">
+	<input type="hidden" id="sido_key" value="12685d425f1af0872d756c" />
+	<input type="hidden" id="sigoon_key" value="b0888bae39fbd0463a9252" />
+	<section id="container">
+		<div class="vis_box">
+			<h2 class="title">Let’s Fruit!</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt pellentesque posuere varius ut a ultricies etiam mattis. Nisi nisi, ut amet, eu.</p>
 		</div>
-			<form id="form1" name="form1" method="get" class="example">
-				<br />
-				<br />
-				<ul class="select_element_tab">
-					<li class="element" data-element="1">
-						<!-- 모임 상태 (CA2) --> <label class="text-black">모임 상태</label> <select
-						name="status" id="status" class="form-control">
-							<option value="선택" selected="selected">필수 선택</option>
-					</select>
-					</li>
-
-					<li class="element" data-element="2">
-						<!-- 활동 지역 --> <label class="text-black">활동 지역</label> 
-					<select
-						name="sido_code" id="sido_code" class="form-control">
-							<option text="">선택</option>
-					</select> 
+		<div id="content">
+			<div class="inner">
+				<div class="find_crew">
+					<div class="top_box">
+						<div class="crew_util_box">
+							<div class="tabbtn_box custom_scroll">
+								<ul>
+									<th:block th:each="category : ${categories}">
+									<li class="all on"  th:if="${category.commCode.toString().equals(commCode)}"><a th:href="@{'/moimlistView/' + ${category.commCode}}">[[${category.commName}]]</a></li>
+									<li th:unless="${category.commCode.toString().equals(commCode)}"><a th:href="@{'/moimlistView/' + ${category.commCode}}">[[${category.commName}]]</a></li>
+									</th:block>
+								</ul>
+							</div>
+							<div class="control_box">
+								<a href="#none" class="prev"><span class="icon">이전 탭</span></a>
+								<a href="#none" class="next"><span class="icon">다음 탭</span></a>
+							</div> 
+						</div>
+						<div class="detail_search">
+							<a  class="search_open_btn open"><span class="icon"></span><span class="text_hidden">상세검색 <span class="ment">열기</span></span></a>
+							<div class="detail_search_inner">
+								<form>
+									<div class="top_search_box">
+										
+										<div class="item">
+											<label class="title" for="state_select">모임 상태</label>
+											<select name="status" id="status" class="custom_select">
+												<option>선택</option>
+											</select>
+										</div>
+										
+										<div class="item">
+											<label class="title" for="place_select">시</label>
+											<select name="sido_code" id="sido_code" class="custom_select">
+												<option text="">선택</option>
+											</select>
+										</div>
+										<div class="item">
+											<label class="title" for="date_select">구</label>
+											<select name="sigoon_code" id="sigoon_code" class="custom_select">
+												<option text="">선택</option>
+											</select>
+										</div>
+										
+									</div>
+									<div class="bottom_search_box">
+										<label for="detail_search_input" class="text_hidden">검색어를 입력해주세요</label>
+										<input type="text" id="detail_search_input" name="title" placeholder="입력하세요" />
+										<button type="submit" class="detail_search_button">Search</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
 					
-					</li>
-					<li>
-					<select name="sigoon_code" id="sigoon_code" class="form-control">
-							<option text=""></option>
-					</select>
-					</li>
-					<br />
-					<li class="element" data-element="3" style="margin-left: 600px">
-						 <input type="text"
-						placeholder="Search.." name="title">
-						<button type="submit" onclick="fn_formSubmit()">
-							<i class="fa fa-search"></i>
-						</button>
-					</li>
-				</ul>
-			</form>
-		</div>
-	</header>
-
-	<section>
-		<div class="site-section bg-white">
-		<!-- 	<h2>
-				<center>
-					개설된 총 스터디수:
-					<td th:text="${moimListCount}" />
-				</center>
-			</h2> -->
-			<div class="container">
-				<div class="row">
-
-					<!-- start of tr each -->
-					<tr th:each="moimList : ${moimList}">
-
-						<div class="col-lg-21">
-							<div class="entry2" style="width: 300px;">
-								<div class="excerpt" style="width: 400px;">
-
-									<div class="Card_custom-card--border_5wJKy card">
-										<div class="card-body">
-											<span class="mb-2 badge badge-danger badge-pill">
-											<td th:text="${moimList.recruitStatus}" /></span>
-											<span class="post-category text-white bg-secondary mb-3">
-												<td th:text="${moimList.sidoname}" />
-												<td th:text="${moimList.sigoonname}" />
-
-											</span> <span class="post-category text-white bg-secondary mb-3">
-												<td th:text="${moimList.category.commName}" />
-											</span> <a
-												th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
-												<img
+					<div class="bottom_box">
+						<div class="grid_item_box">
+							<tr th:each="moimList : ${moimList}">
+							<div class="grid_item card">
+								<a th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
+									<div class="img_box">
+										<img
 												th:src="${moimList.imageName!=null} ? ${'/getMoimImage/'+moimList.imageName+'.'+moimList.imageExtension} : '/images/img_4.jpg'"
 												alt="Image" class="img-fluid rounded"
 												style="height: 200px; width: 500px" />
-											</a>
-											<div class="mb-2">
-												<i class="fa fa-fw fa-star-o"></i><a
-													th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}"><td th:text="${moimList.title}" /></a>
-											</div>
-											<p>
-												소개:
-												<td
-													th:text="${#strings.length(moimList.intro)>10} ? ${#strings.substring(moimList.intro,0,10)+'...'} : ${moimList.intro}"
-													id="moimtitle" />
-											</p>
-											<p>
-												<a
-													th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
-													더보기</a>
-
-											</p>
-										</div>
-										<div class="card-footer">
-											<div class="progress progress-striped">
-												<div class="progress-bar progress-bar-info"
-													role="progressbar" aria-valuenow="90" aria-valuemin="0"
-													aria-valuemax="100"
-													th:style="'width:'+${moimList.progresspercent}+'%;'">
-													[[${moimList.progresspercent}]]%</div>
-											</div>
-										</div>
-										<div class="card-footer">
-											<figure class="author-figure mb-0 mr-3 float-left">
-												<img
-													th:src="${moimList.imageName!=null} ? ${'/getMoimImage/'+moimList.people.imageName+'.'+moimList.people.imageExtension} : '/images/default_people.png'"
-													alt="Image" class="img-fluid rounded"
-													style="height: 30px; width: 30px">
-
-											</figure>
-											<span style="font-weight: bold;">모임장:
-												<td th:text="${moimList.people.email}"></td>
-											</a>
-											</span> <span> <br />
-											<span style="font-weight: bold;">회원수:
-													<!-- <td th:text="${moimList.peopleList.size()}" />/ -->
-													<td th:text="${moimList.moimpeople.size()}" />/
-													<td th:text="${moimList.peopleLimit}-1" />
-												<span style="font-weight: bold;"> <br />개설일:
-												</span>
-												<td th:text="${moimList.createDate}" />
-												
-										</div>
-										<div class="d-flex card-footer">
-											<span class="align-self-center"><td th:text="${moimList.todocount}" />개의 계획</span>
-											<div class="align-self-center ml-auto btn-group">
-												<button type="button" aria-haspopup="true"
-													aria-expanded="false"
-													class="dropdown-toggle btn btn-link btn-sm">
-													<i class="fa fa-gear"></i>
-												</button>
-												<div tabindex="-1" role="menu" aria-hidden="true"
-													class="dropdown-menu dropdown-menu-right">
-													<button type="button" tabindex="0" class="dropdown-item">
-														<i class="fa fa-fw fa-folder-open mr-2"></i>View
-													</button>
-													<button type="button" tabindex="0" class="dropdown-item">
-														<i class="fa fa-fw fa-ticket mr-2"></i>Add Task
-													</button>
-													<button type="button" tabindex="0" class="dropdown-item">
-														<i class="fa fa-fw fa-paperclip mr-2"></i>Add Files
-													</button>
-													<div tabindex="-1" class="dropdown-divider"></div>
-													<button type="button" tabindex="0" class="dropdown-item">
-														<i class="fa fa-fw fa-trash mr-2"></i>Delete
-													</button>
-												</div>
-											</div>
+										<div class="state">
+											<span class="person"><span class="icon"></span>[[${moimList.moimpeople.size()}]]/[[${moimList.peopleLimit}]]</span>
+											<span class="type">[[${moimList.category.commName}]]</span>
 										</div>
 									</div>
-								</div>
+									<div class="cont_box">
+										<strong>[[${moimList.title}]]</strong>
+										<p><td
+													th:text="${#strings.length(moimList.intro)>10} ? ${#strings.substring(moimList.intro,0,10)+'...'} : ${moimList.intro}"
+													id="moimtitle" /></p>
+										<div class="tag"><span>
+														[[${moimList.hashtag}]]</span></div>
+										<div class="percentage">
+											<div class="bar">
+												<div class="active"></div>
+											</div>
+											<span class="txt"><span>[[${moimList.progresspercent}]]</span>%</span>
+										</div>
+										<div class="util_box">
+											<span class="like"><span class="icon"></span>55</span>
+											<span class="place"><span class="icon"></span>[[${moimList.sidoname}]]&nbsp&nbsp[[${moimList.sigoonname}]]</span>
+										</div>
+									</div>
+								</a>
 							</div>
+							</tr>
+							
 						</div>
-					</tr>
-					<!-- end of tr -->
+						<div class="pager_box">
+							<ul 
+									th:with="start=${T(Math).floor(moimList.number/10)*10 + 1},
+						                    last=(${start + 9 < moimList.totalPages ? start + 9 : moimList.totalPages})">
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=1)}" class="pager_btn prev" ><span class="icon">이전 페이지</span></a></li>
+								<li th:each="page: ${#numbers.sequence(start, last)}"
+									th:class="${page == moimList.number + 1}">
+									<a th:if="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num on"></a>
+									<a th:unless="${page} == ${moimList.number+1}" th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="num"></a></li>
+								<li><a th:href="@{'/moimlistView/'+${commCode}(page=${moimList.totalPages},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
-	<!-- <div class="row text-center pt-5 border-top">
-		<div class="col-md-12">
-			<div class="custom-pagination"  th:with="start=${T(Math).floor(moimList.number/10)*10 + 1},
-                    last=(${start + 9 < moimList.totalPages ? start + 9 : moimList.totalPages})">
-					 <a th:href="@{/moimlistView(page=1)}" aria-label="First"><span>1</span></a>
-					<a href="#">2</a> 
-					<a href="#">3</a> 
-					<a href="#">4</a>
-					<span>...</span> 
-					<a href="#">15</a>
-			</div>
-		</div>
-	</div> -->
-<a th:if="${moimList.totalElements!=0}">
-	<footer style="text-align: center;">
-		<ul class="pagination"
-			th:with="start=${T(Math).floor(moimList.number/10)*10 + 1},
-                    last=(${start + 9 < moimList.totalPages ? start + 9 : moimList.totalPages})">
-			<li><a th:href="@{'/moimlistView/'+${commCode}(page=1)}" aria-label="First">
-					<span aria-hidden="true">First</span>
-			</a></li>
-
-			<li th:class="${moimList.first} ? 'disabled'"><a 
-				th:href="${moimList.first} ? '#' :@{'/moimlistView/'+${commCode}(page=${moimList.number},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}"
-				aria-label="Previous"> <span aria-hidden="true">&lt;</span>
-			</a></li>
-			
-			<li th:each="page: ${#numbers.sequence(start, last)}"
-				th:class="${page == moimList.number + 1} ? 'active'"><a
-				th:text="${page}" th:href="@{'/moimlistView/'+${commCode}(page=${page},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}"></a></li>
-			<li th:class="${moimList.last} ? 'disabled'"><a
-				th:href="${moimList.last} ? '#' : @{'/moimlistView/'+${commCode}(page=${moimList.number + 2},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}"
-				aria-label="Next"> <span aria-hidden="true">&gt;</span>
-			</a></li>
-
-			<li><a th:href="@{'/moimlistView/'+${commCode}(page=${moimList.totalPages},status=${status},sido_code=${sido_code},sigoon_code=${sigoon_code},title=${title})}"
-				aria-label="Last"> <span aria-hidden="true">Last</span>
-			</a></li>
-		</ul>
-	</footer>
-</a>
-	<script src="/js/moim/moimList.js"></script>
+	<div th:replace="layout/footer::footer"/>
+</div>
+     
+	 <script src="/js/moim/moimList.js"></script>
 
 	<script type="rv-template" id="categoryItem">
 		<li class="item" data-category={commonCode}>

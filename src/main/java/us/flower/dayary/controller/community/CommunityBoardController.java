@@ -163,7 +163,7 @@ public class CommunityBoardController {
 		
 		// contents list
 		model.addAttribute("timeLineList",timeLineList);
-
+		model.addAttribute("menu3_hover","on");
 		return "community/timeLineList";
 	}
 

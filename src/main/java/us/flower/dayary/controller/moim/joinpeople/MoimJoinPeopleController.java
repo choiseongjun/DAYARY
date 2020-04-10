@@ -158,15 +158,28 @@ public class MoimJoinPeopleController {
 	@PostMapping("/moimParticipant/{moimNo}")
 	public Map<String, Object> moimParticipant(@PathVariable("moimNo") long moimNo,HttpSession session) {
 		Long peopleId = (Long) session.getAttribute("peopleId");
-	
+		
 		char joinCondition='Y';//참가자 승인후 Y
 		Map<String,Object> returnData = new HashMap<String,Object>();
-	 
+
+		
+		
+		
+		
 		try {	
+			Map<String,String> CountMoimPeople = moimjoinPeopleService.selectCountMoimPeople(moimNo);
+			
+			System.out.println("SRWERWER"+CountMoimPeople);
+			
+			if(CountMoimPeople.get("cntPeople").equals("TRUE")) {
+				returnData.put("code","2");  
+				returnData.put("message","인원 초과했어요:)");
+			}else {
 				char maker='N';//만든사람여부
 				moimService.moimParticipant(peopleId,moimNo,joinCondition,maker);
 				returnData.put("code","1");  
 				returnData.put("message","모임가입완료:)");
+			}
 		}catch(Exception e) {
 			    returnData.put("code", "E3290");
 	            returnData.put("message", "데이터 확인 후 다시 시도해주세요.");

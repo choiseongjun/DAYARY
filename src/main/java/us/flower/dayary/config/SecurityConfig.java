@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -81,7 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                  "/js/**",
                  "/css/**",
                  "/img/**",
-                 "/images/**").permitAll()
+                 "/images/**",
+                 "/publ/**").permitAll()
 		.antMatchers(
 			       "/signup").permitAll()
 		.antMatchers("/admin/**").access("hasAnyRole('ADMIN')")

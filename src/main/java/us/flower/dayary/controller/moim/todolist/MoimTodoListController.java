@@ -262,6 +262,7 @@ public class MoimTodoListController {
 	 * @author suyn
 	 */
 	@ResponseBody
+
 	@PutMapping("/moimDetail/moimTodoList/updateModalBoard/{id}")
 	public Map<String, Object> updateModalView(@PathVariable("id")long id,
 //			@PathVariable("memo")String memo,
@@ -269,6 +270,7 @@ public class MoimTodoListController {
 			){
 		moimBoard.setId(id);
 		BaseResponse baseResponse = service.updateBoardById(moimBoard);
+
 		Map<String, Object> returnData = new HashMap<String, Object>();
 
 		returnData.put("code", baseResponse.getCode());
