@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,18 +29,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.minidev.json.JSONObject;
+import us.flower.dayary.common.MediaUtils;
 import us.flower.dayary.domain.MoimBoard;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
+import us.flower.dayary.domain.UploadFile;
 import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
 import us.flower.dayary.service.moim.moimService;
+import us.flower.dayary.service.moim.image.MoimImageService;
 import us.flower.dayary.service.moim.todo.ToDoWriteService;
 
 
@@ -50,6 +58,8 @@ public class MoimTodoListController {
 	MoimBoardRepository moimboardRepository;
 	@Autowired
 	MoimBoardFileRepository moimboardfileRepostiory;
+	@Autowired
+	MoimImageService moimImageService;
 	
 	 /**
      * 모임  해야할일(ToDoList) 현재목록  DetailView  조회
@@ -295,6 +305,42 @@ public class MoimTodoListController {
 		returnData.put("message", baseResponse.getMessage());
 		
 		return returnData;
+	}
+	
+	@ResponseBody
+	@PostMapping("/moimDetail/moimTodoList/image")
+	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file){
+		try {
+			UploadFile uploadFile = moimImageService.store(file);
+			return ResponseEntity.ok().body("/moimDetail/moimTodoList/image/"+uploadFile.getId());
+		}catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@GetMapping("/moimDetail/moimTodoList/image/{fileId}")
+	@ResponseBody
+	public ResponseEntity<?> serveFile(@PathVariable long fileId) {
+		try {
+			UploadFile uploadedFile = moimImageService.load(fileId);
+			HttpHeaders headers = new HttpHeaders();
+
+			Resource resource = moimImageService.loadAsResource(uploadedFile.getSaveFileName());
+			String fileName = uploadedFile.getFileName();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+
+			if (MediaUtils.containsImageMediaType(uploadedFile.getContentType())) {
+				headers.setContentType(MediaType.valueOf(uploadedFile.getContentType()));
+			} else {
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			}
+
+			return ResponseEntity.ok().headers(headers).body(resource);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	/**
