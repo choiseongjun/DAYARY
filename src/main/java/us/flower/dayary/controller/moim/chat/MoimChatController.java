@@ -1,6 +1,8 @@
 package us.flower.dayary.controller.moim.chat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +122,8 @@ public class MoimChatController {
 		System.out.println("MSG=" + message.getMsg());
 		System.out.println("MoimNo=" + message.getMoimNo());
 		System.out.println("peopleEmail"+message.getPeopleEmail());
+		Date date=new java.sql.Date(System.currentTimeMillis());
+		message.setCreateDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date));
 		People people=new People();
 		people.setId(message.getPeopleId());
 		
@@ -130,7 +134,7 @@ public class MoimChatController {
 		moimchat.setPeople(people);
 		moimchat.setChatMemo(message.getMsg());
 		moimchat.setMoim(moim);
-		moimchat.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
+		moimchat.setCreateDate(date);
 		messagingTemplate.convertAndSend("/topic/" + message.getPeopleId(), message.getMsg());
 		moimchatRepository.save(moimchat);
 		return message;
