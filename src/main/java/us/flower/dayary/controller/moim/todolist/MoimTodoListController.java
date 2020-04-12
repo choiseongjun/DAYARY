@@ -488,5 +488,18 @@ public class MoimTodoListController {
       return returnData;
    }
    
+   //@GetMapping("/moimlistView/{commCode}")
+	//public String moimListView(@PageableDefault Pageable pageable, HttpSession session, Model model,
+	//@RequestParam(required = false) String title, @PathVariable("commCode") String commCode,String status,
+	//@RequestParam(required = false) String sido_code, @RequestParam(required = false) String sigoon_code) {
+
+   
+   @GetMapping("/moimDetail/moimTodoList/moimBoardTimeline")
+   public String moimBoardTimeline() {
+	   
+	   System.out.println(" ================ ## 타임라인 컨트롤러실행");
+	   return "/moim/moimTodoTimeline";
+   }
+   
 
 }

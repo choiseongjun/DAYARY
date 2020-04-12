@@ -85,6 +85,9 @@ function modal_view(plan,writer,id,parent,email){
 	            		  }
 	            	   }
 	               }
+	               html+='<li><button type="button" class="btn btn-primary moreBtn"'
+            	   html+= 'onclick=\'location.href="@Url.Ation("moimBoardTimeline","MoimToDoListController")"\'>더보기</button>'
+	               html+="</li>"
 	               html+="</ul></div></div>";
 	            	   
 	              /* $(".form-group").html(c.memo);

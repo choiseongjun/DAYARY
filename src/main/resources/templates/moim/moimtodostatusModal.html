@@ -2,10 +2,13 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
 <title>Insert title here</title>
 </head>
 <style>
-
+.moreBtn {
+	height: 50px; width: 90%;margin: 10px auto;position: absolute;left: 50%;transition: translate(0, -50%);transform: translate(-50%, 0);
+}
 </style>
 <body>
 	<div th:fragment="moimtodostatusModal">
@@ -86,7 +89,7 @@
 						
 					</div>
 					<hr>
-					<div id="modal_content" style="background-color: #f8f8f8;">
+					<div id="modal_content" style="background-color: #f8f8f8; height: 780px">
 						<div class="row">
 							<div class="col-md-10">
 								<ul class="cbp_tmtimeline">
