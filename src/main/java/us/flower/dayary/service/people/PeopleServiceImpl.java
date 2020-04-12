@@ -1,5 +1,6 @@
 package us.flower.dayary.service.people;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.mail.MessagingException;
@@ -12,10 +13,46 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import us.flower.dayary.domain.People;
+import us.flower.dayary.repository.people.PeopleRepository;
 @Service
 public class PeopleServiceImpl implements PeopleService {
 	 @Autowired
-	    private JavaMailSender mailSender;
+	 private JavaMailSender mailSender;
+	 @Autowired
+	 private PeopleRepository peopleRepository;
+	 
+		// 이메일 난수 만드는 메서드
+		private String init() {
+			Random ran = new Random();
+			StringBuffer sb = new StringBuffer();
+			int num = 0;
+	
+			do {
+				num = ran.nextInt(75) + 48;
+				if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+					sb.append((char) num);
+				} else {
+					continue;
+				}
+	
+			} while (sb.length() < size);
+			if (lowerCheck) {
+				return sb.toString().toLowerCase();
+			}
+			return sb.toString();
+		}
+	
+		// 난수를 이용한 키 생성
+		private boolean lowerCheck;
+		private int size;
+	
+		public String getKey(boolean lowerCheck, int size) {
+			this.lowerCheck = lowerCheck;
+			this.size = size;
+			return init();
+		}
+	 
+	 
 	 @Override
 	   public String sendAuthUrlMail(People people) throws  MessagingException{
 		   String key= getKey(false,15);
@@ -54,35 +91,11 @@ public class PeopleServiceImpl implements PeopleService {
 		}
 	  
 
-		// 이메일 난수 만드는 메서드
-		private String init() {
-			Random ran = new Random();
-			StringBuffer sb = new StringBuffer();
-			int num = 0;
+	
 
-			do {
-				num = ran.nextInt(75) + 48;
-				if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
-					sb.append((char) num);
-				} else {
-					continue;
-				}
-
-			} while (sb.length() < size);
-			if (lowerCheck) {
-				return sb.toString().toLowerCase();
-			}
-			return sb.toString();
-		}
-
-		// 난수를 이용한 키 생성
-		private boolean lowerCheck;
-		private int size;
-
-		public String getKey(boolean lowerCheck, int size) {
-			this.lowerCheck = lowerCheck;
-			this.size = size;
-			return init();
+		@Override
+		public List<People> selectAll() {
+			return peopleRepository.findAll();
 		}
 
 
