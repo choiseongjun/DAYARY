@@ -69,7 +69,7 @@ function modal_view(plan,writer,id,parent,email){
 	               console.log(m)
 	               var html="<div class='container'><div class='row'><ul class='cbp_tmtimeline' style='background-color : white; width:1200px'>";
 	               for(var i=0;i<m.length;i++){
-	            	   html+="<li style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
+	            	   html+="<li id='"+m[i].id+"' style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
 	            	   html+=' <div class="cbp_tmicon bg-info"><i class="zmdi zmdi-label"></i></div><div class="cbp_tmlabel">'
 	            	   html+=' <blockquote><p class="blockquote blockquote-primary">'+m[i].memo+"</p></blockquote></div>"
 	            	   html+=' <button type="button" id="del" onclick="del_content('+m[i].id+')" class="btn" style="float: right; margin-right: 1rem;">삭제</button>'
@@ -292,9 +292,6 @@ function del_content(id){
 	
 	alert("삭제됩니다 : " +id);
 	
-//	var baseResponse = {};
-//	baseResponse.message = message;
-//	baseResponse.code = code;
 	
 	 $.ajax({
          url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
@@ -305,7 +302,8 @@ function del_content(id){
           success:function(data){
             if(data.code==1){
             	alert(data.message);
-            	location.reload();         
+            	alert('test00');
+            	$("#"+id).remove();
            }else{
               alert(data.message);
            }

@@ -136,8 +136,8 @@
 									<th:block th:unless="${menu5_hover}==on">
 									<li class="gnbA gnbA4" id="menu5" sec:authorize="isAnonymous()"></li>
 									</th:block>
-									<li class="gnbA gnbA4" id="menu6" sec:authorize="hasAuthority('ROLE_USER')"></li>
-									<li class="gnbA gnbA4" id="menu7" sec:authorize="hasAuthority('ROLE_USER')"></li>
+									<li class="gnbA gnbA4" id="menu6" sec:authorize="hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')"></li>
+									<li class="gnbA gnbA4" id="menu7" sec:authorize="hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')"></li>
 							</ul> 
 							<ul class="gnb" id="menu_list_anony" sec:authorize="isAnonymous()">
 							</ul>
