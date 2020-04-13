@@ -11,9 +11,9 @@ public class MoimJoinDTO {
 
 	private String moimNo;
 	
-	private String peopleEmail;
+	private String userName;
 	
 	private String moimTitle;
 	
-	private String moimPeopleListstr;
+	private String moimPeopleList;
 }
