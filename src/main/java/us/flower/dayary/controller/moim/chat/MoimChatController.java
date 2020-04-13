@@ -24,11 +24,8 @@ import us.flower.dayary.controller.people.SessionNames;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimChat;
 import us.flower.dayary.domain.MoimPeople;
-import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.DTO.Message;
-import us.flower.dayary.domain.DTO.MoimJoinDTO;
-import us.flower.dayary.repository.NotifyRepository;
 import us.flower.dayary.repository.chat.MoimChatRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
@@ -47,9 +44,7 @@ public class MoimChatController {
 	private SimpMessageSendingOperations messagingTemplate;
 	@Autowired
 	MoimPeopleRepository moimpeopleRepository;
-	
-	@Autowired 
-	NotifyRepository notifyRepository;
+
 	
 	private String getId(HttpSession session) {
 		String userid = (String) session.getAttribute("PeopleId");
@@ -62,58 +57,7 @@ public class MoimChatController {
 //			return String.valueOf(loginUser.getId()); 	
 			//Long.toString(loginUser.getId()); 	
 	}
-	
-	/**
-     * 모임 단체채팅방 채팅 날리기
-     *
-     * @param 
-     * @return
-     * @throws 
-     * @author choiseongjun 
-     * @Date 2019-10-02
-     */
-	@MessageMapping("/moimjoinNoti")
-	@SendTo("/topic/message")
-	public MoimJoinDTO moimjoinNoti(MoimJoinDTO message) throws Exception{
-		HttpSession session;
-		 
-	String moimPeopleList = message.getMoimPeopleListstr();
-	String[] moimPeopleListstr = moimPeopleList.split(",");
 
-	
-	
-	for (int i = 0; i < moimPeopleListstr.length; i++) {
-	
-		String moimNo1 = message.getMoimNo();
-		String moimtitle = message.getMoimTitle();
-		String PeopleEmail = message.getPeopleEmail();
-		
-		System.out.println(moimNo1+moimtitle+PeopleEmail);
-		System.out.println(moimPeopleListstr[i]);
-		
-		int moimNo = Integer.parseInt(moimNo1);//모임번호
-		int notipeople = Integer.parseInt(moimPeopleListstr[i]);//알림받을유저
-		
-		Moim moim = new Moim();
-		moim.setId(moimNo);
-		
-		People people=new People();
-		people.setId(notipeople);
-		
-		Noti noti=new Noti();//알림객체를 들고온다
-		noti.setPeople(people);
-		noti.setMemo(moimtitle+"에   "+PeopleEmail+"님이  가입하셨습니다!");
-		noti.setMoim(moim);
-		noti.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
-		notifyRepository.save(noti);
-		
-		
-	}
-	
-
-		return message;
-		
-	}
 	@MessageMapping("/moimchat")
 	@SendTo("/topic/message")
 	public Message ttt(Message message) throws Exception{

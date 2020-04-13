@@ -41,4 +41,8 @@ public class Noti {
 	private String memo;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
+	
+	@Column(name = "GUBUN_CD")
+	private char gubunCd;
+	
 }

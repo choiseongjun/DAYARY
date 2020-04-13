@@ -155,6 +155,7 @@ body {
    <div id="moimPeopleNo" th:data-moimPeopleNo="${moimPeopleNo}"></div><!-- 모임피플테이블번호 -->
    <div id="joinCondition" th:data-joinCondition="${moimDetail.joinCondition}"></div><!-- 모임가입승인조건 유무 -->
    <div id="sessionUserEmail" th:data-sessionUserEmail="${session.peopleEmail}"></div><!-- 모임가입승인조건 유무 -->
+   <div id="userName" th:data="${session.peopleName}"></div><!-- 모임가입승인조건 유무 -->
     
    <link rel="stylesheet" href="/css/friendList.css">
    <div class="content">
@@ -371,7 +372,12 @@ body {
                            <a th:href="@{'/moimdetailView/moimboard/' + ${no}}"> 더 보기</a>
                   </button> -->
                </div>
-               
+               <div class="tab">
+				<span th:each=" noti: ${noti}">
+					<span th:text="${noti.memo}"></span>				
+					<span th:text="${noti.createDate}"></span>	<br>			
+				</span>
+               </div>
             </div>
             <div class="col-xl-8">
                <div class="row">

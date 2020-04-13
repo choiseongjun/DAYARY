@@ -118,7 +118,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
  $(document).ready(function(){
-	connectStomp();
+	connectStompforChat();
 	downFocus();
 	
 	
@@ -142,58 +142,19 @@
 	})
 	
 })
-var socket=null;
-var isStomp=false;
-function connectStomp() {
-	var sock = new SockJS("/stompTest"); // endpoint
-    var client = Stomp.over(sock);
-	isStomp = true;
-	socket = client;
-    
-    client.connect({}, function () {
+function connectStompforChat() {
+	socket.connect({}, function () {
         console.log("Connected stompTest!");
-        // Controller's MessageMapping, header, message(자유형식)
-
-       /*  // 해당 토픽을 구독한다!
-        client.subscribe('/topic/message', function (event) {
-            console.log("!!!!!!!!!!!!event>>", event);
-            console.log("!!!!!!!!!!!!event>>", event.body.msg)
-        }); */
-        // 해당 토픽을 구독한다!
-        client.subscribe('/topic/message', onMessageReceived);
+        socket.subscribe('/topic/message', onMessageReceivedChat);
         
     });
 
 }
 
-function onMessageReceived(payload) {
+function onMessageReceivedChat(payload) {
 	var message = JSON.parse(payload.body);
 	console.log('ㅎㅎㅎㅎㅎㅎㅎ')
-	//console.log(message.peopleId)
 	
-	
-	/* var messageElement = document.createElement('li');
-
-	
-	messageElement.classList.add('message-data');
-
-	var element = document.createElement('i');
-	//var text = document.createTextNode(message.sender[0]);
-	//element.appendChild(text);
-
-	messageElement.appendChild(element);
-
-	var usernameElement = document.createElement('span');
-	var usernameText = document.createTextNode(message.msg);
-	usernameElement.appendChild(usernameText);
-	messageElement.appendChild(usernameElement);
-	
-
-	var textElement = document.createElement('p');
-	var messageText = document.createTextNode(message.content);
-	textElement.appendChild(messageText);
-
-	messageElement.appendChild(textElement);  */
 	console.log("1" + $('#peopleId').attr("data-peopleId"));
 	console.log("2" + message);
 	if($('#peopleId').attr("data-peopleId")==message.peopleId){
@@ -202,9 +163,6 @@ function onMessageReceived(payload) {
 		$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="/images/default_people.png" alt="Retail Admin"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
 	}
 	
-	
-	//document.querySelector('#chatList').appendChild(messageElement);
-	//document.querySelector('#chatList').scrollTop = document.querySelector('#chatList').scrollHeight;
 	downFocus();
 
 }

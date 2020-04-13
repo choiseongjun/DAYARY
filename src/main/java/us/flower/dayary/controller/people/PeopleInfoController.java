@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
-import us.flower.dayary.repository.NotifyRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
+import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.people.PeopleInfoService;
 
@@ -38,7 +38,7 @@ public class PeopleInfoController {
 	@Autowired
 	MoimPeopleRepository moimpeopleRepository;
 	@Autowired
-	NotifyRepository notifyRepository;
+	NotiRepository notifyRepository;
   /**
    * 사진 불러오기 by choiseongjun
    *
