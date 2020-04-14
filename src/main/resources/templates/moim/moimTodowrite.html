@@ -22,6 +22,7 @@
 </head>
 <div th:replace="layout/header::header"/>
 <link th:href="@{/css/moim/moimtodostatusDetail.css}" rel="stylesheet" />
+<div id="userName" th:data="${session.peopleName}"></div><!-- 유저이름 -->
 <!--할일목록체크박스리스트  -->
 <div class="container">
 	<div class="row">

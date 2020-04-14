@@ -101,7 +101,7 @@ function onKeyDown(){
 		alert("일정을 작성해주세요.")
 		return;
 	}
-		
+	var moimNo= $('#moimNo').attr("data-moimNo");
 	let toDoWrite={};
 	toDoWrite.plan_title=$("#title").val();
 	toDoWrite.from_date=new Date($("#from_date").val());
@@ -110,12 +110,14 @@ function onKeyDown(){
 	toDoWriteList.toDoWrite=toDoWrite;
 	toDoWriteList.plan_list=list;
 	   $.ajax({
-	      url:'/moimDetail/moimTodoList/moimTodowrite/'+$('#moimNo').attr("data-moimNo"),
+	      url:'/moimDetail/moimTodoList/moimTodowrite/'+moimNo,
 	        type:'post',
 	        data: JSON.stringify(toDoWriteList) ,
 	        contentType: "application/json; charset=utf-8",
 	        success:function(data){
 	        	 if(data.code==1){
+	        			socket.send('/noti/witeNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+	 					socket.send('/moim/witeNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
 	                 location.href='/moimDetail/moimTodoList/'+ $('#moimNo').attr("data-moimNo");
 	             }else{
 	                 alert(data.message);

@@ -26,6 +26,7 @@ import us.flower.dayary.domain.People;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
+import us.flower.dayary.service.noti.NotiService;
 import us.flower.dayary.service.people.PeopleInfoService;
 
 @Controller
@@ -38,7 +39,7 @@ public class PeopleInfoController {
 	@Autowired
 	MoimPeopleRepository moimpeopleRepository;
 	@Autowired
-	NotiRepository notifyRepository;
+	NotiService notiService;
   /**
    * 사진 불러오기 by choiseongjun
    *
@@ -100,7 +101,7 @@ public class PeopleInfoController {
 		
 	
 
-		long getMyNotiCount=notifyRepository.countByPeople_id(peopleId);
+		long getMyNotiCount=notiService.totalNoti(peopleId);
 		
 		
 		Map<String,Object> data=new HashMap<String,Object>();
@@ -110,26 +111,22 @@ public class PeopleInfoController {
 		return data;
 	}
 	/**
-	 * 내 알림리스트 조회
+	 * 알림리스트 조회
 	 *
-	 * @param
+	 * @param 조회할 페이지리스트
 	 * @return
-	 * @throws @author choiseongjun
+	 * @throws @author JY
 	 */
 	@ResponseBody
-	@GetMapping("/getMyNotiList")
-	public Map<String,Object> getMyNotiList(HttpSession session,Model model) {
-		long peopleId = (long) session.getAttribute("peopleId");//일반회원 번호를 던져준다.
-		
-	
+	@GetMapping("/getMyNotiList/{pageNum}")
+	public Map<String,Object> getMyNotiList(HttpSession session,@PathVariable("pageNum")int pageNum) {
+		//회원 번호를 던져준다.
+		long peopleId = (long) session.getAttribute("peopleId");
 
-		List<Noti> notiList=notifyRepository.findByPeople_id(peopleId);
-		
-		System.out.println(notiList.toString());
+		List<Noti> notiList=notiService.getMoreNoti(pageNum, peopleId, 'P');
 		
 		Map<String,Object> data=new HashMap<String,Object>();
 		data.put("notiList",notiList);
-		data.put("code", "1"); 	
 		
 		return data;
 	}

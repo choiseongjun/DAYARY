@@ -258,8 +258,8 @@ public class MoimController {
 			model.addAttribute("joinedpeople", joinedpeople);
 		}
 		Optional<Moim> moimOne = moimRepository.findById(no);
-		//List<People> moimpeopleList = moimOne.get().getPeopleList();
-		List<MoimPeople> moimpeopleList = moimpeopleRepository.findByMoim_idAndMaker(no,'N');
+		List<MoimPeople> moimpeopleList = moimOne.get().getMoimpeople();
+		//List<MoimPeople> moimpeopleList = moimpeopleRepository.findByMoim_idAndMaker(no,'N');
 		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
 		List<Meetup> meetupList = moimmeetupRepository.findByMoim_id(no, pageable);// 오프라인 모임 내림차순정렬로 가져옴
 

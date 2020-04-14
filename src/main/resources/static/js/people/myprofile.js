@@ -1,35 +1,43 @@
+
 function getNoti(){
+	var notiList =document.getElementById("notiList");
+	var pageNum=parseInt(notiList.childElementCount/9)+1;
 	
-	var peopleId = $('#peopleId').attr("data-peopleId");
+	
 	$.ajax({
-	      url:'/getMyNotiList',
+	      url:'/getMyNotiList/'+pageNum,
 	        contentType: "application/json; charset=utf-8",
 	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 	        success:function(data){
-	        	if(data.code==1){
 		        	var notilist=data.notiList;
 		        	console.log(notilist);
-		        	var html=""
-	        		for(var i in notilist){
-	    				html += '<tbody>'
-	    				html += '<tr>'
-    					html += 	'<td>'
-	    				html += 	'<span class="float-right font-weight-bold">'+notilist[i].createDate+'</span>'
-						html += 	'</td>'
-	    				html += 	'<td>'
-	    				html += 	'<a href="moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+""+'</a>'
-						html += 	'</td>'
-		   				html += '</tr>'
-	    				html += '</tbody>'
-	    			}
-	        		$("#notiList").html(html);
-	        	}
+		        	if(notilist.length>0){
+		        		$("#more").remove();
+		        		var html=""
+			        		for(var i in notilist){
+			    				html += '<tr>'
+		    					html += 	'<td>'
+			    				html += 	'<span class="float-right font-weight-bold">'+notilist[i].createDate+'</span>'
+								html += 	'</td>'
+			    				html += 	'<td>'
+			    				html += 	'<a href="moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
+								html += 	'</td>'
+				   				html += '</tr>'
+				   					if(i==notilist.length-1){
+				   						html+="<tr id='more'><a onclick='getNoti()'>더보기</a></tr>";
+				   					}
+			        		}
+		        		
+		        		$("#notiList").append(html);
+		        	}
+		        
+		        	
+	        	
 	        }, error:function(e){
 				alert(e)
 	        }
 	    });
 }
-
 function myMoimList(){
 	$.ajax({
 	      url:'/myprofilemoimView',
@@ -101,19 +109,7 @@ $(document).ready(function(){
 			});
 		}
 	});
-	
-	$.ajax({
-	      url:'/getMyNotiListCount',
-	        contentType: "application/json; charset=utf-8",
-	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
-	        success:function(data){
-	        	console.log(data.getMyNotiCount);
-	        	$("#badge").append(data.getMyNotiCount);
-	        }, error:function(e){
-				//'alert(e)
-	        }
-	    });  
-	
+	getNotiCount();
 	
 	$("#people_delete_btn").click(function(){
 		  var peopleId = $('#peopleId').attr("data-peopleId");
