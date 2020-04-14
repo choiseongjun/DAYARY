@@ -1,4 +1,4 @@
-package us.flower.dayary.controller.moim.chat;
+package us.flower.dayary.payload;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.service.moim.moimService;
 
 @Controller
-public class MoimChatController {
+public class ChatRouter {
 
 	@Autowired
 	MoimRepository moimRepository;
