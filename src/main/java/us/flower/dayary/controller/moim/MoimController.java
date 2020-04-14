@@ -16,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +35,7 @@ import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.repository.chat.MoimChatRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
@@ -69,6 +68,10 @@ public class MoimController {
 
 	@Autowired
 	private MoimChatRepository moimchatRepository;
+	
+//	@Autowired
+//	private HashTagRepository hashTagRepository;
+	
 	@Autowired
 	private MoimBoardFileRepository moimboardfileRepository;
 	
@@ -179,9 +182,13 @@ public class MoimController {
 			returnData.put("message", "모임 상태를 선택해주세요");
 			return returnData;
 		}
+		
+		
+		
 		char joinCondition='Y';//참가자 승인후 Y Defualt Value
+		moimService.saveMoim(id, subject, moim, file);
 		try {
-			moimService.saveMoim(id, subject, moim, file);
+			
 			
 			long MoimId = moimService.selectMaxMoimId();
 			char maker='Y';//만든사람여부
@@ -322,7 +329,17 @@ public class MoimController {
 			if(title==null) {
 				title="";
 			}
-			
+			if(sigoon_code==null) {
+				sigoon_code="";
+			}else if(sigoon_code.equals("선택")) {
+				sigoon_code="";
+			}
+			if(sido_code==null) {
+				sido_code="";
+			}
+			if(status==null) {
+				status="";
+			}
 			Page<Moim> moimList = moimService.selecttitleList(pageable, title, sido_code, sigoon_code);// 조건을 받아서 출력한다
 			for(int i=0;i<moimList.getNumberOfElements();i++) {
 				
@@ -332,7 +349,12 @@ public class MoimController {
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-			
+				
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+				Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+					hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -353,6 +375,7 @@ public class MoimController {
 					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
 					moimList.getContent().get(i).setProgresspercent(progressPercent);
 					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
 				}
 			
 			model.addAttribute("moimList", moimList);
@@ -362,20 +385,27 @@ public class MoimController {
 			model.addAttribute("status",status);
 			long moimListcount = moimList.getTotalElements();
 			model.addAttribute("moimListcount", moimListcount);
-			
+		
 		
 			
 		}else {
 			Page<Moim> moimList = moimService.selectMoimAll(pageable);// 모든 모임리스트 출력한다
+
 			for(int i=0;i<moimList.getNumberOfElements();i++) {
+				
 				
 				List<ToDoWrite> todowrite =  moimList.getContent().get(i).getTodowrite();
 				double progresstotalSum=0;
 				double progresstotal=0;
 				double progressbefore = 0;
 				double progress = 0;
-				long count = 0;
-			
+				long count = 0; 
+				
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+				Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+					hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -396,6 +426,7 @@ public class MoimController {
 					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
 					moimList.getContent().get(i).setProgresspercent(progressPercent);
 					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
 				}
 			
 			model.addAttribute("moimList", moimList);
@@ -409,6 +440,17 @@ public class MoimController {
 			if(title==null) {
 				title="";
 			}
+			if(sigoon_code==null) {
+				sigoon_code="";
+			}else if(sigoon_code.equals("선택")) {
+				sigoon_code="";
+			}
+			if(sido_code==null) {
+				sido_code="";
+			}
+			if(status==null) {
+				status="";
+			}
 			Page<Moim> moimList = moimService.selectseacrhList(pageable, title, sido_code, sigoon_code,commCode);// 조건을 받아서 출력한다
 			
 			for(int i=0;i<moimList.getNumberOfElements();i++) {
@@ -419,7 +461,12 @@ public class MoimController {
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-			
+				//Set<Tag> tags = moimList.getContent().get(i).getTags();
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+					Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+						hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -440,6 +487,7 @@ public class MoimController {
 					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
 					moimList.getContent().get(i).setProgresspercent(progressPercent);
 					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
 				}
 			
 			model.addAttribute("moimList", moimList);
@@ -455,15 +503,23 @@ public class MoimController {
 		}else { 
 			Page<Moim> moimList = moimService.selectMoimCate(pageable,commCode);// 카테고리별로 모임리스트 출력한다
 			
-			for(int i=0;i<moimList.getNumberOfElements();i++) {
+
 			
+			for(int i=0;i<moimList.getNumberOfElements();i++) {
+				
 				List<ToDoWrite> todowrite =  moimList.getContent().get(i).getTodowrite();
 				double progresstotalSum=0;
 				double progresstotal=0;
 				double progressbefore = 0;
 				double progress = 0;
 				long count = 0;
-			
+				
+				//Set<Tag> tags = moimList.getContent().get(i).getTags();
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+					Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+						hashtag +="#"+tags.getName();
+				}
 				for(ToDoWrite j: todowrite) {
 					Map<String, Object> tempMap = new HashMap<String, Object>();
 					tempMap.put("progress_done", j.getProgress_done());
@@ -484,12 +540,18 @@ public class MoimController {
 					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
 					moimList.getContent().get(i).setProgresspercent(progressPercent);
 					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
 				}
+			
+			
 			
 			model.addAttribute("moimList", moimList);
 			long moimListcount = moimList.getTotalElements();
 			model.addAttribute("moimListcount", moimListcount);
 			model.addAttribute("test", "on");
+			
+			
+			
 		}
 	}
 	model.addAttribute("categories", categories);

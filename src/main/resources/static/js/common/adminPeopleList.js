@@ -1,6 +1,6 @@
 $(function(){
 	$.ajax({
-	      url:'/Menulist',
+	      url:'/adminPeoplelist',
 	        type:'get',
 	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 	        contentType: false,

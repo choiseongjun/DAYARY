@@ -27,7 +27,6 @@ import us.flower.dayary.domain.common.DateAudit;
  */
 @Entity
 @Table(name = "MOIM_PEOPLE")
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,12 +37,12 @@ public class MoimPeople extends DateAudit{
 	@Column(name = "ID")
 	private long id;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "MOIM_ID")
 	@JsonIgnore
 	private Moim moim;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "PEOPLE_ID")
 	@JsonIgnore
 	private People people;

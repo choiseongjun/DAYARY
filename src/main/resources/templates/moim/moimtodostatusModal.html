@@ -45,13 +45,12 @@
 									<div class="tab-pane fade show active" id="posts"
 										role="tabpanel" aria-labelledby="posts-tab">
 										<div class="form-group">
+											<input type="hidden" id="boardId">
 											<label class="sr-only" for="message">post</label>
-											<!-- <textarea class="form-control" id="message" rows="3"
-												placeholder="했던 작업들을 올리세요"></textarea> -->
+
 											<textarea class="form-control" id="summernote" rows="3"
 											placeholder="했던 작업들을 올리세요"></textarea>
 										</div>
-
 									</div>
 									<div class="tab-pane fade" id="images" role="tabpanel"
 										aria-labelledby="images-tab">
@@ -69,6 +68,11 @@
 									<div class="btn-group">
 										<button type="button" id="submit" onclick="submit()"
 											class="btn btn-primary">저장하기</button>
+										<button type="button" id="editBtn" onclick="edit()" style="display: none"
+										class="btn btn-primary">수정하기</button>
+										<button type="button" onclick="showBoard()"
+										class="btn btn-primary">목록으로</button>
+
 									</div>
 								</div>
 							</div>

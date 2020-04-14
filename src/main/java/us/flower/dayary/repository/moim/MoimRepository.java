@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import us.flower.dayary.domain.Common;
 import us.flower.dayary.domain.Moim;
 
-public interface MoimRepository extends JpaRepository<Moim, Long>,MoimRepositoryCustom, JpaSpecificationExecutor<Moim> {
+public interface MoimRepository extends JpaRepository<Moim, Long>, JpaSpecificationExecutor<Moim> {
 
     boolean existsByImageName(String imageName);
 
@@ -73,10 +73,24 @@ public interface MoimRepository extends JpaRepository<Moim, Long>,MoimRepository
 
 	Page<Moim> findAllByCategory(Common common, Pageable pageable);
 
-	Page<Moim> findAllByCategoryQuery(Common common, Pageable pageable);
+	//Page<Moim> findAllByCategoryQuery(Common common, Pageable pageable);
 	
 	Page<Moim> findAllByCategoryAndTitleLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, Common common,
 			String string, String string2, String string3);
+
+	Page<Moim> findAllDistinctByMoimtagTagNameLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, String string,
+			String string2, String string3);
+
+
+
+
+//	Page<Moim> findAllByTagsContainingAndSidocodeLikeAndSigooncodeLike(Pageable pageable, String string, String string2,
+//			String string3);
+//
+//
+//
+//	Page<Moim> findAllByTagsNameLikeAndSidocodeLikeAndSigooncodeLike(Pageable pageable, String string, String string2,
+//			String string3);
 
 	// [2020.01.28][hyozkim] commonCode를 조건으로 가져온 모임 리스트 데이터
 	// Page<Moim> findByCommCode(Pageable pageable, String commonCode);

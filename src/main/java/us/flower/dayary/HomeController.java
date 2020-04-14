@@ -41,7 +41,7 @@ public class HomeController {
 	@RequestMapping("/")
 	public String Home(@PageableDefault Pageable pageable,Model model) throws Exception {
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-		pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		pageable = PageRequest.of(page, 2, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 //		Optional<Moim> moim = moimRepository.findById((long) 48);
 //		return moim.get();
 

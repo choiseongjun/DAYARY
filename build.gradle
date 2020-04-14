@@ -54,6 +54,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1') // MyBatis 라이브러리
+	compile('org.springframework.boot:spring-boot-starter-aop') //aop
     def querydslVersion = "4.1.4"
     implementation ("com.querydsl:querydsl-core:$querydslVersion")
     implementation ("com.querydsl:querydsl-apt:$querydslVersion")
@@ -64,7 +65,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
-compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'

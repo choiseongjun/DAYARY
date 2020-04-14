@@ -43,6 +43,6 @@ public interface ToDoWriteService {
 	 public void saveListTodoRest(ToDoWriteList todo, long peopleNo, long no);//Rest풀(리액트네이티브) 일정작성
 	 
 	 public BaseResponse deleteBoardById(long boardId);
-	 public BaseResponse updateBoardById(long boardid, String memo);
+	 public BaseResponse updateBoardById(MoimBoard moimBoard);
 	 
 	 }
