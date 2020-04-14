@@ -43,6 +43,7 @@ import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.meetup.MoimMeetUpRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.todo.ToDoWriteRepository;
+import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
 
@@ -73,6 +74,10 @@ public class MoimController {
 	
 	@Autowired
 	private MoimBoardFileRepository moimboardfileRepository;
+	
+	@Autowired 
+	NotiRepository notiRepository;
+	
 	private static final Logger logger = LoggerFactory.getLogger(MoimController.class);
 
 //    @GetMapping("/searchTitle")
@@ -267,6 +272,7 @@ public class MoimController {
 															// +1해야한다
 			totalPeople++;
 		}
+		model.addAttribute("noti",notiRepository.findByMoim_idAndGubunCd(no, 'M'));
 		model.addAttribute("moimPeopleNo", moimPeopleNo);
 		model.addAttribute("no", no);
 		model.addAttribute("moimOne", moimOne);

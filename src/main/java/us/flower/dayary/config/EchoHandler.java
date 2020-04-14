@@ -17,7 +17,7 @@ import us.flower.dayary.controller.people.SessionNames;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
-import us.flower.dayary.repository.NotifyRepository;
+import us.flower.dayary.repository.noti.NotiRepository;
 
 @Component
 public class EchoHandler extends TextWebSocketHandler{
@@ -26,7 +26,7 @@ public class EchoHandler extends TextWebSocketHandler{
 		Map<String, WebSocketSession> userSessions = new HashMap<>();
 
 		@Autowired
-		NotifyRepository notifyRepository;
+		NotiRepository notifyRepository;
 		
 		@Override
 		public void afterConnectionEstablished(WebSocketSession session) throws Exception {
