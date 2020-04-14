@@ -447,10 +447,13 @@ public class MoimTodoListController {
      */
     @GetMapping("/moimDetail/moimTodoList/myList/{no}")
     public String myTodoList(@PathVariable("no") long no,Model model,@PageableDefault Pageable pageable,HttpSession session) {
+    	
     	int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
     	pageable = PageRequest.of(page, 9,Sort.by("id").descending());
     	long people=(long)session.getAttribute("peopleId");
+    	
     	Page<ToDoWrite> toDolist=service.findByMoim_idAndPeople_id(pageable,no,people);
+    	
     	boolean moim=service.existByMoim_idAndPeople_id(no,people);
     	model.addAttribute("moim",moimService.findMoimone(no).get());
     	model.addAttribute("todolist", toDolist);
@@ -459,6 +462,18 @@ public class MoimTodoListController {
     	model.addAttribute("status","myList");
     	return "moim/moimTodoList" ;
     }
+    
+    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+    public String boardTimeline(@PathVariable("no") long no, Model model,@PageableDefault Pageable pageable, HttpSession session) {
+//    public String boardTimeline() {
+    	long people=(long)session.getAttribute("peopleId");
+    	Page<ToDoWrite> toDolist=service.findByMoim_idAndPeople_id(pageable,no,people);
+    	
+    	model.addAttribute("todolist", toDolist);
+    	
+    	return "moim/moimBoardTimeline";
+    }
+    
     /**
      * todo 삭제
     *
