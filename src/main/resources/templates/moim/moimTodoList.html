@@ -120,7 +120,7 @@
                     <li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/' + ${moim.id}}" class="nav-link " id="allList"><i class="fa fa-fw fa-line-chart mr-2"></i>전체 일정 보기</a></li>
                     <li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/myList/'+ ${moim.id}}" class="nav-link" id="myList"><i class="fa fa-pencil-square-o mr-2"></i>내 일정 목록</a></li>
                     <li class="nav-item"><a href="/moimDetail/moimTodoList/moimcalender" class="nav-link"><i class="fa fa-fw fa-calendar-o mr-2"></i>달력일정 체크하기</a></li>
-                
+                	<li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/boardTimeline/' + ${moim.id}}" class="nav-link"><i class="fa fa-list-alt mr-2"></i>세부계획 타임라인</a></li>
                 </ul>
             </div>
             <div class="mb-4">

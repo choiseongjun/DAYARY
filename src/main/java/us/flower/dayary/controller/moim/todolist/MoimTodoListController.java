@@ -37,12 +37,14 @@ import org.springframework.web.multipart.MultipartFile;
 import net.minidev.json.JSONObject;
 import us.flower.dayary.common.MediaUtils;
 import us.flower.dayary.domain.MoimBoard;
+import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
 import us.flower.dayary.domain.UploadFile;
 import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
+import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
 import us.flower.dayary.service.moim.image.MoimImageService;
 import us.flower.dayary.service.moim.todo.ToDoWriteService;
@@ -60,6 +62,8 @@ public class MoimTodoListController {
 	MoimBoardFileRepository moimboardfileRepostiory;
 	@Autowired
 	MoimImageService moimImageService;
+	@Autowired
+	PeopleRepository peopleRepository;
 	
 	 /**
      * 모임  해야할일(ToDoList) 현재목록  DetailView  조회
@@ -463,13 +467,16 @@ public class MoimTodoListController {
     	return "moim/moimTodoList" ;
     }
     
-    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
-    public String boardTimeline(@PathVariable("no") long no, Model model,@PageableDefault Pageable pageable, HttpSession session) {
-//    public String boardTimeline() {
-    	long people=(long)session.getAttribute("peopleId");
-    	Page<ToDoWrite> toDolist=service.findByMoim_idAndPeople_id(pageable,no,people);
+    	@GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+    public String boardTimeline(@PathVariable("no") long no, Model model,@PageableDefault Pageable pageable,
+    		HttpSession session, Sort sort) {
     	
-    	model.addAttribute("todolist", toDolist);
+    	//long people=(long)session.getAttribute("peopleId");
+    	
+    	sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
+		List<MoimBoard> boardList=moimboardRepository.findByToDoWriteList_id(no);
+    	
+    	model.addAttribute("boardList", boardList);
     	
     	return "moim/moimBoardTimeline";
     }
@@ -503,18 +510,4 @@ public class MoimTodoListController {
       return returnData;
    }
    
-   //@GetMapping("/moimlistView/{commCode}")
-	//public String moimListView(@PageableDefault Pageable pageable, HttpSession session, Model model,
-	//@RequestParam(required = false) String title, @PathVariable("commCode") String commCode,String status,
-	//@RequestParam(required = false) String sido_code, @RequestParam(required = false) String sigoon_code) {
-
-   
-   @GetMapping("/moimDetail/moimTodoList/moimBoardTimeline")
-   public String moimBoardTimeline() {
-	   
-	   System.out.println(" ================ ## 타임라인 컨트롤러실행");
-	   return "/moim/moimTodoTimeline";
-   }
-   
-
 }
