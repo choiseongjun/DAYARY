@@ -44,6 +44,7 @@ import us.flower.dayary.domain.UploadFile;
 import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
+import us.flower.dayary.repository.moim.todo.ToDoWriteListRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
 import us.flower.dayary.service.moim.image.MoimImageService;
@@ -63,7 +64,7 @@ public class MoimTodoListController {
 	@Autowired
 	MoimImageService moimImageService;
 	@Autowired
-	PeopleRepository peopleRepository;
+	private ToDoWriteListRepository toDoWriteListRepository;
 	
 	 /**
      * 모임  해야할일(ToDoList) 현재목록  DetailView  조회
@@ -467,14 +468,13 @@ public class MoimTodoListController {
     	return "moim/moimTodoList" ;
     }
     
-    	@GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
-    public String boardTimeline(@PathVariable("no") long no, Model model,@PageableDefault Pageable pageable,
-    		HttpSession session, Sort sort) {
+    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+    public String boardTimeline(@PathVariable("no") long no, Model model, HttpSession session, Sort sort) {
     	
     	//long people=(long)session.getAttribute("peopleId");
     	
-    	sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
-		List<MoimBoard> boardList=moimboardRepository.findByToDoWriteList_id(no);
+//    	sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
+		List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_id(no);
     	
     	model.addAttribute("boardList", boardList);
     	

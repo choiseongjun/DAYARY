@@ -18,6 +18,7 @@ public interface ToDoWriteListRepository extends JpaRepository<ToDoWriteList, Lo
 	int countByToDoWrite_id(long id);
 	int countByCheckConfirmAndToDoWrite_id(char Y,long id);
 	List<ToDoWriteList> findByToDoWrite_id(long id);
+	List<ToDoWriteList> findByMoim_id(long id);
 	void deleteByToDoWrite_id(long id);
 	@Modifying
 	@Transactional
