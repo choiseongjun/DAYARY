@@ -66,7 +66,7 @@ function modal_view(plan,writer,id,parent,email){
 	        	 if(data.code==1){
 	               var m=data.modal;
 	               var mfile=data.modalfile;
-	               console.log(m)
+	               console.log(m);
 	               var html="<div class='container'><div class='row'><ul class='cbp_tmtimeline' style='background-color : white; width:1200px'>";
 	               for(var i=0;i<m.length;i++){
 	            	   html+="<li id='"+m[i].id+"' style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
@@ -86,7 +86,7 @@ function modal_view(plan,writer,id,parent,email){
 	            	   }
 	               }
 	               html+='<li><button type="button" class="btn btn-primary moreBtn"'
-            	   html+= 'onclick=\'location.href="@Url.Ation("moimBoardTimeline","MoimToDoListController")"\'>더보기</button>'
+            	   html+= 'onclick="sendToTimeline('+id+')">더보기</button>'
 	               html+="</li>"
 	               html+="</ul></div></div>";
 	            	   
@@ -324,4 +324,36 @@ function expand(div){
 		e.height="600"
 		e.width= "1000"
 	}
+	
+
+function sendToTimeline(id){
+	
+	
+	$.ajax({
+	
+	});
+}
+//$.ajax({
+//	url: '/moimDetail/test',
+//	type: 'POST',
+//	enctype: 'multipart/form-data',
+//	processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+//	contentType: false,
+//	dataType: 'json',
+//	cache: false,
+//	mimeType: "multipart/form-data",
+//	data: formData,
+//	success: function (data) {
+//		if(data['result'] == "성공"){
+//			location.href='/moimDetail/'+noId+'/moimPicture';
+//		}
+//		else{
+//			alert(data['result'] +' 실패입니다.');
+//		}			
+//	},
+//	error: function (request, status, error) {
+//		alert("오류입니다. 다시 입력해주세요.");
+//	}
+//});
+
 }

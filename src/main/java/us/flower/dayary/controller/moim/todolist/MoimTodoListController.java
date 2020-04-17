@@ -301,8 +301,8 @@ public class MoimTodoListController {
 	 */
 	@ResponseBody
 	@DeleteMapping("/moimDetail/moimTodoList/deleteModalBoard/{id}")
-//	public BaseResponse deleteModalView(@PathVariable("id")long id){
 	public Map<String, Object> deleteModalView(@PathVariable("id")long id){
+		
 		BaseResponse baseResponse = service.deleteBoardById(id);
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
@@ -468,17 +468,33 @@ public class MoimTodoListController {
     	return "moim/moimTodoList" ;
     }
     
-    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
-    public String boardTimeline(@PathVariable("no") long no, Model model, HttpSession session, Sort sort) {
+// 타임리프 형식
+//    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+//    public String boardTimeline(@PathVariable("no") long no, Model model, HttpSession session) {
+//    	
+//    	//long people=(long)session.getAttribute("peopleId");
+//    	
+//    	Sort sort = new Sort(Sort.Direction.DESC, "createDate");
+//		List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(no);
+//    	model.addAttribute("boardList", boardList);
+//    	
+//    	return "moim/moimBoardTimeline";
+//    }
+    
+    @ResponseBody
+    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{id}")
+    public Map<String, Object> boardTimeline(@PathVariable("id") long id, Model model, HttpSession session) {
     	
-    	//long people=(long)session.getAttribute("peopleId");
+    	BaseResponse baseResponse = service.deleteBoardById(id);
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		
+		returnData.put("code", baseResponse.getCode());
+		returnData.put("message", baseResponse.getMessage());
     	
-//    	sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
-		List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_id(no);
+//    	List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(id);
+//    	model.addAttribute("boardList", boardList);
     	
-    	model.addAttribute("boardList", boardList);
-    	
-    	return "moim/moimBoardTimeline";
+    	return returnData;
     }
     
     /**

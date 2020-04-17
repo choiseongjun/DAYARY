@@ -1,8 +1,8 @@
 package us.flower.dayary.repository.moim.todo;
 
-import java.sql.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +19,7 @@ public interface ToDoWriteListRepository extends JpaRepository<ToDoWriteList, Lo
 	int countByCheckConfirmAndToDoWrite_id(char Y,long id);
 	List<ToDoWriteList> findByToDoWrite_id(long id);
 	List<ToDoWriteList> findByMoim_id(long id);
+	List<ToDoWriteList> findByMoim_idOrderByIdDesc(long id);
 	void deleteByToDoWrite_id(long id);
 	@Modifying
 	@Transactional
