@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>boardTimeline</title>
+	<link th:href="@{/css/bootstrap/bootstrap-timeline.css}" rel="stylesheet" id="bootstrap-css"/>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!------ Include the above in your HEAD tag ---------->
+	
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	        crossorigin="anonymous">
+	        
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	        crossorigin="anonymous"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	        crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	        crossorigin="anonymous"></script>
+</head>     
+<body>
+<div class="container">
+    <div class="container-fluid gedf-wrapper">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="h5">@LeeCross</div>
+                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
+                            etc.
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Followers</div>
+                            <div class="h5">5.2342</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Following</div>
+                            <div class="h5">6758</div>
+                        </li>
+                        <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+             <!---타임리프적용 \\\\\\\\\\\\\\\\    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    \\\\\\\\\\   Post-->
+             <!-- <div th:each="list: ${boardList}">
+             <div th:each="boardlist: ${list.moimboard}" class="card gedf-card">
+                 <div class="card-header">
+                     <div class="d-flex justify-content-between align-items-center">
+                         <div class="d-flex justify-content-between align-items-center">
+                             <div class="mr-2">
+                                 <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
+                             </div>
+                             <div class="ml-2">
+                                 <div th:text="${list.title}" class="h5 m-0">@</div>
+                                 <div th:text="${list.people.name}" class="h5 m-0"></div>
+                                 <div class="h7 text-muted">Miracles Lee Cross</div>
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+                 <div class="card-body">
+                     <div th:text="${boardlist.createDate}" class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
+                     <a class="card-link" href="#">
+                        <h5 th:text="${list.toDoWrite.plan_title}" class="card-title"></h5>
+                        <h6 th:src="${boardlist.title}" class="card-title"></h6>
+                     </a>
+                     <p th:text="${boardlist.memo}" class="card-text"></p>
+                 </div>
+                 <div class="card-footer">
+                     <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+                     <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                 </div>
+             </div>
+             </div> -->
+             <!-- Post /////-->
+
+
+             <!--- 비동기 방식\\\\\\\Post-->
+             <div id="time_contents">
+             	<div class="card gedf-card">
+	                 <div class="card-header">
+	                     <div class="d-flex justify-content-between align-items-center">
+	                         <div class="d-flex justify-content-between align-items-center">
+	                             <div class="mr-2">
+	                                 <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
+	                             </div>
+	                             <div class="ml-2">
+	                                 <div class="h5 m-0">@</div>
+	                                 <div class="h5 m-0"></div>
+	                                 <div class="h7 text-muted">Miracles Lee Cross</div>
+	                             </div>
+	                         </div>
+	                     </div>
+	
+	                 </div>
+	                 <div class="card-body">
+	                     <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
+	                     <a class="card-link" href="#">
+	                        <h5 class="card-title"></h5>
+	                        <h6 class="card-title"></h6>
+	                     </a>
+	                     <p class="card-text"></p>
+	                 </div>
+	                 <div class="card-footer">
+	                     <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+	                     <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+	                 </div>
+	             </div>
+             </div>
+
+				<!-- Main Post //////////////////////////////////////////////-->
+            
+            <div class="col-md-3">
+                <div class="card gedf-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+                <div class="card gedf-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                card's content.</p>
+                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  <script src="/js/moim/moimtodostatusModal.js"></script>
+  </body>

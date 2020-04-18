@@ -48,6 +48,61 @@ function sendFile(file, el) {
     });
 }
 
+// 타임라인
+function sendToTimeline(id){
+	alert("id : "+ id);
+	
+	$.ajax({
+		url: '/moimDetail/moimTodoList/boardTimeline/'+id,
+		contentType: "application/json; charset=utf-8",
+		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+		success:function(data){
+			if(data.code==1){
+	        	var board = data.boardList;
+	        	var timehtml = "";
+	        	for(var i=0; i<board.length; i++){
+	        		moimBoard = board[i].moimboard;
+	        		for(var j=0; j<moimBoard.length; j++){
+	        			timehtml+="<div class='card gedf-card'>";
+	        			timehtml+='<div class="card-header">'
+	        			timehtml+='<div class="d-flex justify-content-between align-items-center">'
+        				timehtml+='<div class="d-flex justify-content-between align-items-center">'
+        				timehtml+='<div class="mr-2">'
+        				timehtml+='<img class="rounded-circle" width="45" src="https://picsum.photos/50/50">'
+	        			timehtml+='</div>'
+        				timehtml+='<div class="ml-2">'
+	        			timehtml+='<div id="peoplename" class="h5 m-0">'+board[i].people.name+'</div>'
+	        			timehtml+='<div class="h7 text-muted">Miracles Lee Cross</div>'
+        				timehtml+='</div>'
+	        			timehtml+='</div>'
+        				timehtml+='</div>'
+	        			timehtml+='</div>'
+	        			timehtml+='<div class="card-body">'
+	        			timehtml+='<div class="text-muted h7 mb-2"><i class="fa fa-clock-o"></i>'+moimBoard[j].createDate+'</div>'
+	        			timehtml+='<a class="card-link" href="#">'
+	        			timehtml+='<h5 class="card-title">'+board[i].toDoWrite.plan_title+'</h5>'
+	                    timehtml+='<h6 class="card-title">'+moimBoard[j].title+'</h6></a>'
+	                    timehtml+='<p class="card-text">'+moimBoard[j].memo+'</p></div>'
+	                    timehtml+='<div class="card-footer"><a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a><a href="#" class="card-link">'
+	                    timehtml+='<i class="fa fa-mail-forward"></i> Share</a></div>'
+	                    timehtml+='</div>'
+	        		}
+	        	}//for
+	        	alert("result : " + timehtml);
+	        	$("#time_contents").html(timehtml);
+	        	location.href='/moim/boardTimeline';
+			}else{
+				alert(data.code);
+        	}
+        },error:function(e){
+        	alert(data.code);
+        	alert(data.message);
+        }
+	});
+}
+
+
+
 // When the user clicks the button, open the modal 
 function modal_view(plan,writer,id,parent,email){
 	modal.style.display = "block";
@@ -57,6 +112,8 @@ function modal_view(plan,writer,id,parent,email){
 	 
 	  $("#toDoWriteListId").val(id);
 	  $("#toDoWriteId").val(parent);
+	  var moimNo = $('#moimNo').attr("data-moimNo");
+	  
 	
 	$.ajax({
 	    	url:'/moimDetail/moimTodoList/modalView/'+id,
@@ -66,10 +123,10 @@ function modal_view(plan,writer,id,parent,email){
 	        	 if(data.code==1){
 	               var m=data.modal;
 	               var mfile=data.modalfile;
-	               console.log(m)
+	               console.log(m);
 	               var html="<div class='container'><div class='row'><ul class='cbp_tmtimeline' style='background-color : white; width:1200px'>";
 	               for(var i=0;i<m.length;i++){
-	            	   html+="<li style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
+	            	   html+="<li id='"+m[i].id+"' style='height: 150px'><time class='cbp_tmtime' datetime="+m[i].createdAt+" ><span>"+m[i].createdAt.slice(0,10)+" "+m[i].createdAt.slice(11,20)+"</span></time> "
 	            	   html+=' <div class="cbp_tmicon bg-info"><i class="zmdi zmdi-label"></i></div><div class="cbp_tmlabel">'
 	            	   html+=' <blockquote><p class="blockquote blockquote-primary">'+m[i].memo+"</p></blockquote></div>"
 	            	   html+=' <button type="button" id="del" onclick="del_content('+m[i].id+')" class="btn" style="float: right; margin-right: 1rem;">삭제</button>'
@@ -85,6 +142,9 @@ function modal_view(plan,writer,id,parent,email){
 	            		  }
 	            	   }
 	               }
+	               html+='<li><button type="button" class="btn btn-primary moreBtn"'
+            	   html+= 'onclick="sendToTimeline(\''+moimNo	+'\')">더보기</button>'
+	               html+="</li>"
 	               html+="</ul></div></div>";
 	            	   
 	              /* $(".form-group").html(c.memo);
@@ -289,9 +349,6 @@ function del_content(id){
 	
 	alert("삭제됩니다 : " +id);
 	
-//	var baseResponse = {};
-//	baseResponse.message = message;
-//	baseResponse.code = code;
 	
 	 $.ajax({
          url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
@@ -302,7 +359,8 @@ function del_content(id){
           success:function(data){
             if(data.code==1){
             	alert(data.message);
-            	location.reload();         
+            	alert('test00');
+            	$("#"+id).remove();
            }else{
               alert(data.message);
            }
@@ -323,4 +381,12 @@ function expand(div){
 		e.height="600"
 		e.width= "1000"
 	}
+	
+
+
+
+
+
+
+
 }

@@ -37,12 +37,15 @@ import org.springframework.web.multipart.MultipartFile;
 import net.minidev.json.JSONObject;
 import us.flower.dayary.common.MediaUtils;
 import us.flower.dayary.domain.MoimBoard;
+import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
 import us.flower.dayary.domain.UploadFile;
 import us.flower.dayary.domain.DTO.BaseResponse;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
+import us.flower.dayary.repository.moim.todo.ToDoWriteListRepository;
+import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
 import us.flower.dayary.service.moim.image.MoimImageService;
 import us.flower.dayary.service.moim.todo.ToDoWriteService;
@@ -60,6 +63,8 @@ public class MoimTodoListController {
 	MoimBoardFileRepository moimboardfileRepostiory;
 	@Autowired
 	MoimImageService moimImageService;
+	@Autowired
+	private ToDoWriteListRepository toDoWriteListRepository;
 	
 	 /**
      * 모임  해야할일(ToDoList) 현재목록  DetailView  조회
@@ -251,7 +256,6 @@ public class MoimTodoListController {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
 		
-		
 		try {
 			returnData.put("modal",list);	
 			returnData.put("code", "1");
@@ -296,8 +300,8 @@ public class MoimTodoListController {
 	 */
 	@ResponseBody
 	@DeleteMapping("/moimDetail/moimTodoList/deleteModalBoard/{id}")
-//	public BaseResponse deleteModalView(@PathVariable("id")long id){
 	public Map<String, Object> deleteModalView(@PathVariable("id")long id){
+		
 		BaseResponse baseResponse = service.deleteBoardById(id);
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
@@ -435,6 +439,7 @@ public class MoimTodoListController {
     	model.addAttribute("moimPeople",Boolean.toString(moim));
     	model.addAttribute("count",service.countByMoim_idAndStatus(no));
     	model.addAttribute("status","allList");
+    	model.addAttribute("moimNo",no);
     	return "moim/moimTodoList";
     }
     /**
@@ -447,10 +452,13 @@ public class MoimTodoListController {
      */
     @GetMapping("/moimDetail/moimTodoList/myList/{no}")
     public String myTodoList(@PathVariable("no") long no,Model model,@PageableDefault Pageable pageable,HttpSession session) {
+    	
     	int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
     	pageable = PageRequest.of(page, 9,Sort.by("id").descending());
     	long people=(long)session.getAttribute("peopleId");
+    	
     	Page<ToDoWrite> toDolist=service.findByMoim_idAndPeople_id(pageable,no,people);
+    	
     	boolean moim=service.existByMoim_idAndPeople_id(no,people);
     	model.addAttribute("moim",moimService.findMoimone(no).get());
     	model.addAttribute("todolist", toDolist);
@@ -459,6 +467,46 @@ public class MoimTodoListController {
     	model.addAttribute("status","myList");
     	return "moim/moimTodoList" ;
     }
+    
+// 타임리프 형식
+//    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+//    public String boardTimeline(@PathVariable("no") long no, Model model, HttpSession session) {
+//    	
+//    	//long people=(long)session.getAttribute("peopleId");
+//    	
+//    	Sort sort = new Sort(Sort.Direction.DESC, "createDate");
+//		List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(no);
+//    	model.addAttribute("boardList", boardList);
+//    	
+//    	return "moim/moimBoardTimeline";
+//    }
+    
+    @ResponseBody
+    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{id}")
+    public Map<String, Object> boardTimeline(@PathVariable("id") long id) {
+    	
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		
+		try {
+			List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(id);
+			returnData.put("code", "1");
+			returnData.put("message", "저장되었습니다");
+			returnData.put("boardList", boardList);
+			
+		} catch (Exception e) {
+			returnData.put("code", "E3290");
+			returnData.put("message", "데이터 확인 후 다시 시도해주세요.");	
+		}
+		
+    	return returnData;
+    }
+    
+  @GetMapping("/moim/boardTimeline")
+  public String boardTimeline() {
+  	
+  	return "moim/moimBoardTimeline";
+  }
+    
     /**
      * todo 삭제
     *
@@ -488,5 +536,4 @@ public class MoimTodoListController {
       return returnData;
    }
    
-
 }

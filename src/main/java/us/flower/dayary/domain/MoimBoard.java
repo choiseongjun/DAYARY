@@ -91,5 +91,6 @@ public class MoimBoard extends DateAudit {
     @OneToMany(orphanRemoval = true, mappedBy = "moimBoard", cascade = CascadeType.ALL)
     private List<MoimBoardFile> moimBoardfile = new ArrayList<MoimBoardFile>();
 
-
+    @Getter
+    private long moimNo;
 }
