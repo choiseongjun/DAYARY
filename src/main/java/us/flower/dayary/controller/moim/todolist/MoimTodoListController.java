@@ -256,7 +256,6 @@ public class MoimTodoListController {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
 		
-		
 		try {
 			returnData.put("modal",list);	
 			returnData.put("code", "1");
@@ -440,6 +439,7 @@ public class MoimTodoListController {
     	model.addAttribute("moimPeople",Boolean.toString(moim));
     	model.addAttribute("count",service.countByMoim_idAndStatus(no));
     	model.addAttribute("status","allList");
+    	model.addAttribute("moimNo",no);
     	return "moim/moimTodoList";
     }
     /**
@@ -483,19 +483,29 @@ public class MoimTodoListController {
     
     @ResponseBody
     @GetMapping("/moimDetail/moimTodoList/boardTimeline/{id}")
-    public Map<String, Object> boardTimeline(@PathVariable("id") long id, Model model, HttpSession session) {
+    public Map<String, Object> boardTimeline(@PathVariable("id") long id) {
     	
-    	BaseResponse baseResponse = service.deleteBoardById(id);
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
-		returnData.put("code", baseResponse.getCode());
-		returnData.put("message", baseResponse.getMessage());
-    	
-//    	List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(id);
-//    	model.addAttribute("boardList", boardList);
-    	
+		try {
+			List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(id);
+			returnData.put("code", "1");
+			returnData.put("message", "저장되었습니다");
+			returnData.put("boardList", boardList);
+			
+		} catch (Exception e) {
+			returnData.put("code", "E3290");
+			returnData.put("message", "데이터 확인 후 다시 시도해주세요.");	
+		}
+		
     	return returnData;
     }
+    
+  @GetMapping("/moim/boardTimeline")
+  public String boardTimeline() {
+  	
+  	return "moim/moimBoardTimeline";
+  }
     
     /**
      * todo 삭제
