@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import net.minidev.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -342,5 +344,16 @@ public class MoimBoardServiceImpl implements MoimBoardService{
 
 		return replies;
 
+	}
+
+	@Override
+	public List<MoimBoard> getMoimBoardByMoimId(long moimId) {
+		
+		return moimBoardRepository.findByMoim_id(moimId);
+	}
+
+	@Override
+	public Page<MoimBoard> getMoimBoardByMoimIdPaging(Pageable pageable, long moimId) {
+		return moimBoardRepository.findByMoim_id(moimId, pageable);
 	}
 }

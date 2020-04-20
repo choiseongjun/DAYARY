@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONUtil;
 import us.flower.dayary.common.MediaUtils;
 import us.flower.dayary.domain.MoimBoard;
 import us.flower.dayary.domain.People;
@@ -47,6 +48,7 @@ import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
 import us.flower.dayary.repository.moim.todo.ToDoWriteListRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
+import us.flower.dayary.service.moim.board.MoimBoardService;
 import us.flower.dayary.service.moim.image.MoimImageService;
 import us.flower.dayary.service.moim.todo.ToDoWriteService;
 
@@ -65,6 +67,8 @@ public class MoimTodoListController {
 	MoimImageService moimImageService;
 	@Autowired
 	private ToDoWriteListRepository toDoWriteListRepository;
+	@Autowired
+	MoimBoardService moimBoardService;
 	
 	 /**
      * 모임  해야할일(ToDoList) 현재목록  DetailView  조회
@@ -94,15 +98,15 @@ public class MoimTodoListController {
     	Map<String, Object> returnData = new HashMap<String, Object>();
     		
     	 
-    			try {
-    				service.updateList(param.get("list"),no,Integer.parseInt(param.get("count")));
-    	            returnData.put("code", "1");
-    	            returnData.put("message", "저장되었습니다");
+		try {
+			service.updateList(param.get("list"),no,Integer.parseInt(param.get("count")));
+            returnData.put("code", "1");
+            returnData.put("message", "저장되었습니다");
 
-    	        } catch (Exception e) {
-    	            returnData.put("code", "E3290");
-    	            returnData.put("message", "데이터 확인 후 다시 시도해주세요.");
-    	        }
+        } catch (Exception e) {
+            returnData.put("code", "E3290");
+            returnData.put("message", "데이터 확인 후 다시 시도해주세요.");
+        }
     	      
     	  return returnData;
     }
@@ -222,13 +226,14 @@ public class MoimTodoListController {
      * @author JY
      */
 	@ResponseBody
-	@PostMapping("/moimDetail/moimTodoList/modalWrite/{no}")
-	public Map<String, Object> modalWrite(HttpSession session,@RequestPart(name="File",required=false) MultipartFile[] file,@RequestPart(name="MoimBoard") MoimBoard board,@PathVariable("no")long no) {
+	@PostMapping("/moimDetail/moimTodoList/modalWrite/{moimNo}/{no}")
+	public Map<String, Object> modalWrite(HttpSession session,@RequestPart(name="File",required=false) MultipartFile[] file,@RequestPart(name="MoimBoard") MoimBoard board
+			,@PathVariable("no")long no, @PathVariable("moimNo")long moimNo) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		String id =  (String) session.getAttribute("peopleEmail");
 		
 		  try {
-			  	service.writeBoard(file,board,no,id );
+			  	service.writeBoard(file,board,no,id, moimNo );
 	            returnData.put("code", "1");
 	            returnData.put("message", "저장되었습니다");
 
@@ -469,28 +474,31 @@ public class MoimTodoListController {
     }
     
 // 타임리프 형식
-//    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
-//    public String boardTimeline(@PathVariable("no") long no, Model model, HttpSession session) {
-//    	
-//    	//long people=(long)session.getAttribute("peopleId");
-//    	
-//    	Sort sort = new Sort(Sort.Direction.DESC, "createDate");
-//		List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(no);
-//    	model.addAttribute("boardList", boardList);
-//    	
-//    	return "moim/moimBoardTimeline";
-//    }
+    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{no}")
+    public String boardTimeline(@PathVariable("no") long no, Model model, @PageableDefault Pageable pageable, Sort sort) {
+    	
+    	int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+    	pageable = PageRequest.of(page, 3, Sort.by("id").descending());
+    	
+    	Page<MoimBoard> boardList = moimBoardService.getMoimBoardByMoimIdPaging(pageable, no);
+    	model.addAttribute("boardList", boardList);
+    	System.out.println(">>> "+ boardList.toString());
+    	
+    	return "moim/moimBoardTimeline";
+    }
+    
     
     @ResponseBody
-    @GetMapping("/moimDetail/moimTodoList/boardTimeline/{id}")
-    public Map<String, Object> boardTimeline(@PathVariable("id") long id) {
+    @GetMapping("/moimDetail/moimTodoList/boardTimelineMore/{id}")
+    public Map<String, Object> boardTimelineMore(@PathVariable("id") long id, @PageableDefault Pageable pageable, Sort sort) {
     	
 		Map<String, Object> returnData = new HashMap<String, Object>();
-		
+    	
 		try {
-			List<ToDoWriteList> boardList= toDoWriteListRepository.findByMoim_idOrderByIdDesc(id);
+			List<MoimBoard> boardList = moimBoardService.getMoimBoardByMoimId(id);
+					
 			returnData.put("code", "1");
-			returnData.put("message", "저장되었습니다");
+			returnData.put("message", "성공");
 			returnData.put("boardList", boardList);
 			
 		} catch (Exception e) {

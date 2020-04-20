@@ -3,6 +3,7 @@ package us.flower.dayary.service.moim.todo.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,6 @@ import javax.persistence.EntityManager;
 @Service
 public class ToDoWriteServiceimpl implements ToDoWriteService {
 	
-
-	@Autowired
-	EntityManager em;
-
    @Autowired
     private PeopleRepository peopleRepository;
    @Autowired
@@ -225,7 +222,7 @@ public int[] countByMoim_idAndStatus(long id) {
 	return l;
 }
 @Override
-public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
+public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, long moimNo) {
 	// TODO Auto-generated method stub
 	//정보 기준으로 작성자와 todowritelist 설정 
 	try {
@@ -235,9 +232,13 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id) {
 		  board.setToDoWriteList(todo.get());
 		
 		BoardGroup boardGroup=new BoardGroup();
+		Moim moim = new Moim();
+		moim.setId(moimNo);
+		
 		boardGroup.setId(8);
 		board.setBoardGroup(boardGroup);
 		board.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
+		board.setMoim(moim);
 		board=moimboardRepository.save(board);
 		
 		if(file.length>0) {

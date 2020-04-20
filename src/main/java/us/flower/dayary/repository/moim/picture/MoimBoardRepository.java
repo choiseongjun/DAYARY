@@ -46,13 +46,11 @@ public interface MoimBoardRepository extends JpaRepository<MoimBoard, Long>, Moi
 
 	List<MoimBoard> findAllByMoimAndBoardGroupOrderById(Moim moim, BoardGroup boardGroup);
 	
-
 //	@Modifying
 //	@Transactional
 //	@Query("UPDATE MoimBoard m SET m.memo=memo WHERE m.id = :id")
 //	void updateBoardMemo(@Param("id")long id, @Param("memo")String memo);
 
-	
-
-	
+	List<MoimBoard> findByMoim_id(long id);
+	Page<MoimBoard> findByMoim_id(long id, Pageable page);
 }

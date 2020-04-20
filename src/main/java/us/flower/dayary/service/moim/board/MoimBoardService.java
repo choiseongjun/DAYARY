@@ -17,6 +17,9 @@ public interface MoimBoardService {
 
 	// 모임 게시판 아이디로 조회
 	public MoimBoard getMoimBoard(long boardId);
+	
+	public Page<MoimBoard> getMoimBoardByMoimIdPaging(Pageable pageable, long moimId);
+	public List<MoimBoard> getMoimBoardByMoimId(long moimId);
 
 	//모임 게시판 글 조회
 	Page<MoimBoardListDTO> getMoimBoardList(Long moimId, Long boardGroupId, Pageable pageable, String search);
