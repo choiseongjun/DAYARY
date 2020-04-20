@@ -1,5 +1,9 @@
 package us.flower.dayary.controller.moim;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -262,8 +266,10 @@ public class MoimController {
 		//List<MoimPeople> moimpeopleList = moimpeopleRepository.findByMoim_idAndMaker(no,'N');
 		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
 		List<Meetup> meetupList = moimmeetupRepository.findByMoim_id(no, pageable);// 오프라인 모임 내림차순정렬로 가져옴
+		//내가 마지막으로 채팅방들어간 후 알림 갯수 카운트하기위해 정보가져오기
+		MoimPeople myMoimPeopleInfo=moimpeopleRepository.findByMoim_idAndPeople_id(no, user.getId()).get(0);
+		long chatcount = moimchatRepository.countByMoim_idAndCreateDateBetween(no, Timestamp.valueOf(myMoimPeopleInfo.getUpdatedAt()),Timestamp.valueOf(LocalDateTime.now()));
 
-		long chatcount = moimchatRepository.countByMoim_id(no);
 
 		long picturecount = moimboardfileRepository.picturecount(no);
 

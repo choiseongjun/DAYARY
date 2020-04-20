@@ -31,7 +31,7 @@ public class NotiServiceImpl implements NotiService {
 	MoimRepository moimRepository;
 
 	@Override
-	public void sendNotiToMoim(MoimJoinDTO message, String msg) {
+	public Noti sendNotiToMoim(MoimJoinDTO message, String msg) {
 		// TODO Auto-generated method stub
 		Noti noti = new Noti();// 알림객체를 들고온다
 		noti.setGubunCd('M');
@@ -43,6 +43,7 @@ public class NotiServiceImpl implements NotiService {
 		noti.setMoim(moim);
 		
 		notifyRepository.save(noti);
+		return noti;
 		
 	}
 	/**
@@ -56,7 +57,7 @@ public class NotiServiceImpl implements NotiService {
 	 * 
 	 */
 	@Override
-	public void sendNotiToMoimOne(MoimJoinDTO message, String msg,String msg2) {
+	public Noti sendNotiToMoimOne(MoimJoinDTO message, String msg,String msg2) {
 		// TODO Auto-generated method stub
 		long moimNo = Long.parseLong(message.getMoimNo());
 
@@ -69,20 +70,25 @@ public class NotiServiceImpl implements NotiService {
 		noti.setGubunCd('P');
 		noti.setMoim(moim);
 		noti.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
-		noti.setMemo(msg);
-
+		//모임장에게도 보내기
+		noti.setPeople(moim.getPeople());
+		notifyRepository.save(noti);
 		for (int i = 0; i < moimPeopleList.size(); i++) {
 			
 			noti.setPeople(moimPeopleList.get(i).getPeople());
 			if(moimPeopleList.get(i).getPeople().getName()==message.getUserName())
 				noti.setMemo(msg2);
+			else 
+				noti.setMemo(msg);
 			notifyRepository.save(noti);
 
 		}
+		return noti;
+	
 	}
 	
 	@Override
-	public void sendNotiToPrivate(MoimJoinDTO message, String msg,Long peopleId) {
+	public Noti sendNotiToPrivate(MoimJoinDTO message, String msg,Long peopleId) {
 		// TODO Auto-generated method stub
 		Noti noti = new Noti();// 알림객체를 들고온다
 		noti.setGubunCd('P');
@@ -98,6 +104,7 @@ public class NotiServiceImpl implements NotiService {
 		noti.setPeople(p);
 		
 		notifyRepository.save(noti);
+		return noti;
 	}
 
 	@Override

@@ -45,6 +45,7 @@ $('[name="offmoimJoin_btn"]').on('click', function () {//오프라인(meetup)모
 		  success:function(data){
 			if(data.code==1){
 				alert(data.message);
+					
 				  location.href='/moimlistView/moimdetailView/moimmeetupDetailView/'+moimNo+'/'+meetupNo;
 			}else if(data.code==2){
 				alert(data.message);

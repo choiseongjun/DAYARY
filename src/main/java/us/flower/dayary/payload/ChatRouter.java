@@ -1,6 +1,10 @@
 package us.flower.dayary.payload;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.WebSocketSession;
 
 import us.flower.dayary.controller.people.SessionNames;
@@ -99,8 +104,15 @@ public class ChatRouter {
         //List<People> moimpeopleList=moimOne.get().getPeopleList();
         List<MoimPeople> moimpeopleList = moimpeopleRepository.findByMoim_id(no);// 이건 모임내 전체사람조회
         moimService.findMoimone(no).ifPresent(moimDetail -> model.addAttribute("moimDetail", moimDetail));//모임장중심으로 데이터 불러옴
-        List<MoimChat> moimchatList=moimchatRepository.findByMoim_id(no);//특정모임의 채팅리스트를 들고온다( ex)모임1번의 채팅리스트)
-       
+        //가입한 이후의 리스트만 들고온다
+        MoimPeople myMoimPeopleInfo = moimpeopleRepository.findByMoim_idAndPeople_id(no, peopleId).get(0);
+        System.out.println(myMoimPeopleInfo.getCreatedAt()+"//////////");
+        System.out.println(myMoimPeopleInfo.getCreatedAt()+"//////////");
+        List<MoimChat> moimchatList=moimchatRepository.findByMoim_idAndCreateDateBetween(no,Timestamp.valueOf(myMoimPeopleInfo.getCreatedAt()),Timestamp.valueOf(LocalDateTime.now()));//특정모임의 채팅리스트를 들고온다( ex)모임1번의 채팅리스트)
+        //채팅방확인시간업데이트
+        myMoimPeopleInfo.setUpdatedAt(LocalDateTime.now());
+        moimpeopleRepository.save(myMoimPeopleInfo);
+        
         model.addAttribute("moimchatList",moimchatList);
         model.addAttribute("moimpeopleList",moimpeopleList);
         model.addAttribute("moimOne",moimOne); 
@@ -108,5 +120,29 @@ public class ChatRouter {
         model.addAttribute("peopleId",peopleId);
         model.addAttribute("email",email);
     	return "moim/moimChatroom";
+    }
+    /**
+     * 모임 단체채팅방 조회
+     *
+     * @param 
+     * @return
+     * @throws 
+     * @author choiseongjun 
+     */
+    @GetMapping("/moimchat/up/{no}")
+    @ResponseBody
+    public Map<String,Object> moimChatUp(@PathVariable("no") long no,Model model,HttpSession session) {
+    	long peopleId = (long) session.getAttribute("peopleId");//일반회원 번호를 던져준다
+   
+    	MoimPeople myMoimPeopleInfo = moimpeopleRepository.findByMoim_idAndPeople_id(no, peopleId).get(0);
+    	//채팅방확인시간업데이트
+    	myMoimPeopleInfo.setUpdatedAt(LocalDateTime.now());
+    	
+    	moimpeopleRepository.save(myMoimPeopleInfo);
+    	Map<String,Object> data=new HashMap<String,Object>();
+		data.put("code","1");
+		
+		
+		return data;
     }
 }

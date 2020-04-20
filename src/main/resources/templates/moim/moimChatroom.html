@@ -163,11 +163,22 @@ function onMessageReceivedChat(payload) {
 		$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="/images/default_people.png" alt="Retail Admin"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
 	}
 	
+	 
 	downFocus();
 
 }
 
-
+function forCount(){ 
+	$.ajax({
+    url:'/moimchat/up/'+$('#moimNo').attr("data-moimNo"),
+    contentType: "application/json; charset=utf-8",
+    processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+    success:function(data){
+    	
+    }, error:function(e){
+	alert(e)
+    }
+    });}
 function enterkey() {
 	
 	//ctrl + enter 눌렸을 때 실행할 내용
