@@ -361,7 +361,7 @@
 	           	var socket=null;
 	           	var isStomp=false;
 	           	function connectStomp() {
-	           		var sock = new SockJS("/Noti"); // endpoint
+	           		var sock = new SockJS("/noti"); // endpoint
 	           	    var client = Stomp.over(sock);
 	           		isStomp = true;
 	           		socket = client;

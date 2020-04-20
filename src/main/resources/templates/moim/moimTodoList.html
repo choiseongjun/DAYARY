@@ -99,6 +99,8 @@
 <body>
 <div th:replace="layout/header::header"/>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div id="userName" th:data="${session.peopleName}"></div><!-- 유저이름 -->
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
@@ -502,12 +504,13 @@ function post_send(id) {
 // 		document.getElementById("sendBtn").style.display="none";
 // 		return ;
 // 	 }	
-	
+	var total=count.length;
 
 	if(temp.length!=0){
 		for (var i in temp) {
 			if(temp[i].className=="checked"){
 				list+=temp[i].value+",";
+				total++;
 			}
 		}
 	}
@@ -520,6 +523,8 @@ function post_send(id) {
 			list:list,
 			count:count.length
 	}  
+	
+	var moimNo=$('#moimNo').attr("data-moimNo");
 	     $.ajax({
 	      url:'/moimDetail/moimTodoList/moimtodostatus/moimtodostatusDetail/'+id,
 	        type:'post',
@@ -527,7 +532,16 @@ function post_send(id) {
 	        contentType: "application/json; charset=utf-8",
 	        success:function(data){
 	        	 if(data.code==1){
-	                 location.href='/moimDetail/moimTodoList/'+ $('#moimNo').attr("data-moimNo");
+	        		 if(total==temp.length+count.length){
+	        			 socket.send('/noti/finishNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+		 				 socket.send('/moim/finishNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+	        		 }else{
+	        			 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+		        		 
+	        		 }
+	        		
+	                 location.href='/moimDetail/moimTodoList/'+ moimNo;
 	             }else{
 	                 alert(data.message);
 	             }
@@ -556,6 +570,8 @@ function change_form(id){
 		        contentType: "application/json; charset=utf-8",
 		        success:function(data){
 		        	 if(data.code==1){
+		        		 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
 		        		 alert("수정되었습니다.");
 		        		 get_detail(id);
 		             }else{

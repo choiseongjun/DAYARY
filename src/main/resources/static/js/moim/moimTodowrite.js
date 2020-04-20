@@ -116,8 +116,8 @@ function onKeyDown(){
 	        contentType: "application/json; charset=utf-8",
 	        success:function(data){
 	        	 if(data.code==1){
-	        			socket.send('/noti/witeNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
-	 					socket.send('/moim/witeNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+	        			socket.send('/noti/writeNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+	 					socket.send('/moim/writeNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
 	                 location.href='/moimDetail/moimTodoList/'+ $('#moimNo').attr("data-moimNo");
 	             }else{
 	                 alert(data.message);

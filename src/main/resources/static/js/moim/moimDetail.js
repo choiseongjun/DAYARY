@@ -1,3 +1,6 @@
+$(document).ready(function(){
+	connectStompforMoim(); 
+});
 function meetupPeoplejoinCheck() {
   console.log("페이지 로딩 완료");
 
@@ -48,7 +51,7 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 	 			}
 	 		},
 	           error:function(e){
-
+	        	   signup_btn
 	           }
 	       });
 	});

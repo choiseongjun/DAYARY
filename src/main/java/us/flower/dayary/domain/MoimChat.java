@@ -47,4 +47,6 @@ public class MoimChat {
  	@Column(name = "CREATE_DATE", updatable = false)
     @Temporal(TemporalType.TIMESTAMP) 
     private Date createDate;
+ 	
+ 	
 }
