@@ -408,11 +408,15 @@ body {
                   <!-- end col -->
                   <div class="col-sm-4">
                      <div class="card-box tilebox-one">
-                        <i class="icon-rocket float-right text-muted"></i> <a
-                           th:href="@{'/moimDetail/moimChatroom/' + ${no}}"><h6
+                        <i class="icon-rocket float-right text-muted"></i> 
+                        <a  th:if="${not #strings.isEmpty(chatcount)}" th:href="@{'/moimDetail/moimChatroom/' + ${no}}"><h6
                               class="text-muted text-uppercase mt-0">단체채팅방 들어가기</h6></a>
+                        <a  th:if="${#strings.isEmpty(chatcount)}"><h6
+                              class="text-muted text-uppercase mt-0">단체채팅방 </h6></a>
                         <h3 class="" data-plugin="counterup">
-                          <td th:text="${totalPeople}" />(명) <span class="badge badge-info"><td th:text="${chatcount}" /></span>
+                          <td th:text="${totalPeople}" />(명) <span class="badge badge-info"><td th:if="${chatcount=='99'}">99+</td><td th:if="${chatcount!='99'}"  th:text="${chatcount}" /></span>
+                          
+                          
                      </div>
                   </div>
                   <!-- end col -->
