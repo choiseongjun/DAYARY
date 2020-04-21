@@ -43,6 +43,7 @@ import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.ToDoWriteList;
 import us.flower.dayary.domain.UploadFile;
 import us.flower.dayary.domain.DTO.BaseResponse;
+import us.flower.dayary.domain.DTO.MoimBoardAllDTO;
 import us.flower.dayary.repository.moim.picture.MoimBoardFileRepository;
 import us.flower.dayary.repository.moim.picture.MoimBoardRepository;
 import us.flower.dayary.repository.moim.todo.ToDoWriteListRepository;
@@ -493,10 +494,10 @@ public class MoimTodoListController {
     public Map<String, Object> boardTimelineMore(@PathVariable("id") long id, @PageableDefault Pageable pageable, Sort sort) {
     	
 		Map<String, Object> returnData = new HashMap<String, Object>();
-    	
+
 		try {
-			List<MoimBoard> boardList = moimBoardService.getMoimBoardByMoimId(id);
-					
+			List<MoimBoardAllDTO> boardList = moimBoardService.getMoimBoardByMoimId(id);
+			
 			returnData.put("code", "1");
 			returnData.put("message", "성공");
 			returnData.put("boardList", boardList);

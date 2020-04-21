@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import us.flower.dayary.domain.CommunityBoard;
 import us.flower.dayary.domain.CommunityBoardReply;
 import us.flower.dayary.domain.DTO.BoardReplyDTO;
+import us.flower.dayary.domain.DTO.MoimBoardAllDTO;
 import us.flower.dayary.domain.DTO.MoimBoardReplyDTO;
 import us.flower.dayary.domain.MoimBoard;
 import us.flower.dayary.domain.DTO.MoimBoardListDTO;
@@ -19,7 +20,7 @@ public interface MoimBoardService {
 	public MoimBoard getMoimBoard(long boardId);
 	
 	public Page<MoimBoard> getMoimBoardByMoimIdPaging(Pageable pageable, long moimId);
-	public List<MoimBoard> getMoimBoardByMoimId(long moimId);
+	public List<MoimBoardAllDTO> getMoimBoardByMoimId(long moimId);
 
 	//모임 게시판 글 조회
 	Page<MoimBoardListDTO> getMoimBoardList(Long moimId, Long boardGroupId, Pageable pageable, String search);

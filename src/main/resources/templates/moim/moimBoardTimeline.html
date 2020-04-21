@@ -48,11 +48,10 @@
             
             
              <!---타임리프적용 \\\\\\\\\\\\\\\\    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    \\\\\\\\\\   Post-->
-             <div class="col-md-6">
-				<input type="hidden" id="startCount" value="0"/>
-				
+			<input type="hidden" id="startCount" value="0"/>
+             <div id="postWrapper" class="col-md-6">
 	             <div th:each="list: ${boardList}" class="card gedf-card postCard">
-	                 <div class="card-header">
+	                 <div class="card-header postHeader">
 	                     <div class="d-flex justify-content-between align-items-center">
 	                         <div class="d-flex justify-content-between align-items-center">
 	                             <div class="mr-2">
@@ -68,8 +67,8 @@
 	                 <div class="card-body">
 	                     <div th:text="${list.createDate}" class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
 	                     <a class="card-link" href="#">
-	                        <h5 th:text="${list.toDoWriteList.plan_list}" class="card-title"></h5>
-	                        <h6 th:src="${list.title}" class="card-title"></h6>
+	                        <h5 th:text="${list.toDoWriteList.toDoWrite.plan_title}" class="card-title"></h5>
+	                        <h6 th:text="${list.title}" class="card-title"></h6>
 	                     </a>
 	                     <p th:text="${list.memo}" class="card-text"></p>
 	                 </div>
@@ -79,46 +78,10 @@
 	                 </div>
 	             	<input type="hidden" id="timeline_moimId" th:value="${list.moim.id}"/>
 	             </div>
-             <div>
-             	<button type="button" id="moreBtn-timeline" onclick="showMoreTimeline()" class="btn btn-primary">더보기</button>
+           		<div class="postCard"></div>
+           		<button type="button" id="moreBtn" onclick="showMoreTimeline()" class="btn btn-primary">더보기</button>
+           		<div id="endMark">---------- CONTENTS END ----------</div>
              </div>
-             </div>
-             
-             <!-- Post /////-->
-
-
-             <!--- 비동기 방식\\\\\\\Post-->
-             <!-- <div id="time_contents">
-             	<div class="card gedf-card">
-	                 <div class="card-header">
-	                     <div class="d-flex justify-content-between align-items-center">
-	                         <div class="d-flex justify-content-between align-items-center">
-	                             <div class="mr-2">
-	                                 <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
-	                             </div>
-	                             <div class="ml-2">
-	                                 <div class="h5 m-0">@</div>
-	                                 <div class="h5 m-0"></div>
-	                                 <div class="h7 text-muted">Miracles Lee Cross</div>
-	                             </div>
-	                         </div>
-	                     </div>
-	
-	                 </div>
-	                 <div class="card-body">
-	                     <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
-	                     <a class="card-link" href="#">
-	                        <h5 class="card-title"></h5>
-	                        <h6 class="card-title"></h6>
-	                     </a>
-	                     <p class="card-text"></p>
-	                 </div>
-	                 <div class="card-footer">
-	                     <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-	                     <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-	                 </div>
-	             </div>
-             </div> -->
 
 				<!-- Main Post //////////////////////////////////////////////-->
             
@@ -152,8 +115,9 @@
 	//타임라인
 	  function showMoreTimeline(){
 	  	id = $('#timeline_moimId').val();
-	  	var callLength = $('.postCard').length;
-	  	alert("length : "+callLength);
+	  	
+	  	var callLength = $('.postHeader').length; //시작 인덱스
+	  	var limit = 3; // 더보기 누를때마다 나타낼 카드수
 	  	
 	  	$.ajax({
 	  		url: '/moimDetail/moimTodoList/boardTimelineMore/'+id,
@@ -163,11 +127,22 @@
 	  		success:function(data){
 	  			if(data.code==1){
 	  	        	var board = data.boardList;
+	  	        	var planTitle = data.planTitle
 	  	        	var timehtml = "";
-	  	        	for(var i=callLength; i<board.length; i++){
-	  	        		alert("people"+ board[i].people.name);
+	  	        	
+	  	        	var max = board.length-callLength;
+	  	        	var min = max-limit;
+	  	        	if(min<=0){
+	  	        		min= 0;
+	  	        		$("#moreBtn").hide();
+	  	        		$("#endMark").show();
+	  	        	}
+	  	        	
+	  	        	//alert("board.length: "+board.length+" /max :"+max+" /min: "+ min);
+	  	        	
+	  	        	for(var i=max-1; i>=min; i--){
 	          			timehtml+="<div class='card gedf-card postCard'>";
-	          			timehtml+='<div class="card-header">'
+	          			timehtml+='<div class="card-header postHeader">'
 	          			timehtml+='<div class="d-flex justify-content-between align-items-center">'
 	      				timehtml+='<div class="d-flex justify-content-between align-items-center">'
 	      				timehtml+='<div class="mr-2">'
@@ -183,7 +158,7 @@
 	          			timehtml+='<div class="card-body">'
 	          			timehtml+='<div class="text-muted h7 mb-2"><i class="fa fa-clock-o"></i>'+board[i].createDate+'</div>'
 	          			timehtml+='<a class="card-link" href="#">'
-	          			/*timehtml+='<h5 class="card-title">'+board[i].toDoWriteList.plan_list+'</h5>' */
+	          			timehtml+='<h5 class="card-title">'+board[i].toDoWriteList.toDoWrite.plan_title+'</h5>'
 	                    timehtml+='<h6 class="card-title">'+board[i].title+'</h6></a>'
 	                    timehtml+='<p class="card-text">'+board[i].memo+'</p></div>'
 	                    timehtml+='<div class="card-footer"><a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a><a href="#" class="card-link">'
@@ -192,7 +167,8 @@
 	                    timehtml+='</div>'
 	  	        	}//for
 	  	        	alert("result : " + timehtml);
-	  	        	$(".postCard div:last").after(timehtml);
+	  	        	$("#postWrapper .postCard:last").after(timehtml);
+	  	        	
 	  			}else{
 	  				alert(data.code);
 	          	}

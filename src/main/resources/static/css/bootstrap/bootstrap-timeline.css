@@ -30,7 +30,19 @@ body {
     display: none;
 }
 
-#moreBtn-timeline{
+#moreBtn{
 	width: 100%;
 	margin-bottom: 100px;
+}
+
+#endMark{
+	width: 100%;
+	margin-bottom: 100px;
+	line-height: 1.5;
+	text-align: center;
+	background-color: #C3C3C3;
+	color : #fff;
+	border-radius: .25rem;
+	vertical-align: middle;
+	display: none;
 }
