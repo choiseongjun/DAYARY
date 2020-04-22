@@ -24,6 +24,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 import us.flower.dayary.config.handler.LoggingAccessDeniedHandler;
 import us.flower.dayary.security.CustomLoginSuccessHandler;
@@ -117,6 +119,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.collect(Collectors.toList());
 
 		return new InMemoryClientRegistrationRepository(registrations);
+	}
+	@Bean
+	public HttpFirewall defaultHttpFirewall() {
+	    return new DefaultHttpFirewall();
 	}
 
 	private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
