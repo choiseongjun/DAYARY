@@ -37,8 +37,8 @@
             
              <!---타임리프적용 \\\\\\\\\\\\\\\\    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    \\\\\\\\\\   Post-->
 			<input type="hidden" id="startCount" value="0"/>
-             <div id="postWrapper" class="col-md-6">
-	             <div th:each="list: ${boardList}" class="card gedf-card postCard">
+             <div id="postWrapper" class="col-md-6" >
+	             <div th:each="list: ${boardList}" class="card gedf-card postCard" style="width: 950px; height: auto;">
 	                 <div class="card-header postHeader">
 	                     <div class="d-flex justify-content-between align-items-center">
 	                         <div class="d-flex justify-content-between align-items-center">
@@ -52,15 +52,13 @@
 	                         </div>
 	                     </div>
 	                 </div>
-	                 <div class="card-body" >
+	                 <div class="card-body"  >
 	                     <div th:text="${list.createDate}" class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
 	                     <a class="card-link" href="#">
 	                        <h5 th:text="${list.toDoWriteList.toDoWrite.plan_title}" class="card-title"></h5>
 	                        <h6 th:text="${list.title}" class="card-title"></h6>
 	                     </a>
-	                     <div style="overflow: hidden; display: flex;">
-	                       <div style="background-color: whitesmoke; "
-                		 		th:utext="${list.memo}" ></div></div>
+	                       <div th:utext="${list.memo}" ></div>
 	                 </div>
 	                 <div class="card-footer">
 	                     <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
@@ -68,7 +66,7 @@
 	                 </div>
 	             	<input type="hidden" id="timeline_moimId" th:value="${list.moim.id}"/>
 	             </div>
-           		<div class="postCard"></div>
+           		<div class="postCard" ></div>
            		<button type="button" id="moreBtn" onclick="showMoreTimeline()" class="btn btn-primary">더보기</button>
            		<div id="endMark">---------- CONTENTS END ----------</div>
              </div>
@@ -131,7 +129,7 @@
 	  	        	//alert("board.length: "+board.length+" /max :"+max+" /min: "+ min);
 	  	        	
 	  	        	for(var i=max-1; i>=min; i--){
-	          			timehtml+="<div class='card gedf-card postCard'>";
+	          			timehtml+="<div class='card gedf-card postCard' style='width: 950px; height: auto;'>";
 	          			timehtml+='<div class="card-header postHeader">'
 	          			timehtml+='<div class="d-flex justify-content-between align-items-center">'
 	      				timehtml+='<div class="d-flex justify-content-between align-items-center">'
