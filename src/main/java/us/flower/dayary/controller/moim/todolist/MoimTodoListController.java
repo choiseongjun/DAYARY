@@ -483,6 +483,7 @@ public class MoimTodoListController {
     	
     	Page<MoimBoard> boardList = moimBoardService.getMoimBoardByMoimIdPaging(pageable, no);
     	model.addAttribute("boardList", boardList);
+    	model.addAttribute("moimId", no);
     	System.out.println(">>> "+ boardList.toString());
     	
     	return "moim/moimBoardTimeline";
