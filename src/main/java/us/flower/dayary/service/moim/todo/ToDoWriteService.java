@@ -36,7 +36,7 @@ public interface ToDoWriteService {
 	 public Page<ToDoWrite> findByMoim_idAndStatus(long id, String status, Pageable pageable);
 	 public List<ToDoWrite> findByMoim_idAndPeople_nameAndStatus(long id, String name,String status);
 	 public int[] countByMoim_idAndStatus(long id);
-	 public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id);
+	 public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, long moimNo);
 	 public void changeToDate(ToDoWrite todo);
 	 public List<MoimBoardFile> findByToDoWriteList_id(long id);
 	 public void updateById(java.util.Date date);

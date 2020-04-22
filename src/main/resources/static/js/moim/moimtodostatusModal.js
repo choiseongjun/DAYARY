@@ -48,61 +48,6 @@ function sendFile(file, el) {
     });
 }
 
-// 타임라인
-function sendToTimeline(id){
-	alert("id : "+ id);
-	
-	$.ajax({
-		url: '/moimDetail/moimTodoList/boardTimeline/'+id,
-		contentType: "application/json; charset=utf-8",
-		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
-		success:function(data){
-			if(data.code==1){
-	        	var board = data.boardList;
-	        	var timehtml = "";
-	        	for(var i=0; i<board.length; i++){
-	        		moimBoard = board[i].moimboard;
-	        		for(var j=0; j<moimBoard.length; j++){
-	        			timehtml+="<div class='card gedf-card'>";
-	        			timehtml+='<div class="card-header">'
-	        			timehtml+='<div class="d-flex justify-content-between align-items-center">'
-        				timehtml+='<div class="d-flex justify-content-between align-items-center">'
-        				timehtml+='<div class="mr-2">'
-        				timehtml+='<img class="rounded-circle" width="45" src="https://picsum.photos/50/50">'
-	        			timehtml+='</div>'
-        				timehtml+='<div class="ml-2">'
-	        			timehtml+='<div id="peoplename" class="h5 m-0">'+board[i].people.name+'</div>'
-	        			timehtml+='<div class="h7 text-muted">Miracles Lee Cross</div>'
-        				timehtml+='</div>'
-	        			timehtml+='</div>'
-        				timehtml+='</div>'
-	        			timehtml+='</div>'
-	        			timehtml+='<div class="card-body">'
-	        			timehtml+='<div class="text-muted h7 mb-2"><i class="fa fa-clock-o"></i>'+moimBoard[j].createDate+'</div>'
-	        			timehtml+='<a class="card-link" href="#">'
-	        			timehtml+='<h5 class="card-title">'+board[i].toDoWrite.plan_title+'</h5>'
-	                    timehtml+='<h6 class="card-title">'+moimBoard[j].title+'</h6></a>'
-	                    timehtml+='<p class="card-text">'+moimBoard[j].memo+'</p></div>'
-	                    timehtml+='<div class="card-footer"><a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a><a href="#" class="card-link">'
-	                    timehtml+='<i class="fa fa-mail-forward"></i> Share</a></div>'
-	                    timehtml+='</div>'
-	        		}
-	        	}//for
-	        	alert("result : " + timehtml);
-	        	$("#time_contents").html(timehtml);
-	        	location.href='/moim/boardTimeline';
-			}else{
-				alert(data.code);
-        	}
-        },error:function(e){
-        	alert(data.code);
-        	alert(data.message);
-        }
-	});
-}
-
-
-
 // When the user clicks the button, open the modal 
 function modal_view(plan,writer,id,parent,email){
 	modal.style.display = "block";
@@ -142,9 +87,9 @@ function modal_view(plan,writer,id,parent,email){
 	            		  }
 	            	   }
 	               }
-	               html+='<li><button type="button" class="btn btn-primary moreBtn"'
+	              /* html+='<li><button type="button" class="btn btn-primary moreBtn"'
             	   html+= 'onclick="sendToTimeline(\''+moimNo	+'\')">더보기</button>'
-	               html+="</li>"
+	               html+="</li>"*/
 	               html+="</ul></div></div>";
 	            	   
 	              /* $(".form-group").html(c.memo);
@@ -222,7 +167,8 @@ function submit(){
 	var MoimBoard={};
 	MoimBoard.title=$("#title")[0].textContent;
 	MoimBoard.memo= content;
-	alert(content);
+	var moimNo= $('#moimNo').attr("data-moimNo");
+	alert("moim_id : "+$('#moimNo').attr("data-moimNo"));
 	
 	let formData = new FormData();
 	if(array.length>0){
@@ -235,7 +181,7 @@ function submit(){
 		type: "application/json; charset=UTF-8"
 	}));
 	$.ajax({
-	      url:'/moimDetail/moimTodoList/modalWrite/'+$("#toDoWriteListId").val(),
+	      url:'/moimDetail/moimTodoList/modalWrite/'+moimNo+'/'+$("#toDoWriteListId").val(),
 	        type:'post',
 	        enctype: 'multipart/form-data',
 	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지

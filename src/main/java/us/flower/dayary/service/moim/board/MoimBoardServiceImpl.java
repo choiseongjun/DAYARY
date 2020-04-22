@@ -7,13 +7,16 @@ import java.util.stream.Collectors;
 import net.minidev.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import us.flower.dayary.domain.*;
 import us.flower.dayary.domain.DTO.BoardListDTO;
 import us.flower.dayary.domain.DTO.BoardReplyDTO;
+import us.flower.dayary.domain.DTO.MoimBoardAllDTO;
 import us.flower.dayary.domain.DTO.MoimBoardListDTO;
 import us.flower.dayary.domain.DTO.MoimBoardReplyDTO;
 import us.flower.dayary.repository.community.BoardLikeRepository;
@@ -339,8 +342,30 @@ public class MoimBoardServiceImpl implements MoimBoardService{
 			MoimBoardReplyDTO replyDTO = new MoimBoardReplyDTO(reply, filteredReply);
 			replies.add(replyDTO);
 		}
-
 		return replies;
+	}
 
+	@Override
+	public List<MoimBoardAllDTO> getMoimBoardByMoimId(long moimId) {
+		List<MoimBoardAllDTO> moimBoardList = new ArrayList<MoimBoardAllDTO>();
+		MoimBoardAllDTO moimBoard = null;
+		List<MoimBoard> list = moimBoardRepository.findByMoim_id(moimId);
+		for(int i=0; i<list.size(); i++) {
+			moimBoard = new MoimBoardAllDTO();
+			moimBoard.setMemo(list.get(i).getMemo());
+			moimBoard.setCreateDate(list.get(i).getCreateDate());
+			moimBoard.setId(list.get(i).getId());
+			moimBoard.setMoim(list.get(i).getMoim());
+			moimBoard.setPeople(list.get(i).getPeople());
+			moimBoard.setTitle(list.get(i).getTitle());
+			moimBoard.setToDoWriteList(list.get(i).getToDoWriteList());
+			moimBoardList.add(moimBoard);
+		}
+		return moimBoardList;
+	}
+
+	@Override
+	public Page<MoimBoard> getMoimBoardByMoimIdPaging(Pageable pageable, long moimId) {
+		return moimBoardRepository.findByMoim_id(moimId, pageable);
 	}
 }
