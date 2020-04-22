@@ -1,4 +1,4 @@
-
+//계속누르면나오기작업 X
 function getNoti(){
 	var notiList =document.getElementById("notiList");
 	var pageNum=parseInt(notiList.childElementCount/9)+1;

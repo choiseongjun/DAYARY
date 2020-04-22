@@ -30,11 +30,10 @@ public class NotiRouter {
 
 	@MessageMapping("/noti/joinNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO noti(MoimJoinDTO message) throws Exception {
+	public Noti noti(MoimJoinDTO message) throws Exception {
 			String moimOne=message.getMoimTitle() + "에   " + message.getUserName() + "님이  가입하셨습니다:)";
 			String newOne=message.getMoimTitle()+"에 가입하셨습니다:)";
-			notiService.sendNotiToMoimOne(message,moimOne,newOne );
-			return message;
+			return	notiService.sendNotiToMoimOne(message,moimOne,newOne );
 	
 	}
 
@@ -49,11 +48,10 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/joinNoti")
 	@SendTo("/topic/moimNoti")
-	public MoimJoinDTO moimNoti(MoimJoinDTO message) throws Exception {
+	public Noti moimNoti(MoimJoinDTO message) throws Exception {
 		// 모입가입시 팀내알림
 
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이  가입하셨습니다:)");
-		return message;
+		return	notiService.sendNotiToMoim(message, message.getUserName() + "님이  가입하셨습니다:)");
 
 
 	}
@@ -68,12 +66,11 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/apprNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO moimJoinNoti(MoimJoinDTO message) throws Exception {
+	public Noti moimJoinNoti(MoimJoinDTO message) throws Exception {
 		// 승인필요한 모임가입시 모임장에게알림
 		String msg=message.getMoimTitle() + "에 " + message.getUserName() + "님의 가입 요청을 승인해주세요:)" ;
 		Moim moim=moimRepository.findById(Long.parseLong(message.getMoimNo())).get();
-		notiService.sendNotiToPrivate(message,msg,moim.getPeople().getId() );
-		return message;
+		return notiService.sendNotiToPrivate(message,msg,moim.getPeople().getId() );
 
 	}
 
@@ -87,10 +84,9 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/exitNoti")
 	@SendTo("/topic/moim")
-	public MoimJoinDTO ExitNoti(MoimJoinDTO message) throws Exception {
+	public Noti ExitNoti(MoimJoinDTO message) throws Exception {
 
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이 탈퇴하셨습니다:(");
-		return message;
+		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 탈퇴하셨습니다:(");
 	}
 
 	/**
@@ -103,7 +99,7 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/exitNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO moimExitNoti(MoimJoinDTO message) throws Exception {
+	public Noti moimExitNoti(MoimJoinDTO message) throws Exception {
 
 
 		//username을 peopleId로 받아서 탈퇴한 사람 찾기
@@ -114,10 +110,8 @@ public class NotiRouter {
 		String moimOne=message.getMoimTitle() + "에   " + p.getName() + "님이 탈퇴하셨습니다:(";
 		String newOne=message.getMoimTitle()+"를 탈퇴하셨습니다:(";
 
-		notiService.sendNotiToMoimOne(message,moimOne,newOne );
-		notiService.sendNotiToPrivate(message, newOne, p.getId());
-		return message;
-		
+		 notiService.sendNotiToPrivate(message, newOne, p.getId());
+		 return notiService.sendNotiToMoimOne(message,moimOne,newOne );
 		
 	}
 	
@@ -131,10 +125,9 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/banNoti")
 	@SendTo("/topic/moim")
-	public MoimJoinDTO moimBanNoti(MoimJoinDTO message) throws Exception {
+	public Noti moimBanNoti(MoimJoinDTO message) throws Exception {
 		
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이 강퇴당하셨습니다:(");
-		return message;
+		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 강퇴당하셨습니다:(");
 	}
 
 	/**
@@ -147,7 +140,7 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/banNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO banNoti(MoimJoinDTO message) throws Exception {
+	public Noti banNoti(MoimJoinDTO message) throws Exception {
 		//username을 peopleId로 받아서 강퇴당한 사람 찾기
 		People p = peopleRepository.findById(Long.parseLong(message.getUserName())).get();
 		message.setUserName(p.getName());
@@ -155,9 +148,9 @@ public class NotiRouter {
 		String moimOne=message.getMoimTitle() + "에   " + p.getName() + "님이 강퇴당하셨습니다:(";
 		String newOne=message.getMoimTitle()+"에서 강퇴당하셨습니다:(";
 
-		notiService.sendNotiToMoimOne(message,moimOne,newOne );
 		notiService.sendNotiToPrivate(message, newOne, p.getId());
-		return message;
+		return notiService.sendNotiToMoimOne(message,moimOne,newOne );
+
 	}
 	/**
 	 * 모임 계획작성 알림 날리기
@@ -169,9 +162,8 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/writeNoti")
 	@SendTo("/topic/moim")
-	public MoimJoinDTO moimwriteNoti(MoimJoinDTO message) throws Exception {
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 작성하셨습니다.");
-		return message;
+	public Noti moimwriteNoti(MoimJoinDTO message) throws Exception {
+		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 작성하셨습니다.");
 	}
 	
 	/**
@@ -184,7 +176,7 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/writeNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO writeNoti(MoimJoinDTO message) throws Exception {
+	public Noti writeNoti(MoimJoinDTO message) throws Exception {
 		long moimNo = Long.parseLong(message.getMoimNo());
 		
 			Moim moim = moimRepository.findById(moimNo).get();
@@ -192,8 +184,7 @@ public class NotiRouter {
 			String moimOne=moim.getTitle() + "에   " +message.getUserName()+"님이 계획을 작성하셨습니다.";
 			String writer=moim.getTitle() + "에  계획을 작성하셨습니다.";
 
-			notiService.sendNotiToMoimOne(message,moimOne,writer );
-			return message;
+			return	notiService.sendNotiToMoimOne(message,moimOne,writer );
 	}
 	/**
 	 * 모임 계획수정 알림 날리기
@@ -205,9 +196,8 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/updateNoti")
 	@SendTo("/topic/moim")
-	public MoimJoinDTO moimupdateNoti(MoimJoinDTO message) throws Exception {
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 수정하셨습니다.");
-		return message;
+	public Noti moimupdateNoti(MoimJoinDTO message) throws Exception {
+		return	notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 수정하셨습니다.");
 	}
 	
 	/**
@@ -220,7 +210,7 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/updateNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO updateNoti(MoimJoinDTO message) throws Exception {
+	public Noti updateNoti(MoimJoinDTO message) throws Exception {
 		long moimNo = Long.parseLong(message.getMoimNo());
 		
 		Moim moim = moimRepository.findById(moimNo).get();
@@ -228,8 +218,7 @@ public class NotiRouter {
 		String moimOne=moim.getTitle() + "에   " +message.getUserName()+"님이 계획을 수정하셨습니다.";
 		String writer=moim.getTitle() + "에  계획을 수정하셨습니다.";
 		
-		notiService.sendNotiToMoimOne(message,moimOne,writer );
-		return message;
+		return	notiService.sendNotiToMoimOne(message,moimOne,writer );
 		
 	}
 	/**
@@ -242,9 +231,8 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/moim/finishNoti")
 	@SendTo("/topic/moim")
-	public MoimJoinDTO moimfinishNoti(MoimJoinDTO message) throws Exception {
-		notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 완료하셨습니다.");
-		return message;
+	public Noti moimfinishNoti(MoimJoinDTO message) throws Exception {
+		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 완료하셨습니다.");
 	}
 	
 	/**
@@ -257,7 +245,7 @@ public class NotiRouter {
 	 */
 	@MessageMapping("/noti/finishNoti")
 	@SendTo("/topic/noti")
-	public MoimJoinDTO finishNoti(MoimJoinDTO message) throws Exception {
+	public Noti finishNoti(MoimJoinDTO message) throws Exception {
 		long moimNo = Long.parseLong(message.getMoimNo());
 		
 		Moim moim = moimRepository.findById(moimNo).get();
@@ -265,8 +253,7 @@ public class NotiRouter {
 		String moimOne=moim.getTitle() + "에   " +message.getUserName()+"님이 계획을 완료하셨습니다.";
 		String writer=moim.getTitle() + "에  계획을 완료하셨습니다.";
 		
-		notiService.sendNotiToMoimOne(message,moimOne,writer );
-		return message;
+		return notiService.sendNotiToMoimOne(message,moimOne,writer );
 		
 	}
 }

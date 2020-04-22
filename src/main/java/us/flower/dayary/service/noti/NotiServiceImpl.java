@@ -70,6 +70,7 @@ public class NotiServiceImpl implements NotiService {
 		noti.setGubunCd('P');
 		noti.setMoim(moim);
 		noti.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
+		noti.setMemo(msg);
 		//모임장에게도 보내기
 		noti.setPeople(moim.getPeople());
 		notifyRepository.save(noti);
@@ -78,8 +79,6 @@ public class NotiServiceImpl implements NotiService {
 			noti.setPeople(moimPeopleList.get(i).getPeople());
 			if(moimPeopleList.get(i).getPeople().getName()==message.getUserName())
 				noti.setMemo(msg2);
-			else 
-				noti.setMemo(msg);
 			notifyRepository.save(noti);
 
 		}

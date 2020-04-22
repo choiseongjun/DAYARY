@@ -267,9 +267,16 @@ public class MoimController {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
 		List<Meetup> meetupList = moimmeetupRepository.findByMoim_id(no, pageable);// 오프라인 모임 내림차순정렬로 가져옴
 		//내가 마지막으로 채팅방들어간 후 알림 갯수 카운트하기위해 정보가져오기
-		MoimPeople myMoimPeopleInfo=moimpeopleRepository.findByMoim_idAndPeople_id(no, user.getId()).get(0);
-		long chatcount = moimchatRepository.countByMoim_idAndCreateDateBetween(no, Timestamp.valueOf(myMoimPeopleInfo.getUpdatedAt()),Timestamp.valueOf(LocalDateTime.now()));
-
+		List<MoimPeople> myMoimPeopleFind=moimpeopleRepository.findByMoim_idAndPeople_id(no, user.getId());
+		if(!myMoimPeopleFind.isEmpty()) {
+			MoimPeople myMoimPeopleInfo=myMoimPeopleFind.get(0);
+			long chatcount = moimchatRepository.countByMoim_idAndCreateDateBetween(no, Timestamp.valueOf(myMoimPeopleInfo.getUpdatedAt()),Timestamp.valueOf(LocalDateTime.now()));
+			if(chatcount>99)
+				chatcount=99;
+			model.addAttribute("chatcount", chatcount);
+			
+		}
+	
 
 		long picturecount = moimboardfileRepository.picturecount(no);
 
@@ -288,7 +295,6 @@ public class MoimController {
 		model.addAttribute("joinedpeoplelist", joinedpeoplelist);// 현재 접속한 유저(모임피플) 정보.
 		model.addAttribute("joinedmoimpeopleList", joinedmoimpeopleList);// 모임가입된사람전체조회
 		model.addAttribute("meetupList", meetupList);
-		model.addAttribute("chatcount", chatcount);
 		model.addAttribute("picturecount", picturecount);
 		
 		//model.addAttribute("boardGroup", "8L"); // 공지사항 게시판

@@ -15,8 +15,7 @@ function connectStompforMoim() {
 }
 function onMessageReceivedMoim(payload) {
 	var message = JSON.parse(payload.body);
-	alert("message");
-	$("#noti").append('<span>'+message.msg+'</span><span>'+message.createDate+'</span><br>');
+	$("#noti").append('<span>'+message.memo+'</span><span>'+message.createDate+'</span><br>');
 }
 $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중인사람 승인하기 by choiseongjun 2019-10-07
 		 var moimNo = $('#moimNo').attr("data-moimNo");
