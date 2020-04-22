@@ -134,7 +134,28 @@ $(document).ready(function(){
 	  });
 	});
 
-
+$("#people_update_btn").click(function(){
+	  var peopleId = $("#peopleId").attr("data")
+	  var formData = new FormData();
+	  
+	  formData.append("file",$('#profile_image')[0].files[0]);
+		$.ajax({
+	        url:'/myprofileViewUpdate/'+peopleId,
+	        type:'PUT',
+	        enctype: 'multipart/form-data',
+	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+	        contentType: false,
+	        dataType:'json',
+	        mimeType:"multipart/form-data",
+	        data: formData,
+	        success:function(data){
+				
+			},
+			error:function(xhr,error){
+				
+			}
+	    });
+});
 function toMoim(){
 	 var joinedMoimId = $('#joinedMoimId').attr("data-joinedMoimId");
 	console.log('onclick'+joinedMoimId);

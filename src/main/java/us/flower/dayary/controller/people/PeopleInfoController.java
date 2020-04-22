@@ -1,8 +1,6 @@
 package us.flower.dayary.controller.people;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,18 +11,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import us.flower.dayary.common.FileManager;
+import us.flower.dayary.common.TokenGenerator;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
-import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.noti.NotiService;
 import us.flower.dayary.service.people.PeopleInfoService;
@@ -40,6 +44,12 @@ public class PeopleInfoController {
 	MoimPeopleRepository moimpeopleRepository;
 	@Autowired
 	NotiService notiService;
+	@Autowired
+	private TokenGenerator tokenGenerator;
+	@Autowired
+	private FileManager fileManager;
+	@Value("${moimImagePath}")
+	private String moimImagePath;
   /**
    * 사진 불러오기 by choiseongjun
    *
@@ -147,6 +157,51 @@ public class PeopleInfoController {
 		
 		model.addAttribute("joinedMoim",joinedMoim);
 		return "people/myprofile";
+	}
+	/**
+	 * 내 정보 수정
+	 *
+	 * @param
+	 * @return
+	 * @throws @author choiseongjun
+	 */
+	@ResponseBody
+	@PutMapping("/myprofileViewUpdate/{peopleId}")
+	public ResponseEntity<?> myprofileViewUpdate(@PathVariable("peopleId") long peopleId,HttpSession session, @RequestPart(name="file",required=false) MultipartFile file) {
+		
+		System.out.println("파일은??");
+		System.out.println(file);
+		Optional<People> user = peopleRepository.findById(peopleId);
+		if(file!=null) {	//파일이 null이 아니면 
+			//이미지파일이름생성
+	        String imageName="";
+			while(true){
+	        	imageName=tokenGenerator.getToken();
+				//DB에 파일이름이 존재하지 않으면 moim domain에 set
+	        	if(!peopleRepository.existsByImageName(imageName)){
+	        		
+					user.get().setImageName(imageName);
+					break; 
+				} 
+			}
+	  
+			
+	        //이미지파일확장자추출
+	        String originalFileName = file.getOriginalFilename();
+	        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+	        user.get().setImageExtension(fileExtension);
+
+	        //파일업로드
+	        try { 
+	            fileManager.fileUpload(file, moimImagePath+"/"+imageName+"."+fileExtension);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        People result = peopleRepository.save(user.get());
+		}	
+		
+		
+		return null;
 	}
 	/**
 	 * 내가 가입한 모임리스트 조회
