@@ -80,9 +80,14 @@ public class ChatRouter {
 		Moim moim=new Moim();
 		moim.setId(message.getMoimNo());
 		
-		message.setImageName(user.get().getImageName());
-		message.setImagePath(user.get().getImagePath());
-		message.setImageExtension(user.get().getImageExtension());
+		if(user.get().getImageName()==null) {
+			message.setImageName("/images/default_people");
+			message.setImageExtension("png");
+		}else { 
+			message.setImageName("/getMoimImage/"+user.get().getImageName());
+			message.setImageExtension(user.get().getImageExtension());
+		}
+		
 		MoimChat moimchat=new MoimChat();
 		moimchat.setPeople(people);
 		moimchat.setChatMemo(message.getMsg());

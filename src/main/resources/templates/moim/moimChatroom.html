@@ -132,7 +132,7 @@
 		let msg=$('#inputmsg').val();
 		let moimNo=$('#moimNo').attr("data-moimNo");
 		let peopleEmail=$('#email').attr("data-email");
-		console.log("mmmmmmmmmmmmm>>",msg)
+		
 		if(isStomp){
 			socket.send('/moimchat',{},JSON.stringify({ peopleId: peopleId, msg: msg,moimNo: moimNo,peopleEmail: peopleEmail}));
 		}else{
@@ -144,7 +144,6 @@
 })
 function connectStompforChat() {
 	socket.connect({}, function () {
-        console.log("Connected stompTest!");
         socket.subscribe('/topic/message', onMessageReceivedChat);
         
     });
@@ -153,13 +152,10 @@ function connectStompforChat() {
 
 function onMessageReceivedChat(payload) {
 	var message = JSON.parse(payload.body);
-	console.log('ㅎㅎㅎㅎㅎㅎㅎ')
-	console.log(payload)
-	console.log(message)
 	if($('#peopleId').attr("data-peopleId")==message.peopleId){
-		$('.chat-box').append('<li class="chat-right"><div class="chat-hour"><div class="chat-hour">'+message.createDate+'</div></div><div class="chat-text">'+message.msg+'</div><div class="chat-avatar"><img src="/getMoimImage/'+message.imageName+'.'+message.imageExtension+'"> <div class="chat-name">'+message.peopleEmail+'</div></div></li>');
+		$('.chat-box').append('<li class="chat-right"><div class="chat-hour"><div class="chat-hour">'+message.createDate+'</div></div><div class="chat-text">'+message.msg+'</div><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"> <div class="chat-name">'+message.peopleEmail+'</div></div></li>');
 	}else{
-		$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="/images/default_people.png" alt="Retail Admin"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
+		$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
 	}
 	
 	 
@@ -188,6 +184,11 @@ function enterkey() {
 		  return false;
 	// enter 눌렸을 때 실행할 내용
 	}else if (window.event.keyCode == 13) {
+		console.log($('#inputmsg').val())
+		if($('#inputmsg').val()=='\n'||$('#inputmsg').val()=='\n\n'){
+			enterkey();
+			return false;
+		}
          $('#btnSend').click();
          return false;
     }
