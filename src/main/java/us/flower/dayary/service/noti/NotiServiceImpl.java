@@ -1,5 +1,7 @@
 package us.flower.dayary.service.noti;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,9 +109,9 @@ public class NotiServiceImpl implements NotiService {
 	}
 
 	@Override
-	public int totalNoti(long id) {
+	public int totalNoti(People p) {
 		// TODO Auto-generated method stub
-		return notifyRepository.countByPeople_idAndGubunCdAndReadYn(id,'P','N');
+		return notifyRepository.countByPeople_idAndGubunCdAndCreateDateBetween(p.getId(),'P',Timestamp.valueOf(p.getUpdatedAt()),Timestamp.valueOf(LocalDateTime.now()));
 	}
 	@Override
 	public List<Noti> getMoreNoti(int pageNum, long id, char cd) {

@@ -2,6 +2,7 @@ package us.flower.dayary.controller.people;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -97,17 +98,21 @@ public class PeopleInfoController {
 	@ResponseBody
 	@GetMapping("/getMyNotiListCount")
 	public Map<String,Object> getMyNotiCount(HttpSession session,Model model) {
+		Map<String,Object> data=new HashMap<String,Object>();
 		long peopleId = (long) session.getAttribute("peopleId");//일반회원 번호를 던져준다.
 		
-	
-
-		long getMyNotiCount=notiService.totalNoti(peopleId);
-		
-		
-		Map<String,Object> data=new HashMap<String,Object>();
-		data.put("getMyNotiCount",getMyNotiCount);
-		data.put("code", "1"); 	
-		
+		if(peopleId!=0) {
+			People p=peopleRepository.findById(peopleId).get();
+			long getMyNotiCount=notiService.totalNoti(p);
+			p.setUpdatedAt(LocalDateTime.now());
+			peopleRepository.save(p);
+			
+			
+			data.put("count",getMyNotiCount);
+			data.put("code", "1"); 	
+		}else {
+			data.put("code","2");
+		}
 		return data;
 	}
 	/**
