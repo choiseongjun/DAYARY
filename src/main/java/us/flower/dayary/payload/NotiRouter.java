@@ -108,10 +108,10 @@ public class NotiRouter {
 		message.setUserName(p.getName());
 		
 		String moimOne=message.getMoimTitle() + "에   " + p.getName() + "님이 탈퇴하셨습니다:(";
-		String newOne=message.getMoimTitle()+"를 탈퇴하셨습니다:(";
+		String exitOne=message.getMoimTitle()+"를 탈퇴하셨습니다:(";
 
-		 notiService.sendNotiToPrivate(message, newOne, p.getId());
-		 return notiService.sendNotiToMoimOne(message,moimOne,newOne );
+		 notiService.sendNotiToPrivate(message, exitOne, p.getId());
+		 return notiService.sendNotiToMoimOne(message,moimOne,exitOne );
 		
 	}
 	

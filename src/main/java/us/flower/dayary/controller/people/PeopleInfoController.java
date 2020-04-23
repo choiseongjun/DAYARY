@@ -120,9 +120,6 @@ public class PeopleInfoController {
 		if(peopleId!=0) {
 			People p=peopleRepository.findById(peopleId).get();
 			long getMyNotiCount=notiService.totalNoti(p);
-			p.setUpdatedAt(LocalDateTime.now());
-			peopleRepository.save(p);
-			
 			
 			data.put("count",getMyNotiCount);
 			data.put("code", "1"); 	
@@ -143,7 +140,9 @@ public class PeopleInfoController {
 	public Map<String,Object> getMyNotiList(HttpSession session,@PathVariable("pageNum")int pageNum) {
 		//회원 번호를 던져준다.
 		long peopleId = (long) session.getAttribute("peopleId");
-
+		People p=peopleRepository.findById(peopleId).get();
+		p.setUpdatedAt(LocalDateTime.now());
+		peopleRepository.save(p);
 		List<Noti> notiList=notiService.getMoreNoti(pageNum, peopleId, 'P');
 		
 		Map<String,Object> data=new HashMap<String,Object>();
