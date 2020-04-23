@@ -47,7 +47,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/joinNoti")
-	@SendTo("/topic/moimNoti")
+	@SendTo("/topic/moim")
 	public Noti moimNoti(MoimJoinDTO message) throws Exception {
 		// 모입가입시 팀내알림
 
