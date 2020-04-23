@@ -34,6 +34,7 @@ import us.flower.dayary.domain.DTO.Message;
 import us.flower.dayary.repository.chat.MoimChatRepository;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
+import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
 
 @Controller
@@ -49,6 +50,8 @@ public class ChatRouter {
 	private SimpMessageSendingOperations messagingTemplate;
 	@Autowired
 	MoimPeopleRepository moimpeopleRepository;
+	@Autowired
+	private PeopleRepository peopleRepository;
 
 	
 	private String getId(HttpSession session) {
@@ -67,17 +70,23 @@ public class ChatRouter {
 	@SendTo("/topic/message")
 	public Message ttt(Message message) throws Exception{
 		
-		System.out.println("ID?="+message.getPeopleId());
-		System.out.println("MSG=" + message.getMsg());
-		System.out.println("MoimNo=" + message.getMoimNo());
-		System.out.println("peopleEmail"+message.getPeopleEmail());
 		Date date=new java.sql.Date(System.currentTimeMillis());
 		message.setCreateDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date));
 		People people=new People();
 		people.setId(message.getPeopleId());
 		
+		Optional<People> user = peopleRepository.findById(message.getPeopleId());
+		
 		Moim moim=new Moim();
 		moim.setId(message.getMoimNo());
+		
+		if(user.get().getImageName()==null) {
+			message.setImageName("/images/default_people");
+			message.setImageExtension("png");
+		}else { 
+			message.setImageName("/getMoimImage/"+user.get().getImageName());
+			message.setImageExtension(user.get().getImageExtension());
+		}
 		
 		MoimChat moimchat=new MoimChat();
 		moimchat.setPeople(people);
