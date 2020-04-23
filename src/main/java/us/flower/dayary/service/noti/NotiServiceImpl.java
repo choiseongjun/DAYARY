@@ -1,5 +1,6 @@
 package us.flower.dayary.service.noti;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.DTO.MoimJoinDTO;
+import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
@@ -31,6 +33,8 @@ public class NotiServiceImpl implements NotiService {
 	PeopleRepository peopleRepository;
 	@Autowired
 	MoimRepository moimRepository;
+	@Autowired
+	MoimPeopleRepository moimPeopleRepository;
 
 	@Override
 	public Noti sendNotiToMoim(MoimJoinDTO message, String msg) {
@@ -64,26 +68,30 @@ public class NotiServiceImpl implements NotiService {
 		long moimNo = Long.parseLong(message.getMoimNo());
 
 		Moim moim = moimRepository.findById(moimNo).get();
-
-		List<MoimPeople> moimPeopleList = moim.getMoimpeople();
-		// 글작성 알림
-
-		Noti noti = new Noti();// 알림객체를 들고온다
-		noti.setGubunCd('P');
-		noti.setMoim(moim);
-		noti.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
-		noti.setMemo(msg);
-		//모임장에게도 보내기
-		noti.setPeople(moim.getPeople());
-		notifyRepository.save(noti);
+		List<MoimPeople> moimPeopleList = moimPeopleRepository.findByMoim_id(moimNo);
+		Date time=new java.sql.Date(System.currentTimeMillis());
+		
 		for (int i = 0; i < moimPeopleList.size(); i++) {
+			Noti noti = new Noti();// 알림객체를 들고온다
+			noti.setGubunCd('P');
+			noti.setMoim(moim);
+			noti.setCreateDate(time);
+			//알림보낼사람설정
+			People p=new People();
+			p.setId(moimPeopleList.get(i).getPeople().getId());
+			noti.setPeople(p);
 			
-			noti.setPeople(moimPeopleList.get(i).getPeople());
-			if(moimPeopleList.get(i).getPeople().getName()==message.getUserName())
+			if(p.getId()==peopleRepository.findByName(message.getUserName()).getId())
 				noti.setMemo(msg2);
+			else
+				noti.setMemo(msg);
 			notifyRepository.save(noti);
 
 		}
+		Noti noti = new Noti();
+		noti.setMoim(moim);
+		noti.setCreateDate(time);
+		noti.setMemo(msg);
 		return noti;
 	
 	}

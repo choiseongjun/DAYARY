@@ -36,7 +36,7 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 	 			if(data.code==1){
 	 				var moimPeopleList=moimPeopleList.join(',');
 	 				if(!isStomp && socket.readyState!==1) return;
-	 				let peopleId=$('#peopleId').attr("data-peopleId");
+             		let peopleId=$('#peopleId').attr("data");
 	 				let moimNo=$('#moimNo').attr("data-moimNo");
 	 				let peopleEmail=$('#email').attr("data-email");
 	 				if(isStomp){
@@ -201,7 +201,7 @@ $('#withdraw_btn').off().on('click', function () {//스터디 탈퇴하기 by ch
          			if(moimPeopleList.length!=1)
          				 moimPeopleList=moimPeopleList.join(',');
              		if(!isStomp && socket.readyState!==1) return;
-             		let peopleId=$('#peopleId').attr("data-peopleId");
+             		let peopleId=$('#peopleId').attr("data");
              		let moimNo=$('#moimNo').attr("data-moimNo");
              			socket.send('/noti/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: peopleId, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
              			socket.send('/moim/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));

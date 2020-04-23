@@ -45,7 +45,6 @@ public class Noti {
 	@Column(name = "GUBUN_CD")
 	private char gubunCd;
 	
-	@Column(name = "READ_YN" ,columnDefinition = "char(1) default 'N'")
-	private char readYn;
+	
 	
 }
