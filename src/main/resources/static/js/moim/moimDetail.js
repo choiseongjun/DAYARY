@@ -34,7 +34,7 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 	  		  data: JSON.stringify(tempdata),
 	 		  success:function(data){
 	 			if(data.code==1){
-	 				var moimPeopleList=moimPeopleList.join(',');
+	 				//var moimPeopleList=moimPeopleList.join(',');
 	 				if(!isStomp && socket.readyState!==1) return;
              		let peopleId=$('#peopleId').attr("data");
 	 				let moimNo=$('#moimNo').attr("data-moimNo");
