@@ -221,7 +221,14 @@ body {
                            <span th:if="${joinedpeoplelist.joinCondition}=='N'">   
                            	 <span th:if="${joinedpeople}!=null">   
 		                        <span th:if="${!(session.peopleId==moimDetail.people.id)}">
-		                           <button type="button" id="withdraw_btn" class="btn btn-primary btn-xs">스터디 승인대기중...</button>
+		                           <button type="button"  class="btn btn-primary btn-xs">스터디 승인대기중...</button>
+		                        </span>
+		                      </span>
+                           </span>
+                           <span th:if="${joinedpeoplelist.joinCondition}=='N'">   
+                           	 <span th:if="${joinedpeople}!=null">   
+		                        <span th:if="${!(session.peopleId==moimDetail.people.id)}">
+		                           <button type="button" id="registerCancle_btn" class="btn btn-primary btn-xs">가입 취소</button>
 		                        </span>
 		                      </span>
                            </span>

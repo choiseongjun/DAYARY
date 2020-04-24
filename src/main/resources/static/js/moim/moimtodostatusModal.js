@@ -43,7 +43,7 @@ function sendFile(file, el) {
       processData: false,
       success: function(url) {
 	        $(el).summernote('editor.insertImage', url);
-	        $('#imageBoard > ul').append('<li><img src="'+url+'" width="480" height="auto"/></li>');
+	        $('#imageBoard > ul').append('<li><img src="'+url+'" width="480"  height="500"/></li>');
         }
     });
 }

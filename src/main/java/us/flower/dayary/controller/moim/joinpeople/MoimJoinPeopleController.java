@@ -214,7 +214,34 @@ public class MoimJoinPeopleController {
 	      }
 		return returnData;
 	}
-
+	/**
+	 * 일반회원  가입취소(가입승인대기중)
+	 *
+	 * @param locale
+	 * @param moimPeopleNo
+	 * @return returnData
+	 * @throws Exception
+	 * @author choiseongjun
+	 * @Date 2019-09-24
+	 */
+	@ResponseBody
+	@DeleteMapping("/moimParticipant/registerCancle_btn/{moimPeopleNo}")
+	public Map<String, Object> registerCancle_btn(@PathVariable("moimPeopleNo") long moimPeopleNo,HttpSession session) {
+		Long peopleId = (Long) session.getAttribute("peopleId");
+	
+		
+		Map<String,Object> returnData = new HashMap<String,Object>();
+	
+		  try {
+			  	moimjoinPeopleService.deleteMoimPeople(moimPeopleNo);
+				returnData.put("code","1");
+				returnData.put("message","가입취소 완료:)");
+		  }catch (Exception e) {
+	            returnData.put("code", "E3290");
+	            returnData.put("message", "데이터 확인 후 다시 시도해주세요.");
+	      }
+		return returnData;
+	}
 	/**
 	 * 모임 회원 조회
 	 *

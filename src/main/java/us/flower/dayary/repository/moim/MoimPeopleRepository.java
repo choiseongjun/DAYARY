@@ -45,6 +45,11 @@ public interface MoimPeopleRepository extends JpaRepository<MoimPeople, Long>{
 	List<MoimPeople> findByMoim_idAndMaker(long no, char c);
 
 	List<MoimPeople> findByMoim_idAndPeople_idAndMaker(long no, long peopleId, char c);
+
+
+
+	boolean existsByMoim_idAndPeople_idAndJoinCondition(long id, long peopleId, char joinCondition);
+
   
 
 }

@@ -387,6 +387,13 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, l
 		}
 		return baseResponse;
 	}
+	@Override
+	public boolean existByMoim_idAndPeople_idAndMoimpeopleJoinCondition(long id, long peopleId, char joinCondition) {
+	      if(moimRepository.existsByIdAndPeople_idAndMoimpeopleJoinCondition(id, peopleId,joinCondition))
+	         return true;
+	      else
+	         return moimPeopleRepository.existsByMoim_idAndPeople_idAndJoinCondition(id, peopleId,joinCondition);
+	}
 	
 	
 }

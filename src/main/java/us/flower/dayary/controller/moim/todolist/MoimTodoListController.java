@@ -428,8 +428,7 @@ public class MoimTodoListController {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
         pageable = PageRequest.of(page, 9,Sort.by("id").descending());
     	Page<ToDoWrite> toDolist=service.findByMoim_id(pageable,no);
-    	boolean moim=service.existByMoim_idAndPeople_id(no,(long)session.getAttribute("peopleId"));
-    	
+    	boolean moim=service.existByMoim_idAndPeople_idAndMoimpeopleJoinCondition(no,(long)session.getAttribute("peopleId"),'Y');
     	if(moim==false) {
     		response.setContentType("text/html; charset=UTF-8");
     		 

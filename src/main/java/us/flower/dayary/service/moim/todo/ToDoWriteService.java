@@ -44,5 +44,6 @@ public interface ToDoWriteService {
 	 
 	 public BaseResponse deleteBoardById(long boardId);
 	 public BaseResponse updateBoardById(MoimBoard moimBoard);
+	public boolean existByMoim_idAndPeople_idAndMoimpeopleJoinCondition(long no, long attribute, char joinCondition);
 	 
 	 }

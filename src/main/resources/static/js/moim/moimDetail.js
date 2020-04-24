@@ -220,7 +220,49 @@ $('#withdraw_btn').off().on('click', function () {//스터디 탈퇴하기 by ch
        });
    
 });
+//스터디 가입취소  by choiseongjun 2020-04-24
+$('#registerCancle_btn').off().on('click', function () {
+	 
+	 var moimNo = $('#moimNo').attr("data-moimNo");
+    var moimPeopleNo = $('#moimPeopleNo').attr("data-moimPeopleNo");
+    moimPeopleNo*=1;
+    $.ajax({
+         url : '/moimParticipant/registerCancle_btn/'+moimPeopleNo, 
+         type : "DELETE",   
+         processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+         contentType: false,
+         contentType: 'application/json; charset=UTF-8',
+         dataType   : 'json',  
+         data      : JSON.stringify(moimPeopleNo),
+         success:function(data){
+             if(data.code==1){
+           	   
+//           	var userName = $("#userName").attr("data");
+//             	var moimTitle = $('#moimTitle').attr("data-moimTitle");
+//             	
+//         	
+//        			if(moimPeopleList.length!=1)
+//        				 moimPeopleList=moimPeopleList.join(',');
+//            		if(!isStomp && socket.readyState!==1) return;
+//            		let peopleId=$('#peopleId').attr("data");
+//            		let moimNo=$('#moimNo').attr("data-moimNo");
+//            			socket.send('/noti/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: peopleId, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
+//            			socket.send('/moim/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
+        		
+          	   
+           	  
+           	  alert(data.message);
+                 location.href='/moimlistView/moimdetailView/'+moimNo;
+             }else{
+                 alert(data.message);
+              }
+          },
+          error:function(e){
 
+          }
+      });
+  
+});
 //스터디 삭제 by choiseongjun 2019-09-20
 $("#moim_delete_btn").click(function(){
 	var moimNo = $('#moimNo').attr("data-moimNo");
