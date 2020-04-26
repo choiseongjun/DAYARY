@@ -89,7 +89,7 @@
                <div class="user-box">
                 <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user avatar"> -->
             <img th:src="${peopleinfo.imageName!=null} ?${'/getMoimImage/'+peopleinfo.imageName+'.'+peopleinfo.imageExtension} : '/images/default_people.png'"
-											alt="Image" class="img-fluid rounded"
+											alt="Image" class="img-fluid rounded" id="image_section"
 											style="height: 200px; width: 500px"> 
               </div>
               <h5 class="mb-1 text-white" th:text="${peopleinfo.name}"></h5>

@@ -156,6 +156,24 @@ $("#people_update_btn").click(function(){
 			}
 	    });
 });
+
+function readURL(input) {
+ if (input.files && input.files[0]) {
+  var reader = new FileReader();
+  
+  reader.onload = function (e) {
+   $('#image_section').attr('src', e.target.result);  
+  }
+  
+  reader.readAsDataURL(input.files[0]);
+  }
+}
+	  
+$("#profile_image").change(function(){
+   readURL(this);
+});
+
+
 function toMoim(){
 	 var joinedMoimId = $('#joinedMoimId').attr("data-joinedMoimId");
 	console.log('onclick'+joinedMoimId);
