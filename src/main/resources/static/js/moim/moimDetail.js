@@ -9,9 +9,7 @@ function connectStompforMoim() {
 	socket.connect({}, function () {
         console.log("Connected MoimNoti");
         socket.subscribe('/topic/moim', onMessageReceivedMoim);
-        
     });
-
 }
 function onMessageReceivedMoim(payload) {
 	var message = JSON.parse(payload.body);
