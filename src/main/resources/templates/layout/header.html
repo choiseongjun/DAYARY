@@ -334,7 +334,7 @@
 							    				html += '<tr>'
 							    				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
 							    				html += 	'<td>'
-							    				html += 	'<a href="moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
+							    				html += 	'<a href="/moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
 												html += 	'</td>'
 												html += 	'<td>'+notilist[i].createDate.slice(0,10)+'</td>'
 								   				html += '</tr>'
@@ -393,7 +393,6 @@
 	           			}else{
 	           				$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
 	           			}
-	           			
 	           			 
 	           			downFocus();
 	           		}

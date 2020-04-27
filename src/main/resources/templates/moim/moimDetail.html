@@ -149,7 +149,7 @@ body {
 </style>
 </head>
 <body>
-<body onload="meetupPeoplejoinCheck()"><!-- 인원수 세는것 by choiseongjun -->
+<body ><!-- 인원수 세는것 by choiseongjun -->
    <div id="moimNo" th:data-moimNo="${moimDetail.id}"></div><!-- 모임번호 -->
    <div id="moimTitle" th:data-moimTitle="${moimDetail.title}"></div><!-- 모임명 -->
    <div id="moimPeopleNo" th:data-moimPeopleNo="${moimPeopleNo}"></div><!-- 모임피플테이블번호 -->
@@ -506,10 +506,11 @@ body {
 												<button type="button" name="grantpeople_btn"  th:value="${joinedmoimpeopleList.people.id}"
 			                                       class="btn btn-icon btn-sm waves-effect waves-light btn-success">가입승인하기</button>
 			                            </span>
+			                            <!-- 미개발 -->
 	                                    <button type="button"
-	                                       class="btn btn-icon btn-sm waves-effect waves-light btn-success">운영진주기</button>
+	                                       class="btn btn-icon btn-sm waves-effect waves-light btn-success" th:data="${joinedmoimpeopleList.people.name}">운영진주기</button>
 	                                    
-	                                    <button type="button"  name="banpeople_btn"  th:value="${joinedmoimpeopleList.people.id}"
+	                                    <button type="button"  name="banpeople_btn" th:data="${joinedmoimpeopleList.people.name}"  th:value="${joinedmoimpeopleList.people.id}"
 	                                       class="btn btn-icon btn-sm waves-effect waves-light btn-danger">강퇴하기</button>
                               </span>
                               </p>
