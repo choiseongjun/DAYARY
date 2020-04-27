@@ -126,7 +126,7 @@ public class NotiRouter {
 	@MessageMapping("/moim/banNoti")
 	@SendTo("/topic/noti")
 	public Noti moimBanNoti(MoimJoinDTO message) throws Exception {
-		
+				
 		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 강퇴당하셨습니다:(");
 	}
 

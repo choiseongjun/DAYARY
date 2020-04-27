@@ -49,7 +49,6 @@ public class NotiServiceImpl implements NotiService {
 		noti.setMoim(moim);
 		
 		notifyRepository.save(noti);
-		System.out.print(noti);
 		return noti;
 		
 	}
@@ -95,6 +94,7 @@ public class NotiServiceImpl implements NotiService {
 		noti.setMoim(moim);
 		noti.setCreateDate(time);
 		noti.setMemo(msg);
+		noti.setGubunCd('P');
 		return noti;
 	
 	}

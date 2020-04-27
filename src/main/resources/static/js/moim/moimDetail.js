@@ -52,7 +52,7 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 	 				let moimNo=$('#moimNo').attr("data-moimNo");
 	 				let peopleEmail=$('#email').attr("data-email");
 	 				if(isStomp){
-	 					socket.send('/noti/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
+	 					socket.send('/noti/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
 	          			socket.send('/moim/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
 	 				  location.href='/moimlistView/moimdetailView/'+moimNo;
 	 	       		}
@@ -68,10 +68,12 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 $('[name="banpeople_btn"]').on('click', function () {//회원 강퇴하기 by choiseongjun 2019-10-01
    var moimNo = $('#moimNo').attr("data-moimNo");
 
+     var userId=$(this).val();
+     var userName=$(this).attr("data");
+     var moimTitle = $('#moimTitle').attr("data-moimTitle");
      let tempdata = {};
-     tempdata.no1= $(this).val();
+     tempdata.no1= userId;
      tempdata.no2= $('#moimNo').attr("data-moimNo");
-     
 
     $.ajax({
           url : '/moimParticipant/banjoinedPeople', 
@@ -83,9 +85,9 @@ $('[name="banpeople_btn"]').on('click', function () {//회원 강퇴하기 by ch
  			if(data.code==1){
  				
  				alert(data.message);
- 				  location.href='/moimlistView/moimdetailView/'+moimNo;
- 					socket.send('/noti/banNoti',{},JSON.stringify({moimNo:moimNo,  moimTitle: moimTitle,moimPeopleList:moimPeopleList,userName: $(this).val()}));
-         			socket.send('/moim/banNoti',{},JSON.stringify({moimNo:moimNo,  userName: $(this).val()}));
+ 					socket.send('/noti/banNoti',{},JSON.stringify({moimNo:moimNo,  moimTitle: moimTitle,userName: userId}));
+         			socket.send('/moim/banNoti',{},JSON.stringify({moimNo:moimNo,  userName:userName }));
+         			location.href='/moimlistView/moimdetailView/'+moimNo;
      		
  				  
  			}else{
@@ -125,7 +127,7 @@ $('#signup_btn').off().on('click', function () {//스터디 가입하기 by choi
       				 moimPeopleList=moimPeopleList.join(',');
           		if(!isStomp && socket.readyState!==1) return;
           		let moimNo=$('#moimNo').attr("data-moimNo");
-          			socket.send('/noti/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
+          			socket.send('/noti/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
           			socket.send('/moim/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
       		}else{
       			socket.send('/noti/apprNoti',{},JSON.stringify({moimNo:moimNo, moimTitle: moimTitle,userName:userName}));
@@ -214,7 +216,7 @@ $('#withdraw_btn').off().on('click', function () {//스터디 탈퇴하기 by ch
              		if(!isStomp && socket.readyState!==1) return;
              		let peopleId=$('#peopleId').attr("data");
              		let moimNo=$('#moimNo').attr("data-moimNo");
-             			socket.send('/noti/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: peopleId, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
+             			socket.send('/noti/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: peopleId, moimTitle: moimTitle}));
              			socket.send('/moim/exitNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
          		
            	   
