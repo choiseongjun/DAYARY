@@ -49,6 +49,7 @@ public class NotiServiceImpl implements NotiService {
 		noti.setMoim(moim);
 		
 		notifyRepository.save(noti);
+		System.out.print(noti);
 		return noti;
 		
 	}
@@ -67,7 +68,9 @@ public class NotiServiceImpl implements NotiService {
 		// TODO Auto-generated method stub
 		long moimNo = Long.parseLong(message.getMoimNo());
 
-		Moim moim = moimRepository.findById(moimNo).get();
+		Moim moim = new Moim();
+		moim.setId(moimNo);
+		
 		List<MoimPeople> moimPeopleList = moimPeopleRepository.findByMoim_id(moimNo);
 		Date time=new java.sql.Date(System.currentTimeMillis());
 		
@@ -128,6 +131,14 @@ public class NotiServiceImpl implements NotiService {
 		Pageable pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 
 		return notifyRepository.findByPeople_idAndGubunCd(pageable, id, cd);
+	}
+	@Override
+	public List<Noti> getMoimNoti(int pageNum, long id, char cd) {
+		// TODO Auto-generated method stub
+		int page = (pageNum == 0) ? 0 : (pageNum - 1); // page는 index 처럼 0부터 시작
+		Pageable pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		
+		return notifyRepository.findByMoim_idAndGubunCd(pageable, id, cd);
 	}
 
 

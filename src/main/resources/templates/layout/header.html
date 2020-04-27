@@ -282,8 +282,10 @@
                 	
                 	
                 	connectStomp();
-                	if($("#menu7").val()!=undefined)
+                	if($("#menu7").val()!=undefined){
                 		getMyNotiListCount();
+                		connectStompforPrivate();
+                	}
                 });
                 function getMyNotiListCount(){
                 	$.ajax({
@@ -348,41 +350,7 @@
 					        }
 					    });     
             	}
-	           /*  var socket = null;
-	           	$(document).ready(function(){
-	           		connectWS();
-	           	})
-	           	
-	           	function connectWS(){
-	           		console.log("ttttt");
-	           		//var ws = new WebSocket("ws://localhost:8080/echo?bno=1234");
-	           		var ws = new WebSocket("ws://localhost:8080/echo");
-	           		socket = ws;
-	           		
-	           		ws.onopen = function(){
-	           			console.log('Info : connection opened.');
-	           			//setTimeout( function(){ connect(); }, 1000); //retry connection
-	           		};
-	           		
-	           		ws.onmessage = function (event){
-	           			console.log('여기는안타나???헤더');
-	           			console.log("ReceiveMessage:", event.data+'\n');
-	           			let $socketAlert = $('div#socketAlert');
-	           	        $socketAlert.html(event.data);
-	           	        $socketAlert.css('display', 'block');
-	           	        
-	           	        setTimeout( function() {
-	           	        	$socketAlert.css('display', 'none');
-	           	        }, 100000); 
-	           		};
-	           		
-	           		ws.onclose = function (event) { 
-	           	        console.log('Info: connection closed.');
-	           	        //setTimeout( function(){ connect(); }, 1000); // retry connection!!
-	           	    };
-	           	    ws.onerror = function (err) { console.log('Error:', err); };
-	           		
-	           	} */
+	         
 	           	var socket=null;
 	           	var isStomp=false;
 	           	function connectStomp() {
@@ -390,33 +358,45 @@
 	           	    var client = Stomp.over(sock);
 	           		isStomp = true;
 	           		socket = client;
-	           	    
-	           	    client.connect({}, function () {
-	           	        console.log("Connected stompTest!");
-	           	        // Controller's MessageMapping, header, message(자유형식)
-
-	           	       /*  // 해당 토픽을 구독한다!
-	           	        client.subscribe('/topic/message', function (event) {
-	           	            console.log("!!!!!!!!!!!!event>>", event);
-	           	            console.log("!!!!!!!!!!!!event>>", event.body.msg)
-	           	        }); */
-	           	        // 해당 토픽을 구독한다!
-	           	       client.subscribe('/topic/message', onMessageReceived);
-	           	        
-	           	    });
 
 	           	}
-	           	function onMessageReceived(payload) {
+	           	function connectStompforPrivate()	{
+	           	 
+	           	    socket.connect({}, function () {
+	           	        console.log("Connected PrivateNoti!");
+	           	       socket.subscribe('/topic/noti', onMessageReceivedPrivate);
+	           	        
+	           	    });
+	           	}
+	           	    function onMessageReceivedPrivate(payload) {
+	           	    console.log(message);
 	           		var message = JSON.parse(payload.body);
-	           		document.getElementsByClassName("alarm_num")[0].innerHTML++;
-	        		html += '<tr>'
-	    				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
-	    				html += 	'<td>'
-	    				html += 	'<a href="moimlistView/moimdetailView/'+message.moim.id+'">'+message.memo+'</a>'
-						html += 	'</td>'
-						html += 	'<td>'+message.slice(0,10)+'</td>'
-		   				html += '</tr>'
-        		$("#notiList").prepend(html);
+	           		var message = JSON.parse(payload.body);
+	           		if(message.gubunCd=='M'){
+						if(location.href.indexOf("moimdetail")>0)
+	           			$("#noti").prepend('<span>'+message.memo+'</span><span>'+message.createDate+'</span><br>');
+	           			
+	           		}
+	           		else if(message.gubunCd=='P'){
+	           	   		document.getElementsByClassName("alarm_num")[0].innerHTML++;
+	           			html += '<tr>'
+	           				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
+	           				html += 	'<td>'
+	           				html += 	'<a href="moimlistView/moimdetailView/'+message.moim.id+'">'+message.memo+'</a>'
+	           				html += 	'</td>'
+	           				html += 	'<td>'+message.slice(0,10)+'</td>'
+	           					html += '</tr>'
+	           		$("#notiList").prepend(html);
+	           		}else{
+	           			if($('#peopleId').attr("data-peopleId")==message.peopleId){
+	           				$('.chat-box').append('<li class="chat-right"><div class="chat-hour"><div class="chat-hour">'+message.createDate+'</div></div><div class="chat-text">'+message.msg+'</div><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"> <div class="chat-name">'+message.peopleEmail+'</div></div></li>');
+	           			}else{
+	           				$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
+	           			}
+	           			
+	           			 
+	           			downFocus();
+	           		}
 	           	}
             </script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import us.flower.dayary.domain.Noti;
 
 public interface NotiRepository extends JpaRepository<Noti, Long>{
-	List<Noti> findByMoim_idAndGubunCd(long no,char cd);
+	List<Noti> findByMoim_idAndGubunCd(Pageable pageable,long no,char cd);
 	List<Noti> findByPeople_idAndGubunCd(Pageable pageable,long id,char cd);
 	int countByPeople_idAndGubunCdAndCreateDateBetween(long id,char cd,Timestamp date,Timestamp date2);
 }

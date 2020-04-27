@@ -67,7 +67,7 @@ public class ChatRouter {
 	}
 
 	@MessageMapping("/moimchat")
-	@SendTo("/topic/message")
+	@SendTo("/topic/noti")
 	public Message ttt(Message message) throws Exception{
 		
 		Date date=new java.sql.Date(System.currentTimeMillis());

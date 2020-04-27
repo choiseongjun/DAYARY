@@ -381,10 +381,13 @@ body {
                   </button> -->
                </div>
                <div class="tab" >
-				<span th:each=" noti: ${noti}" id="noti">
+               <div id="noti">
+				<span th:each=" noti: ${noti}" >
 					<span th:text="${noti.memo}"></span>				
-					<span th:text="${noti.createDate}"></span>	<br>			
+					<span th:text="${noti.createDate}"></span>			
 				</span>
+			</div>
+				<a onclick="moreNoti()" id="moreNoti">더보기</a>
                </div>
             </div>
             <div class="col-xl-8">

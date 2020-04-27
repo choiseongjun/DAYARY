@@ -12,6 +12,7 @@ public interface NotiService {
 	public Noti sendNotiToPrivate(MoimJoinDTO message,String msg,Long peopleId);
 	public Noti sendNotiToMoim(MoimJoinDTO message,String msg);
 	List<Noti> getMoreNoti(int pageNum,long id,char cd);
+	List<Noti> getMoimNoti(int pageNum,long id,char cd);
 	int totalNoti(People p);
 	
 }

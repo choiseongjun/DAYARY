@@ -38,6 +38,7 @@ import us.flower.dayary.domain.Common;
 import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
+import us.flower.dayary.domain.Noti;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
@@ -50,6 +51,7 @@ import us.flower.dayary.repository.moim.todo.ToDoWriteRepository;
 import us.flower.dayary.repository.noti.NotiRepository;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.service.moim.moimService;
+import us.flower.dayary.service.noti.NotiService;
 
 @Controller
 public class MoimController {
@@ -80,7 +82,7 @@ public class MoimController {
 	private MoimBoardFileRepository moimboardfileRepository;
 	
 	@Autowired 
-	NotiRepository notiRepository;
+	NotiService notiService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(MoimController.class);
 
@@ -285,7 +287,7 @@ public class MoimController {
 															// +1해야한다
 			totalPeople++;
 		}
-		model.addAttribute("noti",notiRepository.findByMoim_idAndGubunCd(no, 'M'));
+		model.addAttribute("noti",notiService.getMoimNoti(1,no, 'M'));
 		model.addAttribute("moimPeopleNo", moimPeopleNo);
 		model.addAttribute("no", no);
 		model.addAttribute("moimOne", moimOne);
@@ -788,5 +790,22 @@ public class MoimController {
 
 		return returnMap;
 	}
-	
+	/**
+	 * 모임 알림리스트 조회
+	 *
+	 * @param 조회할 페이지리스트
+	 * @return
+	 * @throws @author JY
+	 */
+	@ResponseBody
+	@GetMapping("/getMoimNotiList/{pageNum}/{id}")
+	public Map<String,Object> getMoimNotiList(HttpSession session,@PathVariable("pageNum")int pageNum,@PathVariable("id")long id) {
+		
+		List<Noti> notiList=notiService.getMoimNoti(pageNum, id, 'M');
+		
+		Map<String,Object> data=new HashMap<String,Object>();
+		data.put("notiList",notiList);
+		
+		return data;
+	}
 }

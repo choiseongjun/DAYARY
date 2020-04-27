@@ -109,7 +109,6 @@ $(document).ready(function(){
 			});
 		}
 	});
-	getNotiCount();
 	
 	$("#people_delete_btn").click(function(){
 		  var peopleId = $('#peopleId').attr("data-peopleId");
