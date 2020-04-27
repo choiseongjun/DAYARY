@@ -47,7 +47,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/joinNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti moimNoti(MoimJoinDTO message) throws Exception {
 		// 모입가입시 팀내알림
 
@@ -83,7 +83,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/exitNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti ExitNoti(MoimJoinDTO message) throws Exception {
 
 		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 탈퇴하셨습니다:(");
@@ -124,7 +124,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/banNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti moimBanNoti(MoimJoinDTO message) throws Exception {
 		
 		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 강퇴당하셨습니다:(");
@@ -161,7 +161,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/writeNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti moimwriteNoti(MoimJoinDTO message) throws Exception {
 		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 작성하셨습니다.");
 	}
@@ -195,7 +195,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/updateNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti moimupdateNoti(MoimJoinDTO message) throws Exception {
 		return	notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 수정하셨습니다.");
 	}
@@ -230,7 +230,7 @@ public class NotiRouter {
 	 * @Date
 	 */
 	@MessageMapping("/moim/finishNoti")
-	@SendTo("/topic/moim")
+	@SendTo("/topic/noti")
 	public Noti moimfinishNoti(MoimJoinDTO message) throws Exception {
 		return notiService.sendNotiToMoim(message, message.getUserName() + "님이 계획을 완료하셨습니다.");
 	}

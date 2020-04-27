@@ -1,19 +1,33 @@
-$(document).ready(function(){
-	connectStompforMoim(); 
-});
-function meetupPeoplejoinCheck() {
-  console.log("페이지 로딩 완료");
 
-}
-function connectStompforMoim() {
-	socket.connect({}, function () {
-        console.log("Connected MoimNoti");
-        socket.subscribe('/topic/moim', onMessageReceivedMoim);
-    });
-}
-function onMessageReceivedMoim(payload) {
-	var message = JSON.parse(payload.body);
-	$("#noti").append('<span>'+message.memo+'</span><span>'+message.createDate+'</span><br>');
+function moreNoti(){
+	var notiList =document.getElementById("noti");
+	var pageNum=parseInt(notiList.childElementCount/9)+1;
+	if($("#noti").attr("data")==pageNum){
+		$("#moreNoti").toggle();
+		return;
+	}
+	$.ajax({
+	      url:'/getMoimNotiList/'+pageNum+'/'+$("#moimNo").attr("data-moimNo"),
+	        contentType: "application/json; charset=utf-8",
+	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+	        success:function(data){
+		        	var notilist=data.notiList;
+		        	console.log(notilist);
+		        	if(notilist.length>0){
+		        		var html=""
+			        		for(var i in notilist){
+			    				html += '<span>'+notilist[i].memo+'</span><span>'+notilist[i].createDate+'</span><br>'
+			        		}
+		        		$("#noti").append(html);
+		        		$("#noti").attr("data",pageNum);
+		        	}
+		        
+		        	
+	        	
+	        }, error:function(e){
+				alert(e)
+	        }
+	    });     
 }
 $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중인사람 승인하기 by choiseongjun 2019-10-07
 		 var moimNo = $('#moimNo').attr("data-moimNo");
@@ -40,7 +54,6 @@ $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중�
 	 				if(isStomp){
 	 					socket.send('/noti/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle,moimPeopleList:moimPeopleList}));
 	          			socket.send('/moim/joinNoti',{},JSON.stringify({moimNo:moimNo, userName: userName, moimTitle: moimTitle}));
-	 					alert(data.message);
 	 				  location.href='/moimlistView/moimdetailView/'+moimNo;
 	 	       		}
 	 			}else{

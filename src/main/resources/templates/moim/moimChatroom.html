@@ -118,7 +118,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
  $(document).ready(function(){
-	connectStompforChat();
 	downFocus();
 	
 	
@@ -142,26 +141,6 @@
 	})
 	
 })
-function connectStompforChat() {
-	socket.connect({}, function () {
-        socket.subscribe('/topic/message', onMessageReceivedChat);
-        
-    });
-
-}
-
-function onMessageReceivedChat(payload) {
-	var message = JSON.parse(payload.body);
-	if($('#peopleId').attr("data-peopleId")==message.peopleId){
-		$('.chat-box').append('<li class="chat-right"><div class="chat-hour"><div class="chat-hour">'+message.createDate+'</div></div><div class="chat-text">'+message.msg+'</div><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"> <div class="chat-name">'+message.peopleEmail+'</div></div></li>');
-	}else{
-		$('.chat-box').append('<li class="chat-left"><div class="chat-avatar"><img src="'+message.imageName+'.'+message.imageExtension+'"><div class="chat-name">'+message.peopleEmail+'</div></div><div class="chat-text" id="chatList">'+message.msg+'</div><div class="chat-hour">'+message.createDate+'</div></div></li>');
-	}
-	
-	 
-	downFocus();
-
-}
 
 function forCount(){ 
 	$.ajax({
