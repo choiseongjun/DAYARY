@@ -1,11 +1,8 @@
 
-function moreNoti(){
+/*function moreNoti(){
 	var notiList =document.getElementById("noti");
 	var pageNum=parseInt(notiList.childElementCount/9)+1;
-	if($("#noti").attr("data")==pageNum){
-		$("#moreNoti").toggle();
-		return;
-	}
+	
 	$.ajax({
 	      url:'/getMoimNotiList/'+pageNum+'/'+$("#moimNo").attr("data-moimNo"),
 	        contentType: "application/json; charset=utf-8",
@@ -28,7 +25,7 @@ function moreNoti(){
 				alert(e)
 	        }
 	    });     
-}
+}*/
 $('[name="grantpeople_btn"]').on('click', function () {//가입승인 대기중인사람 승인하기 by choiseongjun 2019-10-07
 		 var moimNo = $('#moimNo').attr("data-moimNo");
 	     let tempdata = {};

@@ -124,11 +124,21 @@ public class NotiServiceImpl implements NotiService {
 		// TODO Auto-generated method stub
 		return notifyRepository.countByPeople_idAndGubunCdAndCreateDateBetween(p.getId(),'P',Timestamp.valueOf(p.getUpdatedAt()),Timestamp.valueOf(LocalDateTime.now()));
 	}
+
+	/*
+	 * @Override public List<Noti> getPrivateNoti(long peopleId, int start) { //
+	 * TODO Auto-generated method stub return
+	 * notifyRepository.GetPrivateNoti(peopleId, start, start+9); }
+	 * 
+	 * @Override public List<Noti> getMoimNoti(long moimId, int start) { // TODO
+	 * Auto-generated method stub return notifyRepository.GetMoimNoti(moimId, start,
+	 * start+9); }
+	 */
 	@Override
 	public List<Noti> getMoreNoti(int pageNum, long id, char cd) {
 		// TODO Auto-generated method stub
 		int page = (pageNum == 0) ? 0 : (pageNum - 1); // page는 index 처럼 0부터 시작
-		Pageable pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		Pageable pageable = PageRequest.of(page, 50, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 
 		return notifyRepository.findByPeople_idAndGubunCd(pageable, id, cd);
 	}
@@ -136,7 +146,7 @@ public class NotiServiceImpl implements NotiService {
 	public List<Noti> getMoimNoti(int pageNum, long id, char cd) {
 		// TODO Auto-generated method stub
 		int page = (pageNum == 0) ? 0 : (pageNum - 1); // page는 index 처럼 0부터 시작
-		Pageable pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		Pageable pageable = PageRequest.of(page, 50, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 		
 		return notifyRepository.findByMoim_idAndGubunCd(pageable, id, cd);
 	}

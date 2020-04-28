@@ -177,7 +177,7 @@
 			    <div class="alarm_list_box">
 			    	<div class="inner_popup">
 			        	
-			        	<p class="alarm_title">alarm_title<span>: Alarm Description...</span><a href="#" class="more_alarm_list">더보기</a></p>
+			        	<p class="alarm_title">alarm_title<span>: Alarm Description...</span><!-- <a href="#" class="more_alarm_list">더보기</a> --></p>
 			            <div class="alarm_list_table_box">
 			                <table width="100%" class="alarm_list_table">
 			                    <colgroup>
@@ -289,13 +289,28 @@
                 });
                 function getMyNotiListCount(){
                 	$.ajax({
-					      url:'/getMyNotiListCount',
+					      url:'/getMyNotiList',
 					        contentType: "application/json; charset=utf-8",
 					        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 					        success:function(data){
 						        if(data.code==1){
 						        	$(".alarm_num").append(data.count);
-						        	
+						        	var notilist=data.notiList;
+						        	/* if(notilist.length<9){
+										$(".more_alarm_list").toggle();
+									} */
+					        		var html=""
+						        		for(var i in notilist){
+						    				html += '<tr>'
+						    				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
+						    				html += 	'<td>'
+						    				html += 	'<a href="/moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
+											html += 	'</td>'
+											html += 	'<td>'+notilist[i].createDate+'</td>'
+							   				html += '</tr>'
+						        		}
+					        		$("#notiList").append(html);
+					        		//$("#notiList").attr("data",pageNum);
 						        }
 					        	
 					        }, error:function(e){
@@ -306,17 +321,17 @@
                     $(".alarm_btn").click(function (e) {
 						e.stopPropagation();
 						e.preventDefault();
-						getNotiList(1);
+						//getNotiList(1);
 						//읽으면 알림 0
 						document.getElementsByClassName("alarm_num")[0].innerHTML=0;
                     });
-                    $(".more_alarm_list").click(function (e) {
+                   /*  $(".more_alarm_list").click(function (e) {
                     	var notiList =document.getElementById("notiList");
                     	var pageNum=parseInt(notiList.childElementCount/9)+1;
                     	getNotiList(pageNum);
-                    });
+                    }); */
                 
-            	function getNotiList(pageNum){
+            	/* function getNotiList(pageNum){
 					if($("#notiList").attr("data")==pageNum){
 						$(".more_alarm_list").toggle();
 						return;
@@ -336,11 +351,14 @@
 							    				html += 	'<td>'
 							    				html += 	'<a href="/moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
 												html += 	'</td>'
-												html += 	'<td>'+notilist[i].createDate.slice(0,10)+'</td>'
+												html += 	'<td>'+notilist[i].createDate+'</td>'
 								   				html += '</tr>'
 							        		}
 						        		$("#notiList").append(html);
 						        		$("#notiList").attr("data",pageNum);
+						        	}else{
+						        		$(".more_alarm_list").toggle();
+										return;
 						        	}
 						        
 						        	
@@ -349,7 +367,7 @@
 								alert(e)
 					        }
 					    });     
-            	}
+            	} */
 	         
 	           	var socket=null;
 	           	var isStomp=false;
@@ -364,11 +382,11 @@
 	           	 
 	           	    socket.connect({}, function () {
 	           	        console.log("Connected PrivateNoti!");
-	           	       socket.subscribe('/topic/noti', onMessageReceivedPrivate);
+	           	       socket.subscribe('/topic/noti', onMessageReceived);
 	           	        
 	           	    });
 	           	}
-	           	    function onMessageReceivedPrivate(payload) {
+	           	    function onMessageReceived(payload) {
 	           	    console.log(message);
 	           		var message = JSON.parse(payload.body);
 	           		var message = JSON.parse(payload.body);
@@ -385,7 +403,7 @@
 	           				html += 	'<td>'
 	           				html += 	'<a href="moimlistView/moimdetailView/'+message.moim.id+'">'+message.memo+'</a>'
 	           				html += 	'</td>'
-	           				html += 	'<td>'+message.slice(0,10)+'</td>'
+	           				html += 	'<td>'+message.createDate+'</td>'
 	           					html += '</tr>'
 	           		$("#notiList").prepend(html);
 	           		}else{
