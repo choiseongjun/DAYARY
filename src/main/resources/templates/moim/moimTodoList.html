@@ -4,283 +4,437 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
     <css th:replace="layout/header::headerCss"/>
-     <link th:href="@{/css/moim/moimtodostatusDetail.css}" rel="stylesheet" /><!--할일목록체크박스리스트  -->
-    <style>
- body{
-    margin-top:0px;
-    background:#f8f8f8
-}
-.avatar--md .avatar__content img{
-    width:40px;
-    height:40px;
-}
-.sidenav {
-
-  height: 70%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index:	1; /* Stay on top */
-  right: 0;
-  background-color: #FAFAFA; 
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 30px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-/* The navigation menu links */
-.sidenav li {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-/* When you mouse over the navigation links, change their color */
-.sidenav li:hover {
-  color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-.checked{
-	 color:#f1f1f1;
-}
-.modal-content{
-	position: absolute;
-	bottom:0px;
-}
-.progress-outer{
-    background: #fff;
-    border-radius: 50px;
-    padding: 25px;
-    margin: 10px 0;
-    box-shadow: 0 0  10px rgba(209, 219, 231,0.7);
-}
-.progress{
-    height: 27px;
-    margin: 0;
-    overflow: visible;
-    border-radius: 50px;
-    background: #eaedf3;
-    box-shadow: inset 0 10px  10px rgba(244, 245, 250,0.9);
-}
-.progress .progress-bar{
-    border-radius: 50px;
-}
-.progress .progress-value{
-    position: relative;
-    left: -45px;
-    top: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
-    letter-spacing: 2px;
-}
-.progress-bar.active{
-    animation: reverse progress-bar-stripes 0.40s linear infinite, animate-positive 2s;
-}
-@-webkit-keyframes animate-positive{
-    0% { width: 0%; }
-}
-@keyframes animate-positive {
-    0% { width: 0%; }
-}
-    </style>
+  
 </head>
 <body>
 <div th:replace="layout/header::header"/>
 
 <div id="userName" th:data="${session.peopleName}"></div><!-- 유저이름 -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="mb-4">
-            	<div id="moimNo" th:data-moimNo="${moim.id}"></div><!-- 모임번호 -->
-            	<div id="moimPeople" th:data-No="${moimPeople}"></div><!-- 모임번호 -->
-            	<div id="Login" th:data="${session.peopleEmail}"></div><!-- 모임번호 -->
-                 <div class="small mb-3">Search</div>
-                <div class="input-group">
-                    <input placeholder="Search for..." type="text" class="form-control">
-                    <div class="input-group-append">
-                        <button type="button"  aria-haspopup="true" aria-expanded="false" class="dropdown-toggle btn btn-link"><i class="fa fa-search"></i></button>
+<!--컨텐츠 시작-->
+        <section id="container" class="moimDetail">
+            <!--페이지 타이틀 시작 -->
+            <div class="vis_box">
+                <h2 class="title">NAME OF GROUP</h2>
+            </div>
+            <!--페이지 타이틀 끝 -->
+            <div id="contents">
+                <div class="inner">
+                    <div class="tab_header">
+                        <div class="tab_box">x
+                            <div class="on"><a href="">ALL</a></div>
+                            <div><a href="">Tab1</a></div>
+                            <div><a href="">Tab2</a></div>
+                            <div><a href="">Tab3</a></div>
+                            <div><a href="">Tab4</a></div>
+                            <div><a href="">Tab5</a></div>
+                            <div><a href="">Tab6</a></div>
+                            <div><a href="">Tab7</a></div>
+                            <div><a href="">Tab8</a></div>
+                        </div>
+                        <div class="control_box">
+                            <ul>
+                                <li class="prev"></li>
+                                <li class="next"></li>
+                            </ul>
+                        </div>
                     </div>
-                </div> 
-            </div>
-            <div class="mb-4">
-                 <div class="small mb-3">Favorites</div> -->
-                <ul class="nav flex-column nav-pills">
-                    <li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/' + ${moim.id}}" class="nav-link " id="allList"><i class="fa fa-fw fa-line-chart mr-2"></i>전체 일정 보기</a></li>
-                    <li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/myList/'+ ${moim.id}}" class="nav-link" id="myList"><i class="fa fa-pencil-square-o mr-2"></i>내 일정 목록</a></li>
-                    <li class="nav-item"><a href="/moimDetail/moimTodoList/moimcalender" class="nav-link"><i class="fa fa-fw fa-calendar-o mr-2"></i>달력일정 체크하기</a></li>
-                	<li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/boardTimeline/' + ${moim.id}}" class="nav-link"><i class="fa fa-list-alt mr-2"></i>세부계획 타임라인</a></li>
-                </ul>
-            </div>
-            <div class="mb-4">
-                <div class="small mb-3">Projects</div>
-                <ul class="nav flex-column nav-pills">
-                    <li class="nav-item" id="New" onclick="detail_list('New');"><i class="fa fa-fw fa-star-o align-self-center mr-2"></i>새로운 일정<span class="ml-auto align-self-center badge badge-secondary badge-pill" th:text="${count[0]}"></span></li>
-                    <li class="nav-item" id="In Progress" onclick="detail_list('In Progress');" ><i class="fa fa-fw fa-star-o align-self-center mr-2"></i>진행중인 일정<span class="ml-auto align-self-center badge badge-secondary badge-pill" th:text="${count[1]}"></span></li>
-                    <li class="nav-item" id="End"onclick="detail_list('End');" ><i class="fa fa-fw fa-star-o align-self-center mr-2"></i>완료된것들<span class="ml-auto align-self-center badge badge-secondary badge-pill" th:text="${count[2]}"></span></li>
-                    <li class="nav-item" id="Suspend" onclick="detail_list('Suspend');" ><i class="fa fa-fw fa-star-o align-self-center mr-2"></i>미완료 목록<span class="ml-auto align-self-center badge badge-secondary badge-pill" th:text="${count[3]}"></span></li>
-                    <li class="nav-item"><a th:href="@{'/moimDetail/moimTodoList/moimTodowrite/' + ${no}}" class="nav-link"><i class="fa fa-fw fa-plus mr-2"></i>일정 관리 세우기</a></li>
-                </ul>
-            </div>
-           
-        </div>
-        <div id="detail"  class="sidenav"><div id="detail-body"></div></div>
+                    <div class="tab_cont_box">
+                        <div class="tab_cont">
+                            <!--탭 변경 영역 시작-->
+                            <table class="moimTodoList">
+                                <caption>todo리스트</caption>
+                                <colgroup>
+                                    <col width="60">
+                                    <col width="68">
+                                    <col width="78.5">
+                                    <col width="">
+                                    <col width="205">
+                                    <col width="135">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td class="star"></td> 
+                                        <td class="profile">작성자</td>
+                                        <td class="status">상태</td>
+                                        <td class="title">제목</td> 
+                                        <td class="progress">Progress</td>
+                                        <td class="ico_area">
+                                            <a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
+                                            <a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
+                                            <a href=""><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
+                                        </td>
+                                    </tr>
+                                </thead>
 
-        <div class="col-lg-8">
-            <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
-                <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="active breadcrumb-item" aria-current="page"><a href="/"><i class="fa fa-home"></i></a></li>
-                        <li class="active breadcrumb-item" aria-current="page"><span th:text="${moim.title}"></span>&nbsp &nbsp 일정관리</li>
-                    </ol>
-                </nav>
-                <input type="text" id="searchBox" style="width:150px; height:45px" placeholder="작성자를 검색하세요.">
-                <button type="button" onclick="detail_list('writer,')" class="btn btn-outline-info" style="width:70px;height:45px">검색</button>
-                <div role="toolbar" class="btn-toolbar" style="heigth:45px">
-                    <div role="group" class="btn-group">
-                     <a th:href="@{'/moimDetail/moimTodoList/moimTodowrite/' + ${moim.id}}" class="d-flex nav-link">
-                        <button id="tooltipAddNew" class="align-self-center btn btn-primary"><i class="fa-fw fa fa-plus"></i></button></a>
+                                <tbody>
+                                    <!--todolist 반복 시작-->
+                                    <tr id="todo1" class="list">
+                                        <td>
+                                            <label class="star_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                        </td>
+                                        <td><span class="status_ico ing">진행중</span></td>
+                                        <td class="title">Lorem Ipsum is simply.</td>
+                                        <td colspan="2">
+                                            <div class="percentage low">
+                                                <div class="bar">
+                                                    <div class="active"></div>
+                                                </div>
+                                                <span class="txt">1/3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 시작-->
+                                    <tr id="todo1_detail1" class="list_detail">
+                                        <td colspan="6">
+                                            <ul>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 끝-->
+                                    <tr>
+                                        <td colspan="6" class="contour"></td>
+                                    </tr>
+                                    <!--todolist 반복 끝-->
+
+                                    <!--todolist 반복 시작-->
+                                    <tr id="todo2" class="list">
+                                        <td><label class="star_check"> <input type="checkbox"> <span class="checkmark"></span> </label></td>
+                                        <td>
+                                            <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                        </td>
+                                        <td><span class="status_ico stop">중지</span></td>
+                                        <td class="title">Lorem Ipsum is simply.</td>
+                                        <td colspan="2">
+                                            <div class="percentage mid">
+                                                <div class="bar">
+                                                    <div class="active"></div>
+                                                </div>
+                                                <span class="txt">1/3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 시작-->
+                                    <tr id="todo2_detail1" class="list_detail">
+                                        <td colspan="6">
+                                            <ul>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 끝-->
+                                    <tr>
+                                        <td colspan="6" class="contour"></td>
+                                    </tr>
+                                    <!--todolist 반복 끝-->
+
+                                    <!--todolist 반복 시작-->
+                                    <tr id="todo3" class="list">
+                                        <td><label class="star_check"> <input type="checkbox"> <span class="checkmark"></span> </label></td>
+                                        <td>
+                                            <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                        </td>
+                                        <td><span class="status_ico end">완료</span></td>
+                                        <td class="title">Lorem Ipsum is simply.</td>
+                                        <td colspan="2">
+                                            <div class="percentage high">
+                                                <div class="bar">
+                                                    <div class="active"></div>
+                                                </div>
+                                                <span class="txt">1/3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 시작-->
+                                    <tr id="todo3_detail1" class="list_detail">
+                                        <td colspan="6">
+                                            <ul>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 끝-->
+                                    <tr>
+                                        <td colspan="6" class="contour"></td>
+                                    </tr>
+                                    <!--todolist 반복 끝-->
+
+                                    <!--todolist 반복 시작-->
+                                    <tr id="todo4" class="list">
+                                        <td><label class="star_check"> <input type="checkbox"> <span class="checkmark"></span> </label></td>
+                                        <td>
+                                            <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                        </td>
+                                        <td><span class="status_ico new">신규</span></td>
+                                        <td class="title">Lorem Ipsum is simply.</td>
+                                        <td colspan="2">
+                                            <div class="percentage zero">
+                                                <div class="bar">
+                                                    <div class="active"></div>
+                                                </div>
+                                                <span class="txt">1/3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 시작-->
+                                    <tr id="todo4_detail1" class="list_detail">
+                                        <td colspan="6">
+                                            <ul>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 끝-->
+                                    <tr>
+                                        <td colspan="6" class="contour"></td>
+                                    </tr>
+                                    <!--todolist 반복 끝-->
+
+                                    <!--todolist 반복 시작-->
+                                    <tr id="todo5" class="list">
+                                        <td><label class="star_check"> <input type="checkbox"> <span class="checkmark"></span> </label></td>
+                                        <td>
+                                            <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                        </td>
+                                        <td><span class="status_ico end">완료</span></td>
+                                        <td class="title">Lorem Ipsum is simply.</td>
+                                        <td colspan="2">
+                                            <div class="percentage high">
+                                                <div class="bar">
+                                                    <div class="active"></div>
+                                                </div>
+                                                <span class="txt">1/3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 시작-->
+                                    <tr id="todo5_detail1" class="list_detail">
+                                        <td colspan="6">
+                                            <ul>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                                <li>
+                                                    <label class="cus_check"><input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                                                    </label>
+                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
+                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <!--todolist 내 디테일 반복 끝-->
+                                    <tr>
+                                        <td colspan="6" class="contour"></td>
+                                    </tr>
+                                    <!--todolist 반복 끝-->
+                                </tbody>
+                            </table>
+                            <!--탭 변경 영역 끝-->
+                        </div>
+                    </div>
+                </div>
+                <div class="pager_box">
+                    <ul>
+                        <li><a href="#none" class="pager_btn prev"><span class="icon">이전 페이지</span></a></li>
+                        <li><a href="#none" class="num on">1</a></li>
+                        <li><a href="#none" class="num">2</a></li>
+                        <li><a href="#none" class="num">3</a></li>
+                        <li><span class="loss">…</span></li>
+                        <li><a href="#none" class="num">7</a></li>
+                        <li><a href="#none" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
+                    </ul>
+                </div>
+                <div class="sidenav">
+                    <div class="detail_header">
+                        Lorem Ipsum is simply dummy text
+                        of the printing and typesetting industry.
+                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="기 닫기" class="sidenav_close"></a>
+                    </div>
+                    <div class="detail_body">
+                        <div class="detail_view">
+                            <div class="detail_view_inner">
+                                <div id="detail_view01">
+                                    <div class="wr_info">
+                                        <div class="thumb">
+                                            <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
+                                        </div>
+                                        <span class="wr_name">Johnny Warren</span>
+                                    </div>
+
+                                    <div class="wr_conts_area">
+                                        <div class="wr_conts">
+                                            <img src="/publ/images/contents/sample2.png" alt="샘플이미지">
+                                        </div>
+                                        <div class="conts_info"><span class="date">2020-00-00</span>&nbsp;&nbsp;<span class="time">11:00:00</span></div>
+                                    </div>
+                                </div>
+                                <div id="detail_view02">
+                                    <div class="wr_info">
+                                        <div class="thumb">
+                                            <img src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지">
+                                        </div>
+                                        <span class="wr_name">Johnny Warren</span>
+                                    </div>
+
+                                    <div class="wr_conts_area">
+                                        <div class="wr_conts">
+                                            <img src="/publ/images/contents/sample2.png" alt="샘플이미지">
+                                        </div>
+                                        <div class="conts_info"><span class="date">2020-00-00</span>&nbsp;&nbsp;<span class="time">11:00:00</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail_write">
+                                <div class="thumb">
+                                    <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
+                                </div>
+                                <div class="write_area">
+                                    <form name="" action="" method="post">
+                                        <textarea name=""></textarea>
+                                        <a href=""><img src="/publ/images/contents/textarea_text.png" alt="글자 설정" class="wr_font_ico"></a>
+                                        <a href=""><img src="/publ/images/contents/textarea_file.png" alt="파일 업로드" class="wr_file_ico"></a>
+                                        <button type="submit">Comment</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="mb-3 Card_custom-card--border_5wJKy card">
-                <div class="table-responsive-xl">
-                    <table class="mb-0 table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="align-middle bt-0" width="5">Star</th>
-                                <th class="align-middle bt-0" width="100">계획</th>
-                                <th class="align-middle bt-0" width="5">현재 상태</th>
-                                <th class="align-middle bt-0"	width="150">진행도</th>
-                                <th class="align-middle bt-0" width="10">글쓴이</th>
-                             
-                            </tr>
-                        </thead>
-                        <tbody id="list">
-                      		<tr th:each="list : ${todolist}"  >
-                      		<td class="align-middle">
-                                    <div class="text-inverse">                                   <a href="#"><i class="fa fa-fw fa-lg fa-star-o"></i></a></div>
-                                </td>
-                      		<td><div><a href="#" onclick="get_detail($(this).attr('id'));"  th:id="${list.id}"><span  th:text="${list.plan_title}"></span></a></div>
-                      		   Edited by: <span th:text="${list.people.name}"></span><br>
-                      		    <span th:text="${list.from_date}"></span> ~ 
-                      		    <span  th:if="${list.to_date2 eq null}" th:text="${list.to_date}"></span>
-                      		    <span  th:if="${list.to_date2 ne null}" th:text="${list.to_date2}"></span>
-                      		   </td>  
-                                 <td class="align-middle">
-                                 <span th:if="${list.status eq 'New'}" ><span class="badge badge-light badge-pill" th:text="${list.status}"></span></span>
-                               <span  th:if="${list.status eq 'In Progress'}" ><span class="badge badge-info badge-pill"th:text="${list.status}"></span></span> 
-                               <span th:if="${list.status eq 'End'}"><span class="badge badge-successr badge-pill"  th:text="${list.status}"></span></span>
-                               <span th:if="${list.status eq 'Suspend'}"><span id="suspendVal" class="badge badge-danger badge-pill"  th:text="${list.status}"></span></span></td>
-                                  <td class="align-middle">
-                                    <div class="mb-2 progress" style="height: 40px;">
-                                        			<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" th:style="'width:'+${list.progress}+'%;'"></div>
-                                    </div>
-                                    <div>진행량:<span class="text-inverse"th:text="${list.progress_done}+'/'+${list.progress_total}" ></span></div>
-                                </td>
-                                
-                              
-                                <td class="align-middle">
-                                    <div class="avatar-image avatar-image--loaded">
-                                        <div class="avatar avatar--md avatar-image__image">
-                                            <div class="avatar__content"> <img th:src="${list.people.imageName!=null} ?${'/getMoimImage/'+list.people.imageName+'.'+list.people.imageExtension} : '/images/default_people.png'"> </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-               
-                <div class="d-flex justify-content-center pb-0 card-footer">
-                   	<nav style="text-align: center;" id="page">
-     <span th:if="${status.equals('allList')}">
-	     <ul class="pagination"
-	        th:with="start=${T(Math).floor(todolist.number/10)*10 + 1},
-	                    last=(${start + 9 < todolist.totalPages ? start + 9 : todolist.totalPages})" th:if="${todolist.totalPages ne 0}" >
-	        <li>
-	            <a th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=1|}" aria-label="First">
-	                <span aria-hidden="true">First</span>
-	            </a>
-	        </li>
-	
-	        <li th:class="${todolist.first} ? 'disabled'">
-	            <a th:href="${todolist.first} ? '#' :@{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.number}|}" aria-label="Previous">
-	                <span aria-hidden="true">&lt;</span>
-	            </a>
-	        </li>
-	
-	        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == todolist.number + 1} ? 'active'">
-	            <a th:text="${page}" th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${page}|}"></a>
-	        </li>
-	
-	        <li th:class="${todolist.last} ? 'disabled'">
-	            <a th:href="${todolist.last} ? '#' : @{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.number + 2}|}" aria-label="Next">
-	                <span aria-hidden="true">&gt;</span>
-	            </a>
-	        </li>
-	
-	        <li>
-	            <a th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.totalPages}|}" aria-label="Last">
-	                <span aria-hidden="true">Last</span>
-	            </a>
-	        </li>
-	    </ul> 
-    </span>
-    <span th:if="${status.equals('myList')}">
-	     <ul class="pagination"
-	        th:with="start=${T(Math).floor(todolist.number/10)*10 + 1},
-	                    last=(${start + 9 < todolist.totalPages ? start + 9 : todolist.totalPages})" th:if="${todolist.totalPages ne 0}" >
-	        <li>
-	            <a th:href="@{|/moimDetail/moimTodoList/myList/${moim.id}?page=1|}" aria-label="First">
-	                <span aria-hidden="true">First</span>
-	            </a>
-	        </li>
-	
-	        <li th:class="${todolist.first} ? 'disabled'">
-	            <a th:href="${todolist.first} ? '#' :@{|/moimDetail/moimTodoList/myList/${moim.id}?page=${todolist.number}|}" aria-label="Previous">
-	                <span aria-hidden="true">&lt;</span>
-	            </a>
-	        </li>
-	
-	        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == todolist.number + 1} ? 'active'">
-	            <a th:text="${page}" th:href="@{|/moimDetail/moimTodoList/myList/${moim.id}?page=${page}|}"></a>
-	        </li>
-	
-	        <li th:class="${todolist.last} ? 'disabled'">
-	            <a th:href="${todolist.last} ? '#' : @{|/moimDetail/moimTodoList/myList/${moim.id}?page=${todolist.number + 2}|}" aria-label="Next">
-	                <span aria-hidden="true">&gt;</span>
-	            </a>
-	        </li>
-	
-	        <li>
-	            <a th:href="@{|/moimDetail/moimTodoList/myList/${moim.id}?page=${todolist.totalPages}|}" aria-label="Last">
-	                <span aria-hidden="true">Last</span>
-	            </a>
-	        </li>
-	    </ul> 
-    </span>
-    <span th:if="${todolist.totalPages eq 0}" >일정이 존재하지 않습니다.</span>
-</nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </section>
+        <!--컨텐츠 끝-->
 <div th:replace="moim/moimtodostatusModal::moimtodostatusModal" />
 </body>
 <script>
+
+/******LIST TOGGLE JS******/
+$(function() {
+    $('.list').click(function() {
+        $(this).toggleClass('open')
+        var clickId = $(this).attr('id');
+        var detailId = $("[id*=" + clickId + "_detail]");
+        detailId.toggleClass('open');
+    })
+})
+
+/******fade_class JS******/
+function fadeOutClass(a) {
+    $('.' + a).fadeOut(300);
+}
+
+function fadeInClass(a) {
+    $('.' + a).fadeIn(300);
+}
 $(document).ready(function(){
+	/******탭 슬라이드 JS******/
+	 $('.tab_box').slick({
+	        infinite: false,
+	        slidesToShow: 6,
+	        slidesToScroll: 1,
+	        variableWidth: true,
+	        nextArrow: $('.control_box .next'),
+	        prevArrow: $('.control_box .prev')
+	    });
 	//시간 받아와서 지나면 suspend로 업데이트
 /* //	$.ajax({
 // 	     url:'/moimDetail/moimTodoList/status/'+$('#moimNo').attr("data-moimNo"),
