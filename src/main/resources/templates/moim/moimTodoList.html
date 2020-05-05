@@ -23,13 +23,21 @@
                 <div class="inner">
                     <div class="tab_header">
                         <div class="tab_box">x
-                            <div id="All" class="on" onclick="detail_list('All')">All</div>
-                            <div id="My List"  onclick="detail_list('My List')">My List</div>
-                            <div id="New" onclick="detail_list('New')">New</div>
-                            <div id="In Progress" onclick="detail_list('In Progress')">In Progress</div>
-                            <div id="End" onclick="detail_list('End')">End</div>
-                            <div id="Suspend" onclick="detail_list('Suspend')">Suspend</div>
-                         
+                            <!-- <div  class="on" onclick="detail_list('All')">All</div>
+                            <div   onclick="detail_list('My List')">My List</div>
+                            <div  onclick="detail_list('New')">New</div>
+                            <div  onclick="detail_list('In Progress')">In Progress</div>
+                            <div  onclick="detail_list('End')">End</div>
+                            <div  onclick="detail_list('Suspend')">Suspend</div> -->
+                          	<div onclick="detail_list('All')" class="on"><a href="">ALL</a></div>
+                            <div onclick="detail_list('My List')"><a href="">My List</a></div>
+                            <div onclick="detail_list('New')"><a href="">New</a></div>
+                            <div onclick="detail_list('In Progress')"><a href="">In Progress</a></div>
+                            <div onclick="detail_list('End')"><a href="">End</a></div>
+                            <div onclick="detail_list('Suspend')"><a href="">Suspend</a></div>
+                            <div ><a href="">계획전체보기</a></div>
+                            <div><a href="">Tab7</a></div>
+                            <div><a href="">Tab8</a></div>
                         </div>
                         <div class="control_box">
                             <ul>
@@ -118,17 +126,43 @@
                         </div>
                     </div>
                 </div>
+                <center><button><a th:href="@{'/moimDetail/moimTodoList/moimTodowrite/' + ${no}}" class="nav-link"><i class="fa fa-fw fa-plus mr-2"></i>일정 관리 세우기</a></button></center>
                 <div class="pager_box">
-                    <ul>
-                        <li><a href="#none" class="pager_btn prev"><span class="icon">이전 페이지</span></a></li>
-                        <li><a href="#none" class="num on">1</a></li>
-                        <li><a href="#none" class="num">2</a></li>
-                        <li><a href="#none" class="num">3</a></li>
-                        <li><span class="loss">…</span></li>
-                        <li><a href="#none" class="num">7</a></li>
-                        <li><a href="#none" class="pager_btn next"><span class="icon">다음 페이지</span></a></li>
-                    </ul>
+                    
+                    <ul class="pagination"
+	        th:with="start=${T(Math).floor(todolist.number/10)*10 + 1},
+	                    last=(${start + 9 < todolist.totalPages ? start + 9 : todolist.totalPages})" th:if="${todolist.totalPages ne 0}" >
+				        <li>
+				            <a th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=1|}" aria-label="First">
+				                <span aria-hidden="true">First</span>
+				            </a>
+				        </li>
+				
+				        <li th:class="${todolist.first} ? 'disabled'">
+				            <a th:href="${todolist.first} ? '#' :@{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.number}|}" class="num">
+				                <span aria-hidden="true">&lt;</span>
+				            </a>
+				        </li>
+				
+				        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == todolist.number + 1} ? 'active'">
+				            <a th:text="${page}" th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${page}|}" class="num on"></a>
+				        </li>
+				
+				        <li th:class="${todolist.last} ? 'disabled'">
+				            <a th:href="${todolist.last} ? '#' : @{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.number + 2}|}" aria-label="Next">
+				                <span aria-hidden="true">&gt;</span>
+				            </a>
+				        </li>
+				
+				        <li>
+				            <a th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${todolist.totalPages}|}" aria-label="Last" class="num">
+				                <span aria-hidden="true">Last</span>
+				            </a>
+				        </li>
+				    </ul> 
                 </div>
+                
+                <!-- 모달창 뜨는 이벤트인데 sidenav가 모달창 뜨게하는 역할임-->
                 <div class="sidenav">
                     <div class="detail_header">
                         Lorem Ipsum is simply dummy text
@@ -186,6 +220,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- 모달창 끝 -->
             </div>
         </section>
         <!--컨텐츠 끝-->
@@ -210,6 +245,7 @@ $(function() {
     		        		 var todo = data.todo;
     		        		 var list= data.list;
     		        		 var writer=data.writer;
+    		        		 var sidenav = "sidenav";
     		        		//완료안된 것들 
     		        		 var html="<td colspan='6'><ul id='myUL'>";
     		        		 //완료된 것들 
@@ -221,12 +257,14 @@ $(function() {
     		        			   html+='<h3><span> '+todo.plan_title+' </span> </h3><ul id="myUL" >';
     		        			var html2= '<ul id="DoneUL" >';
     		        			 */
+    		        			
     		        			   for(var i in list){
     		        				   if(list[i].checkConfirm=='N'){
     		        					   html+='<li id='+list[i].id+'><label class="cus_check"><input type="checkbox" ><span class="checkmark"></span>';
     		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
+    		        					   html+='<a ><img src="/publ/images/contents/more_arrow.png" onclick="fadeInClass('+list[i].id+')" alt="자세히보기" class="more_arrow"></a>'
     		        					   if(list[i].detail=='Y'){
-    		        						   html+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>'
+    		        						   html+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeInClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html+='</li>';
     		        					   
@@ -247,7 +285,7 @@ $(function() {
     		        					   html2+='<li><label class="cus_check"><input type="checkbox" checked="checked"><span class="checkmark"></span>';
     		        					   html2+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
     		        					   if(list[i].detail=='Y'){
-    		        						   html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>'
+    		        						   html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeOutClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html2+='</li>';
     		        				   /*작성한 detail 없고 체크된경우
@@ -267,7 +305,7 @@ $(function() {
     		        			   }
     		        			 
     		                   		html+='</ul>';
-    		                   		html2+='</ul>';
+    		                   		html2+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a></ul>';
     		                   		/* html2+='</ul></div><div align="right"><pre><span id="to_date"  value="'+todo.to_date+'">시작일자: '+todo.from_date+'   종료일자: '+todo.to_date+"</span>";
     		                   		if(todo.to_date2 ==null||todo.to_date2==''){
     		                   			html2+='<br><div id="change_date" >수정 종료날짜: <select id="to_date2"> <option value="3">+3일</option><option value="5">+5일</option><option value="7">+7일</option></select></div><hr>'	
@@ -309,11 +347,13 @@ $(function() {
 
 /******fade_class JS******/
 function fadeOutClass(a) {
-    $('.' + a).fadeOut(300);
+	console.log(a)
+    $('.' + "sidenav").fadeOut(300);
 }
 
 function fadeInClass(a) {
-    $('.' + a).fadeIn(300);
+	console.log(a)
+    $('.'+a+ "sidenav").fadeIn(300);
 }
 $(document).ready(function(){
 	/******탭 슬라이드 JS******/
@@ -523,8 +563,8 @@ function detail_list(status){
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				
                    				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>';
-                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a></td>';
+                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
+                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
                    				
