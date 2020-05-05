@@ -10,6 +10,8 @@
 <div th:replace="layout/header::header"/>
 
 <div id="userName" th:data="${session.peopleName}"></div><!-- 유저이름 -->
+<div id="moimNo" th:data-moimNo="${moim.id}"></div><!-- 모임번호 -->
+<div id="Login" th:data="${session.peopleEmail}"></div>
 <!--컨텐츠 시작-->
         <section id="container" class="moimDetail">
             <!--페이지 타이틀 시작 -->
@@ -21,15 +23,13 @@
                 <div class="inner">
                     <div class="tab_header">
                         <div class="tab_box">x
-                            <div class="on"><a href="">ALL</a></div>
-                            <div><a href="">Tab1</a></div>
-                            <div><a href="">Tab2</a></div>
-                            <div><a href="">Tab3</a></div>
-                            <div><a href="">Tab4</a></div>
-                            <div><a href="">Tab5</a></div>
-                            <div><a href="">Tab6</a></div>
-                            <div><a href="">Tab7</a></div>
-                            <div><a href="">Tab8</a></div>
+                            <div id="All" class="on" onclick="detail_list('All')">All</div>
+                            <div id="My List"  onclick="detail_list('My List')">My List</div>
+                            <div id="New" onclick="detail_list('New')">New</div>
+                            <div id="In Progress" onclick="detail_list('In Progress')">In Progress</div>
+                            <div id="End" onclick="detail_list('End')">End</div>
+                            <div id="Suspend" onclick="detail_list('Suspend')">Suspend</div>
+                         
                         </div>
                         <div class="control_box">
                             <ul>
@@ -66,9 +66,11 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="todolist">
+                                   
                                     <!--todolist 반복 시작-->
-                                    <tr th:each="list: ${todolist}"  id="todo${list.id}" class="list">
+                                    <div th:each="list: ${todolist}">
+                                    <tr  th:attr="id=|todo${list.id}|" class="list">
                                         <td>
                                             <label class="star_check">
                                                 <input type="checkbox">
@@ -86,7 +88,7 @@
 			                               <span th:if="${list.status eq 'Suspend'}"><span class="status_ico stop">중지</span></span>
                                         </td>
                                         <td class="title" th:text="${list.plan_title}"></td>
-                                        <td colspan="2">
+                                        <td >
                                             <div class="percentage">
 											<div class="bar">
 												<div class="active"></div>
@@ -94,41 +96,21 @@
 											<span class="txt"><span>[[${list.progress}]]</span>%</span>
 										</div>
                                         </td>
+                                        <td th:if="${session.peopleId eq list.people.id}">
+                                          <a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
+                                            <a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
+                                            <a th:attr="onclick=|delete_send('${list.id}')|" ><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
+                                        </td>
                                     </tr>
                                     <!--todolist 내 디테일 반복 시작-->
-                                    <tr id="todo2_detail1" class="list_detail">
-                                        <td colspan="6">
-                                            <ul>
-                                                <li>
-                                                    <label class="cus_check"><input type="checkbox" checked="checked">
-                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-                                                    </label>
-                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
-                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
-                                                </li>
-                                                <li>
-                                                    <label class="cus_check"><input type="checkbox" checked="checked">
-                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-                                                    </label>
-                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
-                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
-                                                </li>
-                                                <li>
-                                                    <label class="cus_check"><input type="checkbox" checked="checked">
-                                                        <span class="checkmark"></span><span class="detail_txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-                                                    </label>
-                                                    <a href="javascript:void(0)" onclick="fadeInClass('sidenav')">
-                                                        <img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>
-                                                </li>
-                                            </ul>
-                                        </td>
+                                     <tr  th:attr="id=|todo${list.id}_detail|" class="list_detail">
                                     </tr>
                                     <!--todolist 내 디테일 반복 끝-->
                                     <tr>
                                         <td colspan="6" class="contour"></td>
                                     </tr>
                                     <!--todolist 반복 끝-->
-
+									</div>
                                    
                                 </tbody>
                             </table>
@@ -213,13 +195,116 @@
 
 /******LIST TOGGLE JS******/
 $(function() {
-    $('.list').click(function() {
-        $(this).toggleClass('open')
-        var clickId = $(this).attr('id');
-     	console.log("clickId"+clickId);
-        var detailId = $("[id*=" + clickId + "_detail]");
-        detailId.toggleClass('open');
-    })
+
+    $(".list").click(function (e) {
+    	 $(this).toggleClass('open')
+         var clickId = $(this).attr('id');
+      	console.log("clickId"+clickId);
+         var detailId = $("[id*=" + clickId + "_detail]");
+    	   $.ajax({
+    		      url:'/moimDetail/moimTodoList/detail/'+clickId.slice(4),
+    		        contentType: "application/json; charset=utf-8",
+    		        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+    		        success:function(data){
+    		        	 if(data.code==1){
+    		        		 var todo = data.todo;
+    		        		 var list= data.list;
+    		        		 var writer=data.writer;
+    		        		//완료안된 것들 
+    		        		 var html="<td colspan='6'><ul id='myUL'>";
+    		        		 //완료된 것들 
+    		        		 var html2="<ul id='DoneUL'>";
+    		        		 
+    		        		 
+    		        		 /* 
+    		        			var html='<div id="detail-body">  <a href="javascript:void(0)" class="closebtn" onclick="close_detail()">&times;</a>  ';
+    		        			   html+='<h3><span> '+todo.plan_title+' </span> </h3><ul id="myUL" >';
+    		        			var html2= '<ul id="DoneUL" >';
+    		        			 */
+    		        			   for(var i in list){
+    		        				   if(list[i].checkConfirm=='N'){
+    		        					   html+='<li id='+list[i].id+'><label class="cus_check"><input type="checkbox" ><span class="checkmark"></span>';
+    		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
+    		        					   if(list[i].detail=='Y'){
+    		        						   html+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>'
+    		        					   }
+    		                           	  html+='</li>';
+    		        					   
+    		        					   /*작성한 detail 없고 체크안된경우
+    		        					   html+='<li onclick="uncheck($(this))" value="'+list[i].id+'">'+list[i].plan_list;
+    		        					   if(list[i].detail=='N'){
+    		        						   if(writer.email==$("#Login").attr("data")){
+    		        					   		html+="<button type='button'onclick='id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+    		        					   		html+='' 
+    		 								  }				
+    		        					   	}	else{
+    		        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+    		        					   		html+="보기";
+    		        					   	}	
+    		        					   	html+= '     </button></li>';*/
+    		        				   }
+    		        				   else{
+    		        					   html2+='<li><label class="cus_check"><input type="checkbox" checked="checked"><span class="checkmark"></span>';
+    		        					   html2+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
+    		        					   if(list[i].detail=='Y'){
+    		        						   html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" alt="자세히보기" class="more_arrow"></a>'
+    		        					   }
+    		                           	  html2+='</li>';
+    		        				   /*작성한 detail 없고 체크된경우
+    		        					   html2+='<li class="checked">'+list[i].plan_list;
+    	        					   if(list[i].detail=='N'){
+    	        						   if(writer.email==$("#Login").attr("data")){
+    		        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+    		        					   		html+='▷' 
+    		 								  }		
+    	        					   	}	else{
+    	        					   		html2+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+    	        					   		html2+="보기";
+    	        					   	}	
+    	        					   	html2+= '     </button></li>';
+    	        					   	*/
+    		        				   }
+    		        			   }
+    		        			 
+    		                   		html+='</ul>';
+    		                   		html2+='</ul>';
+    		                   		/* html2+='</ul></div><div align="right"><pre><span id="to_date"  value="'+todo.to_date+'">시작일자: '+todo.from_date+'   종료일자: '+todo.to_date+"</span>";
+    		                   		if(todo.to_date2 ==null||todo.to_date2==''){
+    		                   			html2+='<br><div id="change_date" >수정 종료날짜: <select id="to_date2"> <option value="3">+3일</option><option value="5">+5일</option><option value="7">+7일</option></select></div><hr>'	
+    		                   		}else{
+    		                   			html2+='<br>수정된 종료일자: '+todo.to_date2+"<br>";
+    		                   		
+    		                   		}
+    		                   		if(writer.email==$("#Login").attr("data")){
+    		                   			//수정햇던 적이 없으면 마감일 1번수정가눙
+    		                   			if(todo.to_date2 ==null||todo.to_date2==''){
+    										html2+='<button type="button" class="btn btn-outline-info" onclick="change_form('+todo.id+')">수정하기</button>'
+    		                   			}
+    									html2+='<button type="button" class="btn btn-outline-success" onclick="post_send('+todo.id+')">저장하기</button>'
+    									html2+='<button type="button" class="btn btn-outline-danger" onclick="delete_send('+todo.id+')">삭제하기</button>'
+    		                   		}
+    		                   			html2+='</pre></div>'
+    		         
+    		                   		html=html+html2;
+    								console.log(html);
+    		                   		$("#detail-body").html(html);
+    		                   	$("#change_date").hide();
+    		                   	 document.getElementById("detail").style.display="block";
+    		                   	 document.getElementById("detail").style.width = "500px"; */
+    		                   	 
+    		                   	 	html=html+html2;
+    								detailId.html(html);
+    		                        detailId.toggleClass('open');
+    		             }else{
+    		                 alert(data.message);
+    		             }
+    		        }, error:function(e){
+    					alert(e)
+    		        }
+    		    });
+
+    	 })
+
 })
 
 /******fade_class JS******/
@@ -255,12 +340,10 @@ $(document).ready(function(){
  		};
  	}
  */
- 	var location=document.location.href;
- 	if(location.indexOf("myList")>0){
- 		document.getElementById('myList').setAttribute('class','nav-link active');
- 	}else
- 		document.getElementById('allList').setAttribute('class','nav-link active');
- 		
+ if(location.href.indexOf('myList')>0){
+	 document.getElementById('All').setAttribute('class','');
+		document.getElementById('My List').setAttribute('class','on');
+ }
  	
    });
 
@@ -351,13 +434,7 @@ function get_detail(id) {
 	    });
 
  }
-//할일목록에서 체크된거 ---표시하는것
-function uncheck(t){
-	if(t.attr('class')){
-		t.removeClass();
-	}else
-		t.addClass('checked');
-}
+
 //todo삭제기능
 function delete_send(id){
    alert("삭제됩니다")
@@ -382,16 +459,18 @@ function delete_send(id){
 
 
 function detail_list(status){
-	if(status=='writer,'){
-		status+=$("#searchBox").val()+",";
-		if($("#searchBox").val()==""){
-			alert("검색어를 입력하세요.");
-			return;
-		}
-		if(document.getElementsByClassName("nav-link active")[0].getAttribute("id").indexOf("List")<0){
-			status+=document.getElementsByClassName("nav-link active")[0].getAttribute("id");
-		}
+	
+	if(status=='All'){
+		location.href="/moimDetail/moimTodoList/"+$('#moimNo').attr("data-moimNo");
+	}else if(status=='My List'){
+		location.href="/moimDetail/moimTodoList/myList/"+$('#moimNo').attr("data-moimNo");
 	}
+	else{
+	 		document.getElementById('All').setAttribute('class','');
+	 		document.getElementById(status).setAttribute('class','on');
+	 		
+	}
+	
 
 	$.ajax({
 	      url:'/moimDetail/moimTodoList/'+$('#moimNo').attr("data-moimNo")+'/'+encodeURIComponent(status),
@@ -405,7 +484,7 @@ function detail_list(status){
 	        		var list=data.todolist.content;
 	        		var html=""
 	        			for(var i in list){
-	        				
+	        				/* 
 	        				html+='<tr><td class="align-middle"> <div class="text-inverse"><a href="#"><i class="fa fa-fw fa-lg fa-star-o"></i></a></div></td>';
 	        				html+='<td><div><a href="#" onclick="get_detail('+list[i].id+');" ><span>'+list[i].plan_title+'</span></a></div>';
 	        				html+='   Edited by:'+list[i].people.name+'<br>'+list[i].from_date+'~'
@@ -427,13 +506,32 @@ function detail_list(status){
                             html+= '</div><div>진행률:'+list[i].progress_done+'/'+list[i].progress_total+'</div></td>';
                             html+='<td class="align-middle">  <div class="avatar-image avatar-image--loaded"> <div class="avatar avatar--md avatar-image__image">'
 	        				html+='  <div class="avatar__content"><img src="https://bootdey.com/img/Content/avatar/avatar1.png"></div> </div>'
-	        				html+='  </div></td> </tr> ';
+	        				html+='  </div></td> </tr> '; */
+	        				html+='<tr class="list" id="'+list[i].id+'"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
+                            html+='<td> <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
+                 			html+='<td>';
+                 			if(list[i].status=='New')
+		        				html+=' <span class="status_ico new">신규</span> ';
+		        			else if(list[i].status=='In Progress')
+		        				html+=' <span class="status_ico ing">진행중</span>';
+		        			else if(list[i].status=='End')
+		        				html+=' <span class="status_ico end">완료</span>';
+		        			else if(list[i].status=='Suspend')
+		        				html+=' <span class="status_ico stop">중지</span>';
+                           html+='</td><td class="title">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active"></div></div>';
+                           html+='	<span class="txt"><span>'+list[i].progress+'</span>%</span></div></td>';
+                   			if(list[i].people.name==$("#userName").attr("data")){
+                   				
+                   				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
+                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>';
+                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a></td>';
+                   			}
+	      					html+='</tr>';
+                   				
+                                     
 	        			}
-	        		if(status.indexOf("writer")<0){
-		        		document.getElementsByClassName("nav-link active")[0].setAttribute('class','nav-link');
-		        		document.getElementById(status).setAttribute('class','nav-link active');
-	        		}
-	        		$("#list").html(html);
+	        	
+	        		$("#todolist").html(html);
 	        		$("#page").hide();
 	        		 
 	        	 }else{
