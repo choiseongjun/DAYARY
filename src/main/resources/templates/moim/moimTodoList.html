@@ -29,12 +29,12 @@
                             <div  onclick="detail_list('In Progress')">In Progress</div>
                             <div  onclick="detail_list('End')">End</div>
                             <div  onclick="detail_list('Suspend')">Suspend</div> -->
-                          	<div onclick="detail_list('All')" class="on"><a href="">ALL</a></div>
-                            <div onclick="detail_list('My List')"><a href="">My List</a></div>
-                            <div onclick="detail_list('New')"><a href="">New</a></div>
-                            <div onclick="detail_list('In Progress')"><a href="">In Progress</a></div>
-                            <div onclick="detail_list('End')"><a href="">End</a></div>
-                            <div onclick="detail_list('Suspend')"><a href="">Suspend</a></div>
+                          	<div onclick="detail_list('All')" class="on"><a >ALL</a></div>
+                            <div onclick="detail_list('My List')"><a >My List</a></div>
+                            <div onclick="detail_list('New')"><a >New</a></div>
+                            <div onclick="detail_list('In Progress')"><a>In Progress</a></div>
+                            <div onclick="detail_list('End')"><a >End</a></div>
+                            <div onclick="detail_list('Suspend')"><a >Suspend</a></div>
                             <div ><a href="">계획전체보기</a></div>
                             <div><a href="">Tab7</a></div>
                             <div><a href="">Tab8</a></div>
@@ -245,7 +245,6 @@ $(function() {
     		        		 var todo = data.todo;
     		        		 var list= data.list;
     		        		 var writer=data.writer;
-    		        		 var sidenav = "sidenav";
     		        		//완료안된 것들 
     		        		 var html="<td colspan='6'><ul id='myUL'>";
     		        		 //완료된 것들 
@@ -262,7 +261,7 @@ $(function() {
     		        				   if(list[i].checkConfirm=='N'){
     		        					   html+='<li id='+list[i].id+'><label class="cus_check"><input type="checkbox" ><span class="checkmark"></span>';
     		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
-    		        					   html+='<a ><img src="/publ/images/contents/more_arrow.png" onclick="fadeInClass('+list[i].id+')" alt="자세히보기" class="more_arrow"></a>'
+    		        					   html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass()" alt="자세히보기" class="more_arrow"></a>'
     		        					   if(list[i].detail=='Y'){
     		        						   html+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeInClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
     		        					   }
@@ -285,7 +284,7 @@ $(function() {
     		        					   html2+='<li><label class="cus_check"><input type="checkbox" checked="checked"><span class="checkmark"></span>';
     		        					   html2+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
     		        					   if(list[i].detail=='Y'){
-    		        						   html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeOutClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
+    		        						  // html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeOutClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html2+='</li>';
     		        				   /*작성한 detail 없고 체크된경우
@@ -351,9 +350,8 @@ function fadeOutClass(a) {
     $('.' + "sidenav").fadeOut(300);
 }
 
-function fadeInClass(a) {
-	console.log(a)
-    $('.'+a+ "sidenav").fadeIn(300);
+function fadeInClass(plan,writer,id,parent,email) {
+    $('.'+ "sidenav").fadeIn(300);
 }
 $(document).ready(function(){
 	/******탭 슬라이드 JS******/
@@ -403,7 +401,7 @@ function get_detail(id) {
 	        		 var todo = data.todo;
 	        		 var list= data.list;
 	        		 var writer=data.writer;
-	        			 
+	        			
 	        			var html='<div id="detail-body">  <a href="javascript:void(0)" class="closebtn" onclick="close_detail()">&times;</a>  ';
 	        			   html+='<h3><span> '+todo.plan_title+' </span> </h3><ul id="myUL" >';
 	        			var html2= '<ul id="DoneUL" >';
@@ -414,11 +412,13 @@ function get_detail(id) {
 	        					   //작성한 detail 없고 체크안된경우
 	        					   if(list[i].detail=='N'){
 	        						   if(writer.email==$("#Login").attr("data")){
-	        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+	        							html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
+	        					   		//html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
 	        					   		html+='' 
 	 								  }				
 	        					   	}	else{
-	        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+	        					   		html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
+	        					   		//html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
 	        					   		html+="보기";
 	        					   	}	
 	        					   	html+= '     </button></li>';
@@ -430,11 +430,13 @@ function get_detail(id) {
 	        				   //작성한 detail 없고 체크된경우
         					   if(list[i].detail=='N'){
         						   if(writer.email==$("#Login").attr("data")){
-	        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+        							    html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
+        							   //html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
 	        					   		html+='▷' 
 	 								  }		
         					   	}	else{
-        					   		html2+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
+        					   		html2+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
+        					   		//html2+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
         					   		html2+="보기";
         					   	}	
         					   	html2+= '     </button></li>';
@@ -506,8 +508,8 @@ function detail_list(status){
 		location.href="/moimDetail/moimTodoList/myList/"+$('#moimNo').attr("data-moimNo");
 	}
 	else{
-	 		document.getElementById('All').setAttribute('class','');
-	 		document.getElementById(status).setAttribute('class','on');
+	 	//document.getElementById('All').setAttribute('class','');
+	 	//document.getElementById(status).setAttribute('class','on');
 	 		
 	}
 	
@@ -519,7 +521,6 @@ function detail_list(status){
 	        success:function(data){
 	        	 if(data.code==1){
 	        		 console.log(data)
-	        		 console.log(data.todolist)
 	        		//var page=data.todolist.page;
 	        		var list=data.todolist.content;
 	        		var html=""
@@ -562,9 +563,9 @@ function detail_list(status){
                            html+='	<span class="txt"><span>'+list[i].progress+'</span>%</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				
-                   				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
-                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
+                   				//html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
+                           		//html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
+                            	//html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
                    				
