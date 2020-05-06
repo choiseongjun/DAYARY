@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <div class="sidenav">
+                    <div class="detail_header">
+                       	<span th:text="${todo}"></span>
+                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="기 닫기" class="sidenav_close"></a>
+                    </div>
+                    <div class="detail_body">
+                        <div class="detail_view">
+                            <div class="detail_view_inner">
+                           	<div th:each="detail  : ${detailView}">
+                                <div th:attr="id=|detail_view${detail.id}|" >
+                                    <div class="wr_info">
+                                        <div class="thumb">
+                                            <a href=""><img    src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
+                                        </div>
+                                        <span class="wr_name" th:text="${todo.people.name}"></span>
+                                    </div>
+                                    <div class="wr_conts_area">
+                                    		<span th:text="${detail.memo}"></span>
+                                    		<div th:if="${detail.moimBoardfile[0]}!=null" th:each=" image : ${detail.moimBoardfile[0]}">
+                                    			  <div class="wr_conts">
+                                    			 	 <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png" alt="샘플이미지">
+                                    		      </div>
+                                    		</div>
+                                   		<div class="conts_info"><span class="date" th:text="${detail.createAt.slice(0,10)}"></span>&nbsp;&nbsp;<span class="time" th:text="${detail.createAt.slice(0,-10)}"></span></div>
+                               		  </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail_write">
+                                <div class="thumb">
+                                    <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
+                                </div>
+                                <div class="write_area">
+                                    <form name="" action="" method="post">
+                                        <textarea name=""></textarea>
+                                        <a href=""><img src="/publ/images/contents/textarea_text.png" alt="글자 설정" class="wr_font_ico"></a>
+                                        <a href=""><img src="/publ/images/contents/textarea_file.png" alt="파일 업로드" class="wr_file_ico"></a>
+                                        <button type="submit">Comment</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</html>
