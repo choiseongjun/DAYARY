@@ -255,24 +255,15 @@ public class MoimTodoListController {
 	 * @throws 
 	 * @author JY
 	 */
-	@ResponseBody
-	@GetMapping("/moimDetail/moimTodoList/modalView/{no}")
-	public Map<String, Object> modelView(@PathVariable("no")long no,Sort sort) {
-		Map<String, Object> returnData = new HashMap<String, Object>();
+	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
+	public String modelView(@PathVariable("no")long no,Sort sort,Model model) {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
+		model.addAttribute("todo", toDoWriteListRepository.findById(no));
+		model.addAttribute("detailView",list);	
 		
-		try {
-			returnData.put("modal",list);	
-			returnData.put("code", "1");
-			returnData.put("message", "저장되었습니다");
-			
-		} catch (Exception e) {
-			returnData.put("code", "E3290");
-			returnData.put("message", "데이터 확인 후 다시 시도해주세요.");
-		}
 		
-		return returnData;
+		return "moim/popup/sidenav";
 	}
 
 	/**

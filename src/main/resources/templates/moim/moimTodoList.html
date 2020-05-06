@@ -35,9 +35,7 @@
                             <div onclick="detail_list('In Progress')"><a>In Progress</a></div>
                             <div onclick="detail_list('End')"><a >End</a></div>
                             <div onclick="detail_list('Suspend')"><a >Suspend</a></div>
-                            <div ><a href="">계획전체보기</a></div>
-                            <div><a href="">Tab7</a></div>
-                            <div><a href="">Tab8</a></div>
+                      
                         </div>
                         <div class="control_box">
                             <ul>
@@ -67,9 +65,9 @@
                                         <td class="title">제목</td> 
                                         <td class="progress">진행량</td>
                                         <td class="ico_area">
-                                            <a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
-                                            <a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
-                                            <a href=""><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
+                                            <a><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
+                                            <a ><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
+                                            <a ><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
                                         </td>
                                     </tr>
                                 </thead>
@@ -106,7 +104,7 @@
                                         </td>
                                         <td th:if="${session.peopleId eq list.people.id}">
                                           <a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
-                                            <a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
+                                            <a th:attr="onclick=|post_send('${list.id}')|"><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
                                             <a th:attr="onclick=|delete_send('${list.id}')|" ><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
                                         </td>
                                     </tr>
@@ -164,67 +162,11 @@
                 
                 <!-- 모달창 뜨는 이벤트인데 sidenav가 모달창 뜨게하는 역할임-->
                 <div class="sidenav">
-                    <div class="detail_header">
-                        Lorem Ipsum is simply dummy text
-                        of the printing and typesetting industry.
-                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="기 닫기" class="sidenav_close"></a>
-                    </div>
-                    <div class="detail_body">
-                        <div class="detail_view">
-                            <div class="detail_view_inner">
-                                <div id="detail_view01">
-                                    <div class="wr_info">
-                                        <div class="thumb">
-                                            <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
-                                        </div>
-                                        <span class="wr_name">Johnny Warren</span>
-                                    </div>
-
-                                    <div class="wr_conts_area">
-                                        <div class="wr_conts">
-                                            <img src="/publ/images/contents/sample2.png" alt="샘플이미지">
-                                        </div>
-                                        <div class="conts_info"><span class="date">2020-00-00</span>&nbsp;&nbsp;<span class="time">11:00:00</span></div>
-                                    </div>
-                                </div>
-                                <div id="detail_view02">
-                                    <div class="wr_info">
-                                        <div class="thumb">
-                                            <img src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지">
-                                        </div>
-                                        <span class="wr_name">Johnny Warren</span>
-                                    </div>
-
-                                    <div class="wr_conts_area">
-                                        <div class="wr_conts">
-                                            <img src="/publ/images/contents/sample2.png" alt="샘플이미지">
-                                        </div>
-                                        <div class="conts_info"><span class="date">2020-00-00</span>&nbsp;&nbsp;<span class="time">11:00:00</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="detail_write">
-                                <div class="thumb">
-                                    <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
-                                </div>
-                                <div class="write_area">
-                                    <form name="" action="" method="post">
-                                        <textarea name=""></textarea>
-                                        <a href=""><img src="/publ/images/contents/textarea_text.png" alt="글자 설정" class="wr_font_ico"></a>
-                                        <a href=""><img src="/publ/images/contents/textarea_file.png" alt="파일 업로드" class="wr_file_ico"></a>
-                                        <button type="submit">Comment</button>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- 모달창 끝 -->
             </div>
         </section>
         <!--컨텐츠 끝-->
-<div th:replace="moim/moimtodostatusModal::moimtodostatusModal" />
 </body>
 <script>
 
@@ -246,88 +188,34 @@
     		        		 var list= data.list;
     		        		 var writer=data.writer;
     		        		//완료안된 것들 
-    		        		 var html="<td colspan='6'><ul id='myUL'>";
+    		        		 var html="<td colspan='6'><ul id='myUL"+todo.id+"'>";
     		        		 //완료된 것들 
-    		        		 var html2="<ul id='DoneUL'>";
+    		        		 var html2="<ul id='DoneUL"+todo.id+"'>";
     		        		 
-    		        		 
-    		        		 /* 
-    		        			var html='<div id="detail-body">  <a href="javascript:void(0)" class="closebtn" onclick="close_detail()">&times;</a>  ';
-    		        			   html+='<h3><span> '+todo.plan_title+' </span> </h3><ul id="myUL" >';
-    		        			var html2= '<ul id="DoneUL" >';
-    		        			 */
-    		        			
     		        			   for(var i in list){
     		        				   if(list[i].checkConfirm=='N'){
-    		        					   html+='<li id='+list[i].id+'><label class="cus_check"><input type="checkbox" ><span class="checkmark"></span>';
+    		        					   html+='<li id="'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
     		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
-    		        					   html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass()" alt="자세히보기" class="more_arrow"></a>'
     		        					   if(list[i].detail=='Y'){
-    		        						   html+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeInClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
+    		        						   html+='<a  onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html+='</li>';
     		        					   
-    		        					   /*작성한 detail 없고 체크안된경우
-    		        					   html+='<li onclick="uncheck($(this))" value="'+list[i].id+'">'+list[i].plan_list;
-    		        					   if(list[i].detail=='N'){
-    		        						   if(writer.email==$("#Login").attr("data")){
-    		        					   		html+="<button type='button'onclick='id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-    		        					   		html+='' 
-    		 								  }				
-    		        					   	}	else{
-    		        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-    		        					   		html+="보기";
-    		        					   	}	
-    		        					   	html+= '     </button></li>';*/
+    		        
     		        				   }
     		        				   else{
-    		        					   html2+='<li><label class="cus_check"><input type="checkbox" checked="checked"><span class="checkmark"></span>';
+    		        					   html2+='<li><label class="cus_check" name="'+list[i].id+'"><input type="checkbox" name="'+list[i].id+'" readonly="readonly" checked="checked"><span class="checkmark"></span>';
     		        					   html2+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
     		        					   if(list[i].detail=='Y'){
-    		        						  // html2+='<a  onclick="viewMore()"><img src="/publ/images/contents/more_arrow.png" onclick="fadeOutClass(sidenav)" alt="자세히보기" class="more_arrow"></a>'
+    		        						   html2+='<a onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html2+='</li>';
-    		        				   /*작성한 detail 없고 체크된경우
-    		        					   html2+='<li class="checked">'+list[i].plan_list;
-    	        					   if(list[i].detail=='N'){
-    	        						   if(writer.email==$("#Login").attr("data")){
-    		        					   		html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-    		        					   		html+='▷' 
-    		 								  }		
-    	        					   	}	else{
-    	        					   		html2+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-    	        					   		html2+="보기";
-    	        					   	}	
-    	        					   	html2+= '     </button></li>';
-    	        					   	*/
+    		        	
     		        				   }
     		        			   }
     		        			 
     		                   		html+='</ul>';
-    		                   		html2+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a></ul>';
-    		                   		/* html2+='</ul></div><div align="right"><pre><span id="to_date"  value="'+todo.to_date+'">시작일자: '+todo.from_date+'   종료일자: '+todo.to_date+"</span>";
-    		                   		if(todo.to_date2 ==null||todo.to_date2==''){
-    		                   			html2+='<br><div id="change_date" >수정 종료날짜: <select id="to_date2"> <option value="3">+3일</option><option value="5">+5일</option><option value="7">+7일</option></select></div><hr>'	
-    		                   		}else{
-    		                   			html2+='<br>수정된 종료일자: '+todo.to_date2+"<br>";
     		                   		
-    		                   		}
-    		                   		if(writer.email==$("#Login").attr("data")){
-    		                   			//수정햇던 적이 없으면 마감일 1번수정가눙
-    		                   			if(todo.to_date2 ==null||todo.to_date2==''){
-    										html2+='<button type="button" class="btn btn-outline-info" onclick="change_form('+todo.id+')">수정하기</button>'
-    		                   			}
-    									html2+='<button type="button" class="btn btn-outline-success" onclick="post_send('+todo.id+')">저장하기</button>'
-    									html2+='<button type="button" class="btn btn-outline-danger" onclick="delete_send('+todo.id+')">삭제하기</button>'
-    		                   		}
-    		                   			html2+='</pre></div>'
-    		         
-    		                   		html=html+html2;
-    								console.log(html);
-    		                   		$("#detail-body").html(html);
-    		                   	$("#change_date").hide();
-    		                   	 document.getElementById("detail").style.display="block";
-    		                   	 document.getElementById("detail").style.width = "500px"; */
     		                   	 
     		                   	 	html=html+html2;
     								detailId.html(html);
@@ -346,11 +234,24 @@
 /******fade_class JS******/
 function fadeOutClass(a) {
 	console.log(a)
-    $('.' + "sidenav").fadeOut(300);
+    $('.sidenav').fadeOut(300);
 }
 
-function fadeInClass(plan,writer,id,parent,email) {
-    $('.'+ "sidenav").fadeIn(300);
+function fadeInClass(id) {
+
+	$.ajax({
+	    	url:'/moimDetail/moimTodoList/sidenav/'+id,
+	    	 method: "POST",
+	    	    dataType: "html",
+	        success:function(data){
+   				 $('.sidenav').replaceWith(data);
+   				 $('.sidenav').fadeIn(300);
+	        	
+	        	
+	        }, error:function(e){
+
+	        }
+	});
 }
 $(document).ready(function(){
 	/******탭 슬라이드 JS******/
@@ -381,100 +282,11 @@ $(document).ready(function(){
 	 document.getElementById('All').setAttribute('class','');
 		document.getElementById('My List').setAttribute('class','on');
  }
- 	
-   });
+});
 
 function close_detail(){
 	 document.getElementById("detail").style.width = "0";
 }
-function get_detail(id) {
-
-	
-	
-	   $.ajax({
-	      url:'/moimDetail/moimTodoList/detail/'+id,
-	        contentType: "application/json; charset=utf-8",
-	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
-	        success:function(data){
-	        	 if(data.code==1){
-	        		 var todo = data.todo;
-	        		 var list= data.list;
-	        		 var writer=data.writer;
-	        			
-	        			var html='<div id="detail-body">  <a href="javascript:void(0)" class="closebtn" onclick="close_detail()">&times;</a>  ';
-	        			   html+='<h3><span> '+todo.plan_title+' </span> </h3><ul id="myUL" >';
-	        			var html2= '<ul id="DoneUL" >';
-	        			
-	        			   for(var i in list){
-	        				   if(list[i].checkConfirm=='N'){
-	        					   html+='<li onclick="uncheck($(this))" value="'+list[i].id+'">'+list[i].plan_list;
-	        					   //작성한 detail 없고 체크안된경우
-	        					   if(list[i].detail=='N'){
-	        						   if(writer.email==$("#Login").attr("data")){
-	        							html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
-	        					   		//html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-	        					   		html+='' 
-	 								  }				
-	        					   	}	else{
-	        					   		html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
-	        					   		//html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-	        					   		html+="보기";
-	        					   	}	
-	        					   	html+= '     </button></li>';
-	        					   
-	        				   }
-	        				   else{
-	        					   
-	        					   html2+='<li class="checked">'+list[i].plan_list;
-	        				   //작성한 detail 없고 체크된경우
-        					   if(list[i].detail=='N'){
-        						   if(writer.email==$("#Login").attr("data")){
-        							    html+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
-        							   //html+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-	        					   		html+='▷' 
-	 								  }		
-        					   	}	else{
-        					   		html2+='<a ><img src="/publ/images/contents/more_arrow.png"  onclick="fadeInClass('+list[i].plan_list.trim()+','+writer.name+','+list[i].id+','+todo.id+','+writer.email+')" alt="자세히보기" class="more_arrow"></a>'
-        					   		//html2+="<button type='button'onclick='modal_view(\""+list[i].plan_list.trim()+"\",\""+writer.name+"\","+list[i].id+","+todo.id+",\""+writer.email+"\")'id='myBtn'  aria-haspopup='true' aria-expanded='false' class='dropdown-toggle btn btn-link'>";
-        					   		html2+="보기";
-        					   	}	
-        					   	html2+= '     </button></li>';
-	        				   }
-	        			   }
-	        			 
-	                   		html+='</ul>';
-	                   		html2+='</ul></div><div align="right"><pre><span id="to_date"  value="'+todo.to_date+'">시작일자: '+todo.from_date+'   종료일자: '+todo.to_date+"</span>";
-	                   		if(todo.to_date2 ==null||todo.to_date2==''){
-	                   			html2+='<br><div id="change_date" >수정 종료날짜: <select id="to_date2"> <option value="3">+3일</option><option value="5">+5일</option><option value="7">+7일</option></select></div><hr>'	
-	                   		}else{
-	                   			html2+='<br>수정된 종료일자: '+todo.to_date2+"<br>";
-	                   		
-	                   		}
-	                   		if(writer.email==$("#Login").attr("data")){
-	                   			//수정햇던 적이 없으면 마감일 1번수정가눙
-	                   			if(todo.to_date2 ==null||todo.to_date2==''){
-									html2+='<button type="button" class="btn btn-outline-info" onclick="change_form('+todo.id+')">수정하기</button>'
-	                   			}
-								html2+='<button type="button" class="btn btn-outline-success" onclick="post_send('+todo.id+')">저장하기</button>'
-								html2+='<button type="button" class="btn btn-outline-danger" onclick="delete_send('+todo.id+')">삭제하기</button>'
-	                   		}
-	                   			html2+='</pre></div>'
-	         
-	                   		html=html+html2;
-							console.log(html);
-	                   		$("#detail-body").html(html);
-	                   	$("#change_date").hide();
-	                   	 document.getElementById("detail").style.display="block";
-	                   	 document.getElementById("detail").style.width = "500px";
-	             }else{
-	                 alert(data.message);
-	             }
-	        }, error:function(e){
-				alert(e)
-	        }
-	    });
-
- }
 
 //todo삭제기능
 function delete_send(id){
@@ -524,29 +336,7 @@ function detail_list(status){
 	        		var list=data.todolist.content;
 	        		var html=""
 	        			for(var i in list){
-	        				/* 
-	        				html+='<tr><td class="align-middle"> <div class="text-inverse"><a href="#"><i class="fa fa-fw fa-lg fa-star-o"></i></a></div></td>';
-	        				html+='<td><div><a href="#" onclick="get_detail('+list[i].id+');" ><span>'+list[i].plan_title+'</span></a></div>';
-	        				html+='   Edited by:'+list[i].people.name+'<br>'+list[i].from_date+'~'
-	        					if(list[i].to_date2==null)
-	        						html+=list[i].to_date;
-	        					else
-	        						html+=list[i].to_date2;
-	        				html+='</td>  <td class="align-middle">';
-	        				if(list[i].status=='New')
-		        				html+=' <span class="badge badge-light badge-pill">New</span>';
-		        			else if(list[i].status=='In Progress')
-		        				html+=' <span class="badge badge-success badge-pill">In Progress</span>';
-		        			else if(list[i].status=='End')
-		        				html+=' <span class="badge badge-danger badge-pill">End</span>';
-		        			else if(list[i].status=='Suspend')
-		        				html+=' <span class="badge badge-danger badge-pill">Suspend</span>';
-		        			html+=' <td class="align-middle"> <div class="mb-2 progress" style="height: 5px;">';
-		        			html+='<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:'+list[i].progress+'%;"></div>';
-                            html+= '</div><div>진행률:'+list[i].progress_done+'/'+list[i].progress_total+'</div></td>';
-                            html+='<td class="align-middle">  <div class="avatar-image avatar-image--loaded"> <div class="avatar avatar--md avatar-image__image">'
-	        				html+='  <div class="avatar__content"><img src="https://bootdey.com/img/Content/avatar/avatar1.png"></div> </div>'
-	        				html+='  </div></td> </tr> '; */
+	        			
 	        				html+='<tr id="todo'+list[i].id+'" class="list" onclick="list_click('+list[i].id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
                             html+='<td> <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
                  			html+='<td>';
@@ -562,12 +352,12 @@ function detail_list(status){
                            html+='	<span class="txt"><span>'+list[i].progress+'</span>%</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				
-                   				//html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		//html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
-                            	//html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
+                   				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
+                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
+                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
-	      					html+='<tr id=todo+'+list[i].id+'_detail" class="list_detail">';
+	      					html+='<tr id=todo'+list[i].id+'_detail" class="list_detail">';
 	      					html+='</tr>';                                     
 	        			}
 	        	
@@ -586,8 +376,8 @@ function detail_list(status){
 
 //체크저장기능
 function post_send(id) {
-	var temp = document.getElementById("myUL").getElementsByTagName("LI");
-	var count=document.getElementById("DoneUL").getElementsByTagName("LI");
+	var temp = document.getElementById("myUL"+id).getElementsByTagName("LI");
+	var count=document.getElementById("DoneUL"+id).getElementsByTagName("LI");
 	var list="";
 	var now =new Date();
 	//var to=new Date($('#to_date').attr("data"));
@@ -681,5 +471,4 @@ function change_form(id){
 }
 
 </script>
-<script src="/js/moim/moimtodostatusModal.js"></script>
 </html>
