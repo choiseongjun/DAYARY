@@ -84,12 +84,12 @@ table.moimTodoList tbody td.contour{height:15px;background:#F2F2F2}
 /* Hide the browser's default checkbox */
 .star_check input{display:none;opacity:0;cursor:pointer;height:0;width:0}
 /* Create a custom checkbox */
-.star_check .checkmark{position:relative;display:inline-block;height:44px;width:44px;background:url('../images/contents/srtar_x.png');background-position:center;background-repeat:no-repeat}
+.star_check .checkmark{position:relative;display:inline-block;height:44px;width:44px;background:url('/images/contents/srtar_x.png');background-position:center;background-repeat:no-repeat}
 .star_check .checkmark:after{content:"";position:absolute;display:none}
 /* Show the checkmark when checked */
 .star_check input:checked ~ .checkmark:after{display:inline-block}
 /* Style the checkmark/indicator */
-.star_check .checkmark:after{left:0;top:0;height:44px;width:44px;background:url('../images/contents/star_o.png');background-position:center;background-repeat:no-repeat}
+.star_check .checkmark:after{left:0;top:0;height:44px;width:44px;background:url('/images/contents/star_o.png');background-position:center;background-repeat:no-repeat}
 /***** The star_check 끝 *****/
 
 table.moimTodoList tbody .profile_img{margin:0 auto;width:44px;height:44px;overflow:hidden;border-radius:22px}
@@ -109,7 +109,7 @@ table.moimTodoList tbody .list_detail{display:none;transition:0.5s}
 table.moimTodoList tbody .list_detail.open{display:table-row;transition:0.5s}
 table.moimTodoList tbody .list_detail .detail_txt{font-family:Noto Sans KR;font-style:normal;font-weight:normal;font-size:19px;text-align:center;line-height:normal;color:#000000}
 table.moimTodoList .list_detail{border:0}
-table.moimTodoList tbody .list_detail ul{padding:25px 0}
+table.moimTodoList tbody .list_detail ul{max-height: 286px;padding:25px 0;box-sizing: border-box;overflow-y: auto;}
 table.moimTodoList tbody .list_detail li{position:relative;padding-bottom:24px}
 table.moimTodoList tbody .list_detail li:last-child{padding-bottom:0}
 table.moimTodoList tbody .list_detail .checkmark{left:168px}

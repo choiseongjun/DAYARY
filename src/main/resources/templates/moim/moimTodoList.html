@@ -79,7 +79,7 @@
                                     <tr  th:attr="id=|todo${list.id}|" class="list" th:onclick="|list_click(${list.id})|">
                                         <td>
                                             <label class="star_check">
-                                                <input type="checkbox">
+                                                <input type="checkbox" checked>
                                                 <span class="checkmark"></span>
                                             </label>
                                         </td>
@@ -99,7 +99,7 @@
 											<div class="bar">
 												<div class="active"></div>
 											</div>
-											<span class="txt"><span>[[${list.progress}]]</span>%</span>
+											<span class="txt"><span>[[${list.progress_done}]]/[[${list.progress_total}]]</span></span>
 										</div>
                                         </td>
                                         <td th:if="${session.peopleId eq list.people.id}">
@@ -169,6 +169,36 @@
         <!--컨텐츠 끝-->
 </body>
 <script>
+/****** 목록 진행률 ******/
+$(".moimTodoList .list").each(function() {
+    var obj = $(this);
+    /*진행률/전체*/
+    var percent_a = $(this).find(".percentage .txt").text();
+    var percent_b = percent_a.indexOf('/');
+    /*진행률 값*/
+    var percent_c = percent_a.substr(0, percent_b);
+    /*전체 값*/
+    var percent_d = percent_a.substr(-percent_b);
+
+    var percent = (100 / percent_d) * percent_c;
+
+    obj.find(".percentage .bar .active").css("width", percent + "%");
+    if (percent > 60) {
+        $(this).find(".percentage").addClass("high");
+    } else if (percent > 30 && percent < 60) {
+        $(this).find(".percentage").addClass("mid");
+    } else if (percent > 0 && percent < 30) {
+        $(this).find(".percentage").addClass("low");
+    } else if (percent == 0) {
+        $(this).find(".percentage").addClass("zero");
+    }
+});
+/****** 상세 목록 내 체크박스를 클릭 시 addclass ******/
+$('.cus_check input').click(function() {
+	console.log($(this));
+    $(this).parents('li').toggleClass('checked')
+})
+
 
 /******LIST TOGGLE JS******/
 
@@ -254,6 +284,14 @@ function fadeInClass(id) {
 	});
 }
 $(document).ready(function(){
+	/****** 페이지 로드시 상세 목록 내 체크박스 상태 확인후 addclass ******/
+    $(".moimTodoList .list_detail li").each(function() {
+        var obj = $(this);
+        if (obj.find('input').prop('checked')) {
+            obj.addClass('checked');
+        }
+    });
+	/*****/
 	/******탭 슬라이드 JS******/
 	 $('.tab_box').slick({
 	        infinite: false,
