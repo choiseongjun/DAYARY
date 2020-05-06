@@ -78,7 +78,7 @@
                                    
                                     <!--todolist 반복 시작-->
                                     <div th:each="list: ${todolist}">
-                                    <tr  th:attr="id=|todo${list.id}|" class="list">
+                                    <tr  th:attr="id=|todo${list.id}|" class="list" th:onclick="|list_click(${list.id})|">
                                         <td>
                                             <label class="star_check">
                                                 <input type="checkbox">
@@ -229,15 +229,15 @@
 <script>
 
 /******LIST TOGGLE JS******/
-$(function() {
 
-    $(".list").click(function (e) {
+    function list_click(id){
+    	console.log('listClick@!#!@#!@#!@!@!@#@#!@#!@#'+id)
     	 $(this).toggleClass('open')
-         var clickId = $(this).attr('id');
+         var clickId = id;
       	console.log("clickId"+clickId);
-         var detailId = $("[id*=" + clickId + "_detail]");
+         var detailId = $("[id*=todo" + clickId + "_detail]");
     	   $.ajax({
-    		      url:'/moimDetail/moimTodoList/detail/'+clickId.slice(4),
+    		      url:'/moimDetail/moimTodoList/detail/'+clickId,
     		        contentType: "application/json; charset=utf-8",
     		        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
     		        success:function(data){
@@ -340,9 +340,8 @@ $(function() {
     		        }
     		    });
 
-    	 })
+    	 }
 
-})
 
 /******fade_class JS******/
 function fadeOutClass(a) {
@@ -548,7 +547,7 @@ function detail_list(status){
                             html+='<td class="align-middle">  <div class="avatar-image avatar-image--loaded"> <div class="avatar avatar--md avatar-image__image">'
 	        				html+='  <div class="avatar__content"><img src="https://bootdey.com/img/Content/avatar/avatar1.png"></div> </div>'
 	        				html+='  </div></td> </tr> '; */
-	        				html+='<tr class="list" id="'+list[i].id+'"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
+	        				html+='<tr id="todo'+list[i].id+'" class="list" onclick="list_click('+list[i].id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
                             html+='<td> <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
                  			html+='<td>';
                  			if(list[i].status=='New')
@@ -568,8 +567,8 @@ function detail_list(status){
                             	//html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
-                   				
-                                     
+	      					html+='<tr id=todo+'+list[i].id+'_detail" class="list_detail">';
+	      					html+='</tr>';                                     
 	        			}
 	        	
 	        		$("#todolist").html(html);
