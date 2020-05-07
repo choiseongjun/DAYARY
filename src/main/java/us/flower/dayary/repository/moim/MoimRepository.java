@@ -85,6 +85,9 @@ public interface MoimRepository extends JpaRepository<Moim, Long>, JpaSpecificat
 	boolean existsByIdAndPeople_idAndMoimpeopleJoinCondition(long id, long peopleId, char joinCondition);
 
 
+	Page<Moim> findAllBySidocodeLikeAndSigooncodeLike(Pageable pageable, String string, String string2);
+
+
 
 
 
