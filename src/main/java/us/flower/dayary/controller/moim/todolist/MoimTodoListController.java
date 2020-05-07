@@ -259,7 +259,7 @@ public class MoimTodoListController {
 	public String modelView(@PathVariable("no")long no,Sort sort,Model model) {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
-		model.addAttribute("todo", toDoWriteListRepository.findById(no));
+		model.addAttribute("todo", toDoWriteListRepository.findById(no).get());
 		model.addAttribute("detailView",list);	
 		
 		
