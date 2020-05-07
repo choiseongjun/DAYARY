@@ -27,9 +27,6 @@
 			<link rel="stylesheet" href="/publ/css/common.css" />
 			<link rel="stylesheet" href="/publ/css/slick.css" />
         </css>  
-        <!-- <css th:fragment="moimDetailsubmenu"> -->  
-          <!-- <link rel="stylesheet" href="/css/moim/moimDetailsubmenu.css"> -->
-          
         
             </head>
     <body>
@@ -44,72 +41,7 @@
                 <div class="site-mobile-menu-body"></div>
             </div>
 
-            <!-- <header class="site-navbar" role="banner">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-12 search-form-wrap js-search-form">
-                            <form method="get" action="#">
-                                <input type="text" id="s" class="form-control"
-                                       placeholder="Search...">
-                                <button class="search-btn" type="submit">
-                                    <span class="icon-search"></span>
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col-4 site-logo">
-                            <a href="/" class="text-black h2 mb-0"><img src="/publ/images/layout/logo.png" width="100px" height="80px"/></a>
-                        </div>
-                        <div class="col-8 text-right">
-                            <nav class="site-navigation" role="navigation">
-                            	<div id="socketAlert" class="alert alert-success" role="alert" style="display:none;"></div>임시 알림창
-                                <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block mb-0">
-                                    <li>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-                                        <a href="/">Home</a>
-                                    </li>
-                                    <li>
-                                        <a href="/moimlistView/11">크루 찾기</a>
-                                    </li>
-                                    <li>
-                                        <a href="/community/timeLine">커뮤니티</a>
-                                    </li>
-                                   	<li sec:authorize="hasAuthority('ROLE_USER')">
-                                        <a href="/moimMakeView">크루 만들기</a>
-                                    </li>
-                                    <li sec:authorize="isAnonymous()">
-                                        <a href="/signupView">회원가입</a>
-                                    </li>
-                                  	<li sec:authorize="isAnonymous()">
-                                        <a href="/signinView">로그인
-                                        </a>
-                                    </li>
-                                        <a href="/logout">로그아웃</a>
-                                    </li>
-                                 
-                                    <li sec:authorize="hasAuthority('ROLE_USER')">
-                                        <a href="/myprofileView">내정보보기 
-                                      </a>
-                                    </li>
-                             
-                                    <li sec:authorize="hasAuthority('ROLE_USER')">
-                                        <div class="notification notishow">
-                                            <span>Inbox</span>
-                                            <span class="badge">3</span>
-                                        </div>
-                                    </li>
-                                    <li class="d-none d-lg-inline-block">
-                                        <a href="#" class="js-search-toggle">
-                                            <span class="icon-search"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                            <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none">
-                                <span class="icon-menu h3"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </header> -->
+            
 			<header id="header">
 				<div class="inner">
 					<h1 class="logo"><a href="/"><img src="/publ/images/layout/logo.png" alt="Fruit 로고"></a></h1>
@@ -251,25 +183,25 @@
             	        	var menu6="";
             	        	var menu7="";
             	        	for(var i=0;i<m.length;i++){
-            	        		if(m[i].id==1){
+            	        		if(m[i].menu_order==1){
             	        			menu1+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==2){
+            	        		if(m[i].menu_order==2){
             	        			menu2+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==3){
+            	        		if(m[i].menu_order==3){
             	        			menu3+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==4){
+            	        		if(m[i].menu_order==4){
             	        			menu4+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==5){
+            	        		if(m[i].menu_order==5){
             	        			menu5+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==6){
+            	        		if(m[i].menu_order==6){
             	        			menu6+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
-            	        		if(m[i].id==7){
+            	        		if(m[i].menu_order==7){
             	        			menu7+="<a href='"+data[i].menu_url+"'>"+data[i].menu_name+"</a>";
             	        		}
             	        	}
@@ -328,50 +260,7 @@
 						//읽으면 알림 0
 						document.getElementsByClassName("alarm_num")[0].innerHTML=0;
                     });
-                   /*  $(".more_alarm_list").click(function (e) {
-                    	var notiList =document.getElementById("notiList");
-                    	var pageNum=parseInt(notiList.childElementCount/9)+1;
-                    	getNotiList(pageNum);
-                    }); */
-                
-            	/* function getNotiList(pageNum){
-					if($("#notiList").attr("data")==pageNum){
-						$(".more_alarm_list").toggle();
-						return;
-					}
-					$.ajax({
-					      url:'/getMyNotiList/'+pageNum,
-					        contentType: "application/json; charset=utf-8",
-					        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
-					        success:function(data){
-						        	var notilist=data.notiList;
-						        	console.log(notilist);
-						        	if(notilist.length>0){
-						        		var html=""
-							        		for(var i in notilist){
-							    				html += '<tr>'
-							    				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
-							    				html += 	'<td>'
-							    				html += 	'<a href="/moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
-												html += 	'</td>'
-												html += 	'<td>'+notilist[i].createDate+'</td>'
-								   				html += '</tr>'
-							        		}
-						        		$("#notiList").append(html);
-						        		$("#notiList").attr("data",pageNum);
-						        	}else{
-						        		$(".more_alarm_list").toggle();
-										return;
-						        	}
-						        
-						        	
-					        	
-					        }, error:function(e){
-								alert(e)
-					        }
-					    });     
-            	} */
-	         
+                   
 	           	var socket=null;
 	           	var isStomp=false;
 	           	function connectStomp() {
@@ -390,7 +279,6 @@
 	           	    });
 	           	}
 	           	    function onMessageReceived(payload) {
-	           	    console.log(message);
 	           		var message = JSON.parse(payload.body);
 	           		var message = JSON.parse(payload.body);
 	           		if(message.gubunCd=='M'){
