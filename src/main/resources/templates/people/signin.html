@@ -480,9 +480,8 @@
 	            <li>
 	            	<p>직업</p>
 	                 <select id="job" name="job" class="select_pp" >
-	                     <option value="0">직업1</option>
-	                     <option value="0">직업1</option>
-	                     <option value="1">직업3</option>
+	                     <option  th:value="${jobs[0].commName}" th:text="${jobs[0].commName}"></option>
+	                     <option th:each="job : ${jobs}" th:value="${job.commName}" th:text="${job.commName}"></option>
 	                  </select>
 	            </li>
 	            <li>

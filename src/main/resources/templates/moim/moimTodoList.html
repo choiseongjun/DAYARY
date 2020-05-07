@@ -23,18 +23,12 @@
                 <div class="inner">
                     <div class="tab_header">
                         <div class="tab_box">x
-                            <!-- <div  class="on" onclick="detail_list('All')">All</div>
-                            <div   onclick="detail_list('My List')">My List</div>
-                            <div  onclick="detail_list('New')">New</div>
-                            <div  onclick="detail_list('In Progress')">In Progress</div>
-                            <div  onclick="detail_list('End')">End</div>
-                            <div  onclick="detail_list('Suspend')">Suspend</div> -->
-                          	<div onclick="detail_list('All')" class="on"><a >ALL</a></div>
-                            <div onclick="detail_list('My List')"><a >My List</a></div>
-                            <div onclick="detail_list('New')"><a >New</a></div>
-                            <div onclick="detail_list('In Progress')"><a>In Progress</a></div>
-                            <div onclick="detail_list('End')"><a >End</a></div>
-                            <div onclick="detail_list('Suspend')"><a >Suspend</a></div>
+                          	<div  id="All" onclick="detail_list('All')" class="on"><a >ALL</a></div>
+                            <div id="My List" onclick="detail_list('My List')"><a >My List</a></div>
+                            <div id="New" onclick="detail_list('New')"><a >New</a></div>
+                            <div id="In Progress" onclick="detail_list('In Progress')"><a>In Progress</a></div>
+                            <div id="End" onclick="detail_list('End')"><a >End</a></div>
+                            <div id="Suspend" onclick="detail_list('Suspend')"><a >Suspend</a></div>
                       
                         </div>
                         <div class="control_box">
@@ -63,7 +57,7 @@
                                         <td class="profile">작성자</td>
                                         <td class="status">상태</td>
                                         <td class="title">제목</td> 
-                                        <td class="progress">진행량</td>
+                                        <td class="">진행량</td>
                                         <td class="ico_area">
                                             <a><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
                                             <a ><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
@@ -76,7 +70,7 @@
                                    
                                     <!--todolist 반복 시작-->
                                     <div th:each="list: ${todolist}">
-                                    <tr  th:attr="id=|todo${list.id}|" class="list" th:onclick="|list_click(${list.id})|">
+                                    <tr  th:attr="id=|todo${list.id}|" class="list" >
                                         <td>
                                             <label class="star_check">
                                                 <input type="checkbox" checked>
@@ -84,7 +78,7 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <div class="profile_img"><a href=""><img  th:src="${list.people.imageName!=null} ?${'/getMoimImage/'+list.people.imageName+'.'+list.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
+                                            <div class="profile_img"><a><img  th:src="${list.people.imageName!=null} ?${'/getMoimImage/'+list.people.imageName+'.'+list.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div>
                                         </td>
                                         <td>
                                         
@@ -93,7 +87,7 @@
 			                               <span th:if="${list.status eq 'End'}"><span class="status_ico end">완료</span></span>
 			                               <span th:if="${list.status eq 'Suspend'}"><span class="status_ico stop">중지</span></span>
                                         </td>
-                                        <td class="title" th:text="${list.plan_title}"></td>
+                                        <td class="title" th:text="${list.plan_title}" th:onclick="|list_click(${list.id})|"></td>
                                         <td >
                                             <div class="percentage">
 											<div class="bar">
@@ -103,7 +97,8 @@
 										</div>
                                         </td>
                                         <td th:if="${session.peopleId eq list.people.id}">
-                                          <a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
+                                        	
+                                          <a th:attr="onclick=|change_form('${list.id}')|" th:if="${list.status ne 'End'&& list.status ne 'Suspend'}"><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
                                             <a th:attr="onclick=|post_send('${list.id}')|"><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
                                             <a th:attr="onclick=|delete_send('${list.id}')|" ><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
                                         </td>
@@ -223,10 +218,11 @@ function check_input(){
     		        		 var list= data.list;
     		        		 var writer=data.writer;
     		        		//완료안된 것들 
-    		        		 var html="<td colspan='6'><ul id='myUL"+todo.id+"'>";
+    		        		 var html=" <td colspan='6'><input type='hidden' id='to_date_"+todo.id+"' value='"+todo.to_date+"'><div  id='changeDate"+todo.id+"' style='display:none' ><select  id='NewEnd"+todo.id+"'><option value='+1'>+1일</option><option value='+3'>+3일</option><option value='+7'>+7일</option></select></div>"
+    		        		 		+" <ul id='myUL"+todo.id+"'>";
     		        		 //완료된 것들 
     		        		 var html2="<ul id='DoneUL"+todo.id+"'>";
-    		        		 
+    		        		 		
     		        			   for(var i in list){
     		        				   if(list[i].checkConfirm=='N'){
     		        					   html+='<li id="'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
@@ -291,6 +287,10 @@ function fadeInClass(id) {
 }
 $(document).ready(function(){
 	progress_bar();
+	 if(location.href.indexOf('myList')>0){
+		 $(".on").attr("class","");
+		 	document.getElementById('My List').setAttribute('class','on');
+	 }
 	/****** 페이지 로드시 상세 목록 내 체크박스 상태 확인후 addclass ******/
     $(".moimTodoList .list_detail li").each(function() {
         var obj = $(this);
@@ -323,10 +323,7 @@ $(document).ready(function(){
  		};
  	}
  */
- if(location.href.indexOf('myList')>0){
-	 document.getElementById('All').setAttribute('class','');
-		document.getElementById('My List').setAttribute('class','on');
- }
+
 });
 
 function close_detail(){
@@ -364,8 +361,8 @@ function detail_list(status){
 		location.href="/moimDetail/moimTodoList/myList/"+$('#moimNo').attr("data-moimNo");
 	}
 	else{
-	 	//document.getElementById('All').setAttribute('class','');
-	 	//document.getElementById(status).setAttribute('class','on');
+		$(".on").attr("class","");
+	 	document.getElementById(status).setAttribute('class','on');
 	 		
 	}
 	
@@ -396,9 +393,9 @@ function detail_list(status){
                            html+='</td><td class="title">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list[i].progress+'"></div></div>';
                            html+='	<span class="txt">'+list[i].progress_done+'/'+list[i].progress_total+'</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
-                   				
-                   				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+list[i].id+')"></a>';
+                   				if(list[i].status!='End'&&list[i].status!='Suspend')
+                   					html+='<td><a onclick="change_form('+list[i].id+')"><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
+                           		html+='<a onclick="post_send('+list[i].id+')"><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+list[i].id+')"></a>';
                             	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+list[i].id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
@@ -407,7 +404,7 @@ function detail_list(status){
 	        			}
 	        	
 	        		$("#todolist").html(html);
-	        		$("#page").hide();
+	        		$(".pager_box").hide();
 	        		progress_bar();
 	        		 
 	        	 }else{
@@ -443,11 +440,41 @@ function post_send(id) {
 			}
 		}
 	}
-	if(list.length==0){
+	
+	if(list.length==0&&$("#newEnd"+id).attr("style")==""){
 		alert("변경된 사항이 없습니다.")
 		return;
 	} 
-		
+	//종료날짜 수정했을경우
+	if($("#newEnd"+id).attr("style")!=""){
+		//기존 종료일에 추가된 날짜 더하기
+		 var date=new Date($("#to_date_"+id).attr("value"));
+		 date.setDate(date.getDate()+$("#newEnd"+id).val()*1);
+		 var toDoWrite={};
+		 toDoWrite.to_date2=date;
+		 toDoWrite.id=id;
+		 $.ajax({
+		      url:'/moimDetail/moimTodoList/update_date',
+		        type:'post',
+		        data: JSON.stringify(toDoWrite) ,
+		        contentType: "application/json; charset=utf-8",
+		        success:function(data){
+		        	 if(data.code==1){
+		        		if(list.length==0){
+		        		 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+		 					 alert("수정되었습니다.");
+		        			 list_click(id);
+		        		}
+		             }else{
+		                 alert(data.message);
+		             }
+		        }, error:function(e){
+
+		        }
+		    });
+		 
+	 }
 	var param={
 			list:list,
 			count:count.length
@@ -482,38 +509,7 @@ function post_send(id) {
 
 function change_form(id){
 //종료날짜 수정변경 폼 보여주기
-	 if($("#change_date").attr("style")!=''){
-	 	$("#change_date").show();
-	 }
-	 else{
-		 //기존 종료일에 추가된 날짜 더하기
-		 var date=new Date($("#to_date").attr("value"));
-		 date.setDate(date.getDate()+$("#to_date2").val()*1);
-		 var toDoWrite={};
-		 toDoWrite.to_date2=date;
-		 toDoWrite.id=id;
-		 $.ajax({
-		      url:'/moimDetail/moimTodoList/update_date',
-		        type:'post',
-		        data: JSON.stringify(toDoWrite) ,
-		        contentType: "application/json; charset=utf-8",
-		        success:function(data){
-		        	 if(data.code==1){
-		        		 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
-		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
-		        		 alert("수정되었습니다.");
-		        		 get_detail(id);
-		             }else{
-		                 alert(data.message);
-		             }
-		        }, error:function(e){
-
-		        }
-		    });
-		 
-	 }
-	 
-	 
+	 	$("#changeDate"+id).show();
 }
 
 </script>
