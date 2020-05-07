@@ -128,7 +128,7 @@
                 <div class="pager_box">
                     
                     <ul class="pagination"
-	        th:with="start=${T(Math).floor(todolist.number/10)*10 + 1},
+	        			th:with="start=${T(Math).floor(todolist.number/10)*10 + 1},
 	                    last=(${start + 9 < todolist.totalPages ? start + 9 : todolist.totalPages})" th:if="${todolist.totalPages ne 0}" >
 				        <li>
 				            <a th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=1|}" aria-label="First">
@@ -143,7 +143,8 @@
 				        </li>
 				
 				        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == todolist.number + 1} ? 'active'">
-				            <a th:text="${page}" th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${page}|}" class="num on"></a>
+				            <a th:if="${page} == ${todolist.number+1}" th:text="${page}" th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${page}|}" class="num on"></a>
+				            <a th:unless="${page} == ${todolist.number+1}" th:text="${page}" th:href="@{|/moimDetail/moimTodoList/${moim.id}?page=${page}|}" class="num"></a>
 				        </li>
 				
 				        <li th:class="${todolist.last} ? 'disabled'">
