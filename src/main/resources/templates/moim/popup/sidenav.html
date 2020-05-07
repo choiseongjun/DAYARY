@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <div class="sidenav">
                     <div class="detail_header">
-                       	<span th:text="${todo}"></span>
+                       	<span th:text="${todo.plan_list}"></span>
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="기 닫기" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
@@ -12,25 +12,29 @@
                                 <div th:attr="id=|detail_view${detail.id}|" >
                                     <div class="wr_info">
                                         <div class="thumb">
-                                            <a href=""><img    src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
+                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
                                         </div>
                                         <span class="wr_name" th:text="${todo.people.name}"></span>
                                     </div>
                                     <div class="wr_conts_area">
                                     		<span th:text="${detail.memo}"></span>
-                                    		<div th:if="${detail.moimBoardfile[0]}!=null" th:each=" image : ${detail.moimBoardfile[0]}">
+                                    		<span th:text="${detail.moimBoardfile}"></span>
+                                    		<span th:text="${detail.createDate}"></span>
+                                    <!-- 		<div th:if="${detail.moimBoardfile}!=null" th:each=" image : ${detail.moimBoardfile[0]}">
                                     			  <div class="wr_conts">
                                     			 	 <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png" alt="샘플이미지">
                                     		      </div>
-                                    		</div>
-                                   		<div class="conts_info"><span class="date" th:text="${detail.createAt.slice(0,10)}"></span>&nbsp;&nbsp;<span class="time" th:text="${detail.createAt.slice(0,-10)}"></span></div>
+                                    		</div> 
+                                   		<div class="conts_info"><span class="date" th:text="${detail.createDate}"></span>&nbsp;&nbsp;<span class="time" th:text="${detail.createDate}"></span></div>
+                               		 -->
                                		  </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="detail_write">
                                 <div class="thumb">
-                                    <a href=""><img src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
+                                    <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
+                             
                                 </div>
                                 <div class="write_area">
                                     <form name="" action="" method="post">

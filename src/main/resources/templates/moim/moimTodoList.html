@@ -99,7 +99,7 @@
 											<div class="bar">
 												<div class="active"></div>
 											</div>
-											<span class="txt"><span>[[${list.progress_done}]]/[[${list.progress_total}]]</span></span>
+											<span class="txt">[[${list.progress_done}]]/[[${list.progress_total}]]</span>
 										</div>
                                         </td>
                                         <td th:if="${session.peopleId eq list.people.id}">
@@ -170,40 +170,44 @@
 </body>
 <script>
 /****** 목록 진행률 ******/
-$(".moimTodoList .list").each(function() {
-    var obj = $(this);
-    /*진행률/전체*/
-    var percent_a = $(this).find(".percentage .txt").text();
-    var percent_b = percent_a.indexOf('/');
-    /*진행률 값*/
-    var percent_c = percent_a.substr(0, percent_b);
-    /*전체 값*/
-    var percent_d = percent_a.substr(-percent_b);
+function progress_bar(){
+	$(".moimTodoList .list").each(function() {
+	    var obj = $(this);
+	    /*진행률/전체*/
+	    var percent_a = $(this).find(".percentage .txt").text();
+	    var percent_b = percent_a.indexOf('/');
+	    /*진행률 값*/
+	    var percent_c = percent_a.substr(0, percent_b);
+	    /*전체 값*/
+	    var percent_d = percent_a.substr(percent_b+1,percent_a.length);
 
-    var percent = (100 / percent_d) * percent_c;
+	    var percent = (percent_c / percent_d) * 100;
 
-    obj.find(".percentage .bar .active").css("width", percent + "%");
-    if (percent > 60) {
-        $(this).find(".percentage").addClass("high");
-    } else if (percent > 30 && percent < 60) {
-        $(this).find(".percentage").addClass("mid");
-    } else if (percent > 0 && percent < 30) {
-        $(this).find(".percentage").addClass("low");
-    } else if (percent == 0) {
-        $(this).find(".percentage").addClass("zero");
-    }
-});
+	    obj.find(".percentage .bar .active").css("width", percent + "%");
+	    if (percent > 60) {
+	        $(this).find(".percentage").addClass("high");
+	    } else if (percent > 30 && percent < 60) {
+	        $(this).find(".percentage").addClass("mid");
+	    } else if (percent > 0 && percent < 30) {
+	        $(this).find(".percentage").addClass("low");
+	    } else if (percent == 0) {
+	        $(this).find(".percentage").addClass("zero");
+	    }
+	});
+}
+
 /****** 상세 목록 내 체크박스를 클릭 시 addclass ******/
-$('.cus_check input').click(function() {
-	console.log($(this));
-    $(this).parents('li').toggleClass('checked')
-})
+function check_input(){
+	$('.cus_check input').click(function() {
+		console.log($(this));
+	    $(this).parents('li').toggleClass('checked')
+	})
 
+}
 
 /******LIST TOGGLE JS******/
 
     function list_click(id){
-    	console.log('listClick@!#!@#!@#!@!@!@#@#!@#!@#'+id)
     	 $(this).toggleClass('open')
          var clickId = id;
       	console.log("clickId"+clickId);
@@ -226,7 +230,7 @@ $('.cus_check input').click(function() {
     		        				   if(list[i].checkConfirm=='N'){
     		        					   html+='<li id="'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
     		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
-    		        					   if(list[i].detail=='Y'){
+    		        					   if(list[i].detail=='Y'||list[i].people.name==$("#userName").attr("data")){
     		        						   html+='<a  onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html+='</li>';
@@ -234,9 +238,9 @@ $('.cus_check input').click(function() {
     		        
     		        				   }
     		        				   else{
-    		        					   html2+='<li><label class="cus_check" name="'+list[i].id+'"><input type="checkbox" name="'+list[i].id+'" readonly="readonly" checked="checked"><span class="checkmark"></span>';
-    		        					   html2+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
-    		        					   if(list[i].detail=='Y'){
+    		        					   html2+='<li><label class="cus_check" name="'+list[i].id+'"><span class=""></span>';
+    		        					   html2+='<span class="detail_txt" style="    text-decoration: line-through;">'+list[i].plan_list+'</span></label>';
+    		        					   if(list[i].detail=='Y'||list[i].people.name==$("#userName").attr("data")){
     		        						   html2+='<a onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html2+='</li>';
@@ -250,6 +254,7 @@ $('.cus_check input').click(function() {
     		                   	 	html=html+html2;
     								detailId.html(html);
     		                        detailId.toggleClass('open');
+    		                        check_input();
     		             }else{
     		                 alert(data.message);
     		             }
@@ -284,6 +289,7 @@ function fadeInClass(id) {
 	});
 }
 $(document).ready(function(){
+	progress_bar();
 	/****** 페이지 로드시 상세 목록 내 체크박스 상태 확인후 addclass ******/
     $(".moimTodoList .list_detail li").each(function() {
         var obj = $(this);
@@ -376,7 +382,7 @@ function detail_list(status){
 	        			for(var i in list){
 	        			
 	        				html+='<tr id="todo'+list[i].id+'" class="list" onclick="list_click('+list[i].id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
-                            html+='<td> <div class="profile_img"><a href=""><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
+                            html+='<td> <div class="profile_img"><a ><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
                  			html+='<td>';
                  			if(list[i].status=='New')
 		        				html+=' <span class="status_ico new">신규</span> ';
@@ -386,13 +392,13 @@ function detail_list(status){
 		        				html+=' <span class="status_ico end">완료</span>';
 		        			else if(list[i].status=='Suspend')
 		        				html+=' <span class="status_ico stop">중지</span>';
-                           html+='</td><td class="title">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active"></div></div>';
-                           html+='	<span class="txt"><span>'+list[i].progress+'</span>%</span></div></td>';
+                           html+='</td><td class="title">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list[i].progress+'"></div></div>';
+                           html+='	<span class="txt">'+list[i].progress_done+'/'+list[i].progress_total+'</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				
                    				html+='<td><a href=""><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+todo.id+')"></a>';
-                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+todo.id+')" alt="삭제하기 아이콘"></a></td>';
+                           		html+='<a href=""><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+list[i].id+')"></a>';
+                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+list[i].id+')" alt="삭제하기 아이콘"></a></td>';
                    			}
 	      					html+='</tr>';
 	      					html+='<tr id=todo'+list[i].id+'_detail" class="list_detail">';
@@ -401,6 +407,7 @@ function detail_list(status){
 	        	
 	        		$("#todolist").html(html);
 	        		$("#page").hide();
+	        		progress_bar();
 	        		 
 	        	 }else{
 	                 alert(data.message);
@@ -430,7 +437,7 @@ function post_send(id) {
 	if(temp.length!=0){
 		for (var i in temp) {
 			if(temp[i].className=="checked"){
-				list+=temp[i].value+",";
+				list+=temp[i].id+",";
 				total++;
 			}
 		}
