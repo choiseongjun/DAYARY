@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString
 public class Noti {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private long id;
 	@ManyToOne

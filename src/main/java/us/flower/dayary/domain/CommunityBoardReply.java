@@ -20,7 +20,7 @@ import java.util.List;
 public class CommunityBoardReply extends DateAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
 
