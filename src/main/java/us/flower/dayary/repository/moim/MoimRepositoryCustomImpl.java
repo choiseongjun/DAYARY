@@ -24,7 +24,7 @@ public class MoimRepositoryCustomImpl extends QuerydslRepositorySupport implemen
 		super(Moim.class);
 		this.jpaQueryFactory = jpaQueryFactory;
 	}
-
+ 
 	@Override
 	public Page<Moim> findAllByCategoryQuery(Common common, Pageable pageable) {
 
