@@ -228,6 +228,8 @@
 					        contentType: "application/json; charset=utf-8",
 					        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 					        success:function(data){
+					        	console.log("datat!@#!@#")
+					        	console.log(data)
 						        if(data.code==1){
 						        	$(".alarm_num").append(data.count);
 						        	var notilist=data.notiList;
@@ -237,11 +239,11 @@
 					        		var html=""
 						        		for(var i in notilist){
 						    				html += '<tr>'
-						    				html += 	' <td class="user_pic"><img src="/publ/images/contents/sample.png"></td>'
+						    				html += 	' <td class="user_pic"><img src="/images/default_people.png"></td>'
 						    				html += 	'<td>'
 						    				html += 	'<a href="/moimlistView/moimdetailView/'+notilist[i].moim.id+'">'+notilist[i].memo+'</a>'
 											html += 	'</td>'
-											html += 	'<td>'+notilist[i].createDate+'</td>'
+											html += 	'<td>'+notilist[i].createdAt.substring(0, 10 )+"\t\t"+notilist[i].createdAt.substring(11, 16 )+'</td>'
 							   				html += '</tr>'
 						        		}
 					        		$("#notiList").append(html);
@@ -273,7 +275,6 @@
 	           	function connectStompforPrivate()	{
 	           	 
 	           	    socket.connect({}, function () {
-	           	        console.log("Connected PrivateNoti!");
 	           	       socket.subscribe('/topic/noti', onMessageReceived);
 	           	        
 	           	    });
@@ -281,6 +282,7 @@
 	           	    function onMessageReceived(payload) {
 	           		var message = JSON.parse(payload.body);
 	           		var message = JSON.parse(payload.body);
+	           		
 	           		if(message.gubunCd=='M'){
 						if(location.href.indexOf("moimdetail")>0)
 	           			$("#noti").prepend('<span>'+message.memo+'</span><span>'+message.createDate+'</span><br>');

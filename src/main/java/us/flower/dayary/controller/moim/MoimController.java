@@ -337,7 +337,7 @@ public class MoimController {
 
 	// [hyozkim] 카테고리 데이터 추가
 	List<Common> categories = (List<Common>) moimService.getMoimElement().get("element_CA1");
-	if(commCode.equals("11")) {
+	if(commCode.equals("01")) {
 		if (title != null || sido_code != null || sigoon_code != null || status != null) {
 			
 			if(title==null) {

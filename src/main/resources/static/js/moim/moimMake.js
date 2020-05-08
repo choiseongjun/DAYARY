@@ -50,12 +50,13 @@ function deletePreImage(){
 // [hyozkim] makeSelectElement 셀렉트 탭에 데이터 추가
 function makeSelectElement(item, id) {
     $('#'+id).empty(); // 초기화
-
+  
     for (var n=0; n<item.length; n++) {
         var code  = item[n].commCode;
         var name = item[n].commName;
-
-        $('#'+id).append('<option value="' + code + '">' + name + '</option>');
+        if(name!='전체'){
+        	$('#'+id).append('<option value="' + code + '">' + name + '</option>');
+        }
     }
 }
 
@@ -73,7 +74,7 @@ function initMoimElement(opt) {
         mimeType:"multipart/form-data",
         //data: formData,
         success:function(data) {
-
+        	
              makeSelectElement(data.element_CA1,'categorybox');
              makeSelectElement(data.element_CA2,'status');
              makeSelectElement(data.element_CA3,'secretmode');
@@ -148,7 +149,7 @@ $('#moimMake_btn').off().on('click', function () {
         success:function(data){
             if(data.code==1){
                 alert(data.message);
-                location.href='/moimlistView/11';
+                location.href='/moimlistView/01';
             }else{
                 alert(data.message);
             }

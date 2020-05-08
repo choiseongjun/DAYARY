@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import us.flower.dayary.domain.common.DateAudit;
 
 //20191208 알림창 최성준
 @Entity
@@ -25,7 +26,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Noti {
+public class Noti extends DateAudit{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

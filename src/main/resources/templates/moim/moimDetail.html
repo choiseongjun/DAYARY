@@ -424,7 +424,7 @@ body {
                         <a  th:if="${#strings.isEmpty(chatcount)}"><h6
                               class="text-muted text-uppercase mt-0">단체채팅방 </h6></a>
                         <h3 class="" data-plugin="counterup">
-                          <td th:text="${totalPeople}" />(명) <span class="badge badge-info"><td th:if="${chatcount=='99'}">99+</td><td th:if="${chatcount!='99'}"  th:text="${chatcount}" /></span>
+                          <td th:text="${totalPeople-1}" />(명) <span class="badge badge-info"><td th:if="${chatcount=='99'}">99+</td><td th:if="${chatcount!='99'}"  th:text="${chatcount}" /></span>
                           
                           
                      </div>

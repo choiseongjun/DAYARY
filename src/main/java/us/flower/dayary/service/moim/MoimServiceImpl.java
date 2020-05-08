@@ -210,6 +210,7 @@ public class MoimServiceImpl implements moimService{
 
 	@Override
 	public Page<Moim> selecttitleList(Pageable pageable, String title, String sido_code,String sigoon_code) {
+		
 		if(title=="") {
 			return moimRepository.findAllBySidocodeLikeAndSigooncodeLike(pageable,"%"+sido_code+"%","%"+sigoon_code+"%");
 		}else {
@@ -303,8 +304,14 @@ public class MoimServiceImpl implements moimService{
 			String commCode) {
 		Common common =new Common();
 		common.setCommCode(commCode);
-		
-		return moimRepository.findAllByCategoryAndTitleLikeAndSidocodeLikeAndSigooncodeLike(pageable,common,"%"+title+"%","%"+sido_code+"%","%"+sigoon_code+"%");
+		System.out.println("타이틀은??"+title);
+		if(title=="") {
+			System.out.println("위");
+			return moimRepository.findAllByCategoryAndSidocodeLikeAndSigooncodeLike(pageable,common,"%"+sido_code+"%","%"+sigoon_code+"%");
+		}else {
+			System.out.println("아래");
+			return moimRepository.findAllDistinctByMoimtagTagNameLikeAndCategoryAndSidocodeLikeAndSigooncodeLike(pageable,"%"+title+"%",common,"%"+sido_code+"%","%"+sigoon_code+"%");
+		}
 	}
 	
 
