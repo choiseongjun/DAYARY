@@ -1,12 +1,7 @@
 package us.flower.dayary.controller.people;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import java.io.IOException;
-
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +49,8 @@ public class PeopleInfoController {
 	private TokenGenerator tokenGenerator;
 	@Autowired
 	private FileManager fileManager;
-	@Value("${moimImagePath}")
-	private String moimImagePath;
+	@Value("${userprofileImagePath}")
+	private String userImagePath;
 
 	/**
 	 * 사진 불러오기 by choiseongjun
@@ -181,8 +176,6 @@ public class PeopleInfoController {
 	public ResponseEntity<?> myprofileViewUpdate(@PathVariable("peopleId") long peopleId, HttpSession session,
 			@RequestPart(name = "file", required = false) MultipartFile file) {
 
-		System.out.println("파일은??");
-		System.out.println(file);
 		Optional<People> user = peopleRepository.findById(peopleId);
 		if (file != null) { // 파일이 null이 아니면
 			// 이미지파일이름생성
@@ -204,7 +197,7 @@ public class PeopleInfoController {
 
 			// 파일업로드
 			try {
-				fileManager.fileUpload(file, moimImagePath + "/" + imageName + "." + fileExtension);
+				fileManager.fileUpload(file, userImagePath + "/" + imageName + "." + fileExtension);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

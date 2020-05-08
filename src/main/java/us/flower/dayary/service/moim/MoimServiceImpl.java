@@ -210,8 +210,13 @@ public class MoimServiceImpl implements moimService{
 
 	@Override
 	public Page<Moim> selecttitleList(Pageable pageable, String title, String sido_code,String sigoon_code) {
-		// TODO Auto-generated method stub
-		return moimRepository.findAllDistinctByMoimtagTagNameLikeAndSidocodeLikeAndSigooncodeLike(pageable,"%"+title+"%","%"+sido_code+"%","%"+sigoon_code+"%");
+		
+		if(title=="") {
+			return moimRepository.findAllBySidocodeLikeAndSigooncodeLike(pageable,"%"+sido_code+"%","%"+sigoon_code+"%");
+		}else {
+			return moimRepository.findAllDistinctByMoimtagTagNameLikeAndSidocodeLikeAndSigooncodeLike(pageable,"%"+title+"%","%"+sido_code+"%","%"+sigoon_code+"%");	
+		}
+		
 	}
 
 	@Override
@@ -299,8 +304,11 @@ public class MoimServiceImpl implements moimService{
 			String commCode) {
 		Common common =new Common();
 		common.setCommCode(commCode);
-		
-		return moimRepository.findAllByCategoryAndTitleLikeAndSidocodeLikeAndSigooncodeLike(pageable,common,"%"+title+"%","%"+sido_code+"%","%"+sigoon_code+"%");
+		if(title=="") {
+			return moimRepository.findAllByCategoryAndSidocodeLikeAndSigooncodeLike(pageable,common,"%"+sido_code+"%","%"+sigoon_code+"%");
+		}else {
+			return moimRepository.findAllDistinctByMoimtagTagNameLikeAndCategoryAndSidocodeLikeAndSigooncodeLike(pageable,"%"+title+"%",common,"%"+sido_code+"%","%"+sigoon_code+"%");
+		}
 	}
 	
 

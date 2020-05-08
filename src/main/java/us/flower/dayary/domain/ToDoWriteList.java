@@ -35,7 +35,7 @@ import us.flower.dayary.domain.common.DateAudit;
 @Setter
 public class ToDoWriteList extends DateAudit {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ID")
 	private long id;
 	

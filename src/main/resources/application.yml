@@ -21,7 +21,7 @@ spring:
     enabled: true
   datasource:
       driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
+      url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/fruit"
       #url: "jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
       username: csj2702
       password: tjdwns2702
@@ -58,6 +58,7 @@ server:
 
 moimImagePath: C:/dayary/moim/image
 communityImagePath : C:/dayary/community/image
+userprofileImagePath : C:/dayary/user/image
 
 app:
       jwtSecret : JWTSuperSecretKey

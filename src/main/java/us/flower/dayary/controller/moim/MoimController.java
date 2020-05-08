@@ -189,7 +189,11 @@ public class MoimController {
 			return returnData;
 		}
 		
-		
+		if(moim.getPeopleLimit()>100) {
+			returnData.put("code", "0");
+			returnData.put("message", "인원수는 100명을 초과할 수 없습니다");
+			return returnData;
+		}
 		
 		char joinCondition='Y';//참가자 승인후 Y Defualt Value
 		moimService.saveMoim(id, subject, moim, file);
@@ -337,7 +341,7 @@ public class MoimController {
 
 	// [hyozkim] 카테고리 데이터 추가
 	List<Common> categories = (List<Common>) moimService.getMoimElement().get("element_CA1");
-	if(commCode.equals("11")) {
+	if(commCode.equals("01")) {
 		if (title != null || sido_code != null || sigoon_code != null || status != null) {
 			
 			if(title==null) {

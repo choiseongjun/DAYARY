@@ -37,7 +37,7 @@ import us.flower.dayary.domain.common.DateAudit;
 @ToString
 public class MoimBoard extends DateAudit {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private long id;
 

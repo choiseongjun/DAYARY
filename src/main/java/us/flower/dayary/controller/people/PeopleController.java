@@ -256,6 +256,7 @@ public class PeopleController {
 		}
 		model.addAttribute("code", "true");
 		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
 		return "people/signin";
 	}
 
@@ -282,6 +283,7 @@ public class PeopleController {
 			model.addAttribute("authMessage", "잘못된접근입니다.");
 		}
 		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
 		return "people/signin";
 	}
 
@@ -350,6 +352,7 @@ public class PeopleController {
 		String referrer = request.getHeader("Referer");
 		request.getSession().setAttribute("prevPage", referrer);
 		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
 		model.addAttribute("menu5_hover", "on");
 
 		return "people/signin";
@@ -375,6 +378,7 @@ public class PeopleController {
 	public String loginError(Model model) {
 		model.addAttribute("loginError", true);
 		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
 		return "people/signin";
 	}
 
