@@ -189,7 +189,11 @@ public class MoimController {
 			return returnData;
 		}
 		
-		
+		if(moim.getPeopleLimit()>100) {
+			returnData.put("code", "0");
+			returnData.put("message", "인원수는 100명을 초과할 수 없습니다");
+			return returnData;
+		}
 		
 		char joinCondition='Y';//참가자 승인후 Y Defualt Value
 		moimService.saveMoim(id, subject, moim, file);

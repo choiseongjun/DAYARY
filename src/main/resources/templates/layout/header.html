@@ -92,9 +92,11 @@
 			<div class="blank"></div>
 			    <div class="search_box">
 			    	<div class="inner_popup">
-			        	<div>
-			        		<input placeholder="sample"><button>Search</button>
-			            </div>
+			    		<form th:action="@{/moimlistView/01}">
+				        	<div>
+				        		<input placeholder="sample" name="title"><button>Search</button>
+				            </div>
+			            </form>
 			            <ul class="search_chart_ul">
 			            	<li>추천</li>
 			                <li><a href="">#Hashtag_1</a></li>
@@ -228,8 +230,6 @@
 					        contentType: "application/json; charset=utf-8",
 					        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 					        success:function(data){
-					        	console.log("datat!@#!@#")
-					        	console.log(data)
 						        if(data.code==1){
 						        	$(".alarm_num").append(data.count);
 						        	var notilist=data.notiList;
