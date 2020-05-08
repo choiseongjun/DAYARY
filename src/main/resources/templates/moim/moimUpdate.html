@@ -137,7 +137,12 @@
                                           class="form-control" th:text="${moimDetail.intro}"></textarea>
                             </div>
                         </div>
- 
+ 							<div class="row form-group">
+                            <div class="col-md-12">
+                                <label class="text-black">해시 태그 </label>
+                                <input type="text" name="hashtag" id="hashtag" th:value="${moimDetail.hashtag}"placeholder="해시태그을 입력하세요" class="form-control">
+                            </div>
+                        </div>
                         <label class="text-black">대표사진 </label> 
                         <input type="file" id="moim_image_file" name="file"  hidden="true"/>
                         <input type="button"  id="del_img" value="사진 삭제" onclick="deletePreImage();">

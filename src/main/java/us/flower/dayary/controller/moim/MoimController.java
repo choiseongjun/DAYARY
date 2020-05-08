@@ -668,9 +668,18 @@ public class MoimController {
 	 */
 	@GetMapping("/moimUpdateView/{no}")
 	public String moimUpdateView(@PathVariable("no") long no, Model model) {
+		Moim moimDetail=moimService.findMoimone(no).get();
+		if(moimDetail!=null) {
 
-		moimService.findMoimone(no).ifPresent(moimDetail -> model.addAttribute("moimDetail", moimDetail));
-
+			String hashtag="";
+			for(int j=0;j<moimDetail.getMoimtag().size();j++) {
+				Tag tags =moimDetail.getMoimtag().get(j).getTag();
+					hashtag +="#"+tags.getName();
+				}
+			moimDetail.setHashtag(hashtag);
+		}
+	
+		 model.addAttribute("moimDetail", moimDetail);
 		model.addAttribute("no", no);
 
 		return "moim/moimUpdate";

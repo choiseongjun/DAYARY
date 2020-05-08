@@ -261,6 +261,27 @@ public class MoimServiceImpl implements moimService{
 	        String imageExtension=moim.getImageExtension();
 
 	        moimRepository.updateMoim(title,intro,peopleLimit,joincondition,imageName,imageExtension,moimId);
+	
+	        //해시태그
+	        String hashtag = moim.getHashtag();
+			String[] hashtagArr = hashtag.split("#");
+			
+			for(int i=0;i<hashtagArr.length;i++) {
+				Tag tag =hashTagRepository.findByName(hashtagArr[i]);
+				if(tag==null) {
+					tag=new Tag();
+					tag.setName(hashtagArr[i]);
+					hashTagRepository.save(tag);
+				}
+				moimTagRepository.deleteByMoim_id(moim.getId());
+				MoimTag moimtag = new MoimTag();
+				moimtag.setTag(tag);
+				moimtag.setMoim(moim);
+				
+				
+				
+				moimTagRepository.save(moimtag);
+			}
 	}
 
 	@Override
