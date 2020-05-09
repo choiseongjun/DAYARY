@@ -7,15 +7,18 @@
 <style>
 
 </style>
+
 <body>
 	<div th:fragment="center">
 	<div id="wrap">
 	<section id="container">
 		<div class="vis_box">
 			<h2 class="title">Hello~ Everyone<br>Let's Fruit</h2>
-            <div class="search_input_box">
-            	<input type="text" placeholder="입력하세요"><button>Search</button>
-            </div>
+            <form th:action="@{/moimlistView/01}">
+	            <div class="search_input_box">
+	            	<input type="text" placeholder="입력하세요" name="title"><button>Search</button>
+	            </div>
+            </form>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt pellentesque posuere varius ut a ultricies etiam mattis. Nisi nisi, ut amet, eu.</p>
             <img src="/publ/images/layout/down.png" class="down_icon">
 		</div>
@@ -122,7 +125,7 @@
                     </div>
 					<div class="bottom_box">
 						<div class="grid_item_box">
-						<div class="grid_item add_team"><a href="#none"><div class="add_box"><div class="add_cont"><span class="icon"></span>새로운 팀을<br />만들어보세요!</div></div></a></div>
+						<div class="grid_item add_team"><a href="/moimMakeView"><div class="add_box"><div class="add_cont"><span class="icon"></span>새로운 팀을<br />만들어보세요!</div></div></a></div>
 							<tr th:each="moimList : ${moimList}">
 							<div class="grid_item card">
 								<a th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
@@ -171,15 +174,12 @@
 				Passion goes, boredom remains.
             </p>
             <p class="sub_text"> Gabriel Coco Chanel</p>
-            <a href="#" class="create_crew">Create New Crew</a>
+            <a href="/moimMakeView" class="create_crew">Create New Crew</a>
         </div>
     </section>
 	</div>   
 	</div>
 </body>
-<script>
-
-</script>
 
 
 </html>
