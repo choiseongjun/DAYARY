@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import us.flower.dayary.domain.Tag;
 
 public interface HashTagRepository extends JpaRepository<Tag, Long>{
-
+	Tag findByName(String name); 
 }

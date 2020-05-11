@@ -83,10 +83,11 @@ $('#moimUpdate_btn').off().on('click', function () {
     moim.intro = $('#intro').val();
     moim.id	= $('#moimNo').attr("data-moimNo");
     moim.joinCondition = $(":input:radio[name=chk_info]:checked").val();
+    moim.hashtag = $('#hashtag').val();
     //let category = {};
     //category.commName = obj.options[obj.selectedIndex].text;
     //moim.category = category;
-
+    moim.hashtag = $('#hashtag').val();
     let formData = new FormData();
     formData.append("file", $('#moim_image_file')[0].files[0]);
     formData.append('moim', new Blob([JSON.stringify(moim)], {

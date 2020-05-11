@@ -115,16 +115,18 @@ public class MoimServiceImpl implements moimService{
 		String[] hashtagArr = hashtag.split("#");
 		
 		for(int i=0;i<hashtagArr.length;i++) {
-			Tag tag =new Tag();	
-			tag.setName(hashtagArr[i]);
-			
-			MoimTag moimtag = new MoimTag();
-			moimtag.setTag(tag);
-			moimtag.setMoim(moim);
-			
-			
-			hashTagRepository.save(tag);
-			moimTagRepository.save(moimtag);
+			if(!hashtagArr[i].isEmpty()) {
+				Tag tag =new Tag();	
+				tag.setName(hashtagArr[i]);
+				
+				MoimTag moimtag = new MoimTag();
+				moimtag.setTag(tag);
+				moimtag.setMoim(moim);
+				
+				
+				hashTagRepository.save(tag);
+				moimTagRepository.save(moimtag);
+			}
 		}
     }
  
@@ -261,6 +263,28 @@ public class MoimServiceImpl implements moimService{
 	        String imageExtension=moim.getImageExtension();
 
 	        moimRepository.updateMoim(title,intro,peopleLimit,joincondition,imageName,imageExtension,moimId);
+	        moimTagRepository.deleteByMoim(moim);
+	    	System.out.println("ok");
+	        //해시태그
+	        String hashtag = moim.getHashtag();
+			String[] hashtagArr = hashtag.split("#");
+			
+			for(int i=0;i<hashtagArr.length;i++) {
+				System.out.println(hashtagArr[i]+"////");
+				if(!hashtagArr[i].isEmpty()) {
+					Tag tag =hashTagRepository.findByName(hashtagArr[i]);
+					if(tag==null) {
+						tag=new Tag();
+						tag.setName(hashtagArr[i]);
+						hashTagRepository.save(tag);
+					}
+				
+					MoimTag moimtag = new MoimTag();
+					moimtag.setTag(tag);
+					moimtag.setMoim(moim);
+					moimTagRepository.save(moimtag);
+				}
+			}
 	}
 
 	@Override
