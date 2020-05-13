@@ -118,7 +118,7 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
       return toDowriteRepository.findById(id);
    }
    @Override
-   public void updateList(String list,long no,int count) {
+   public ToDoWrite updateList(String list,long no,int count) {
       // TODO Auto-generated method stub
       String[] id=list.split(",");
       ToDoWrite todo=toDowriteRepository.findById(no);
@@ -137,8 +137,7 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
            toDowriteListRepository.save(l);
         }
        
-       //String x=Integer.toString(done)+"/"+Integer.toString(total);
-       //todo.setCount(x);
+       
        todo.setProgress_done(done);//상태 완료치는 것
        //상태바 
        if(total!=0) {
@@ -152,6 +151,7 @@ public class ToDoWriteServiceimpl implements ToDoWriteService {
     	   todo.setStatus("In Progress");
        }
        toDowriteRepository.save(todo);
+       return todo;
    }
    @Override
    public boolean existByMoim_idAndPeople_id(long id, long peopleId) {
@@ -393,6 +393,38 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, l
 	         return true;
 	      else
 	         return moimPeopleRepository.existsByMoim_idAndPeople_idAndJoinCondition(id, peopleId,joinCondition);
+	}
+	@Override
+	public ToDoWrite updateList(ToDoWriteList list) {
+		// TODO Auto-generated method stub
+		//id_수정된계획_YNflag
+		String[] todoWriteLists=list.getPlan_list().split(",");
+		System.out.println("ok");
+		for(int i=0;i<todoWriteLists.length;i++) {
+			String[] todoWriteList=todoWriteLists[i].split("_");
+			ToDoWriteList vo=toDowriteListRepository.findById(Long.parseLong(todoWriteList[0])).get();
+			vo.setPlan_list(todoWriteList[1]);
+			vo.setCheckConfirm(todoWriteList[2].charAt(0));
+			toDowriteListRepository.save(vo);
+		}
+		ToDoWrite todo=toDowriteRepository.findById(list.getToDoWrite().getId());
+		long done=list.getToDoWrite().getProgress_done();
+		  int total=toDowriteListRepository.countByToDoWrite_id(list.getToDoWrite().getId());
+	       todo.setProgress_done(done);//상태 완료치는 것
+	       //상태바 
+	       if(total!=0) {
+	         todo.setProgress((double)done/(double)total*100.0);
+	         }
+	       else
+	          todo.setProgress(0);
+	       if(total==done) {
+	    	   todo.setStatus("End");
+	       }else if(done>0) {
+	    	   todo.setStatus("In Progress");
+	       }
+	       toDowriteRepository.save(todo);
+		
+	       return todo;
 	}
 	
 	

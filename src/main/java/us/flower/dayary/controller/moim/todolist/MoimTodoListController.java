@@ -100,7 +100,7 @@ public class MoimTodoListController {
     		
     	 
 		try {
-			service.updateList(param.get("list"),no,Integer.parseInt(param.get("count")));
+			returnData.put("todo", service.updateList(param.get("list"),no,Integer.parseInt(param.get("count"))));
             returnData.put("code", "1");
             returnData.put("message", "저장되었습니다");
 
@@ -150,12 +150,12 @@ public class MoimTodoListController {
      * @author jy
      */
     @ResponseBody
-    @PostMapping("/moimDetail/moimTodoList/update_date")
-    public Map<String,Object> update_date(@RequestBody ToDoWrite todo) {
-    	
+    @PostMapping("/moimDetail/moimTodoList/updateDetail")
+    public Map<String,Object> update_date(@RequestBody ToDoWriteList toDoWriteList) {
     	Map<String,Object> data=new HashMap<String,Object>();
     	try {
-    		service.changeToDate(todo);
+    		data.put("todo",service.updateList(toDoWriteList));
+    		//service.changeToDate(toDoWriteList.getToDoWrite());
     		data.put("code", "1");
     		data.put("message", "저장되었습니다");
     		
@@ -256,15 +256,19 @@ public class MoimTodoListController {
 	 * @author JY
 	 */
 	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
-	public String modelView(@PathVariable("no")long no,Sort sort,Model model) {
+	public String modelView(@PathVariable("no")long no,Sort sort,Model model, Pageable pageable) {
 		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
-		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
-		model.addAttribute("todo", toDoWriteListRepository.findById(no).get());
-		model.addAttribute("detailView",list);	
-		
-		
-		return "moim/popup/sidenav";
-	}
+		int page = (pageable.getPageNumber() ==0)? 0: (pageable.getPageNumber() - 1);
+		pageable = PageRequest.of(page, 5, sort);
+		Page<MoimBoard> list = moimboardRepository.findBoardByToDoWriteList_id(pageable, no);
+//	      List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
+	      ToDoWriteList todoList = toDoWriteListRepository.findById(no).get();
+	      model.addAttribute("todo", todoList);
+	      model.addAttribute("detailView",list);
+	      model.addAttribute("moimid", todoList.getMoim().getId());
+
+	      return "moim/popup/sidenav";
+	   }
 
 	/**
 	 * 모달창 todowrite 게시판 글 수정
