@@ -285,24 +285,28 @@ function check_input(){
 function fadeOutClass(a) {
 	console.log(a)
     $('.sidenav').fadeOut(300);
-}
+} 
 
 function fadeInClass(id) {
+	   $.ajax({
+	          url:'/moimDetail/moimTodoList/sidenav/'+id,
+	           method: "POST",
+	           headers : {
+	             Accept : "application/json; charset=utf-8",
+	             "Content-Type" : "application/json; charset=utf-8"
+	          },
+	           dataType: "html",
+	           success:function(data){
+	                $('.sidenav').replaceWith(data);
+	                $('.sidenav').fadeIn(300);
+	              
+	              
+	           }, error:function(e){
+	        	   alert(e);
+	           }
+	   });
+	}
 
-	$.ajax({
-	    	url:'/moimDetail/moimTodoList/sidenav/'+id,
-	    	 method: "POST",
-	    	    dataType: "html",
-	        success:function(data){
-   				 $('.sidenav').replaceWith(data);
-   				 $('.sidenav').fadeIn(300);
-	        	
-	        	
-	        }, error:function(e){
-
-	        }
-	});
-}
 $(document).ready(function(){
 	progress_bar();
 	 if(location.href.indexOf('myList')>0){
