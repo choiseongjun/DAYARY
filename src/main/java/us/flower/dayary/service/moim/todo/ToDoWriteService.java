@@ -29,7 +29,8 @@ public interface ToDoWriteService {
 	//public List<ToDoWrite> findByMoim_id(long id); 
 	public List<ToDoWriteList> findByToDoWrite_id(long id);
 	public ToDoWrite findById(long id);
-	public void updateList(String list,long no,int count);
+	public ToDoWrite updateList(String list,long no,int count);
+	public ToDoWrite updateList(ToDoWriteList list);
 	public boolean existByMoim_idAndPeople_id(long id,long peopleId);
 	//public void updateById(long id,Date date);
 	public void deleteById(long id);

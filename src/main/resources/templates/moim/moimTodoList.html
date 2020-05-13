@@ -98,9 +98,9 @@
                                         </td>
                                         <td th:if="${session.peopleId eq list.people.id}">
                                         	
-                                          <a th:attr="onclick=|change_form('${list.id}')|" th:if="${list.status ne 'End'&& list.status ne 'Suspend'}"><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>
-                                            <a th:attr="onclick=|post_send('${list.id}')|"><img src="/publ/images/contents/download.png" alt="다운받기 아이콘"></a>
-                                            <a th:attr="onclick=|delete_send('${list.id}')|" ><img src="/publ/images/contents/delete.png" alt="삭제하기 아이콘"></a>
+                                          <a th:attr="onclick=|change_form('${list.id}')|" th:if="${list.status ne 'End'&& list.status ne 'Suspend'}"><img src="/publ/images/contents/calendar.png" alt="수정하기 "></a>
+                                            <a th:attr="onclick=|post_send('${list.id}')| " ><img src="/publ/images/contents/download.png" alt="저장하기 "></a>
+                                            <a th:attr="onclick=|delete_send('${list.id}')|" ><img src="/publ/images/contents/delete.png" alt="삭제하기 "></a>
                                         </td>
                                     </tr>
                                     <!--todolist 내 디테일 반복 시작-->
@@ -220,18 +220,32 @@ function check_input(){
     		        		//완료안된 것들 
     		        		 var html=" <td colspan='6'><input type='hidden' id='to_date_"+todo.id+"' value='"+todo.to_date+"'><div  id='changeDate"+todo.id+"' style='display:none' ><select  id='NewEnd"+todo.id+"'><option value='+1'>+1일</option><option value='+3'>+3일</option><option value='+7'>+7일</option></select></div>"
     		        		 		+" <ul id='myUL"+todo.id+"'>";
+    		        		 //수정 폼 작성자의 경우에만 
+    		        		 var html3="";
+    		        		    if(todo.people.name==$("#userName").attr("data")){
+    		        		 		html3+="<ul id='updateUL"+todo.id+"' style='display:none'>";
+    		        		    }
     		        		 //완료된 것들 
     		        		 var html2="<ul id='DoneUL"+todo.id+"'>";
     		        		 		
     		        			   for(var i in list){
     		        				   if(list[i].checkConfirm=='N'){
-    		        					   html+='<li id="'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
-    		        					   html+='<span class="detail_txt">'+list[i].plan_list+'</span></label>';
+    		        					   html+='<li name="'+list[i].id+'" id="d'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
+    		        					   html+='<span class="detail_txt" name="'+list[i].id+'">'+list[i].plan_list+'</span></label>';
     		        					   if(list[i].detail=='Y'||list[i].people.name==$("#userName").attr("data")){
     		        						   html+='<a  onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
     		        					   }
     		                           	  html+='</li>';
-    		        					   
+    		                           	  //작성자의 경우에만 수정폼 추가
+    		                              if(todo.people.name==$("#userName").attr("data")){
+	    		                           	 html3+='<li name="'+list[i].id+'"id="d'+list[i].id+'"><label class="cus_check" name="check'+list[i].id+'"><input type="checkbox" name="check'+list[i].id+'" ><span class="checkmark"></span>';
+	  		        					   html3+='<span class="detail_txt" name="'+list[i].id+'"></span></label>';
+	  		        					   html3+='<input  name="'+list[i].id+'" type="text" value="'+list[i].plan_list+'">';
+	  		        					   if(list[i].detail=='Y'||list[i].people.name==$("#userName").attr("data")){
+	  		        						   html+='<a  onclick="fadeInClass('+list[i].id+')"><img src="/publ/images/contents/more_arrow.png"  alt="자세히보기" class="more_arrow"></a>'
+	  		        					   }
+	  		                           	  html3+='</li>';
+    		                              }
     		        
     		        				   }
     		        				   else{
@@ -243,12 +257,16 @@ function check_input(){
     		                           	  html2+='</li>';
     		        	
     		        				   }
+    		        				   
+    		        				   
     		        			   }
     		        			 
     		                   		html+='</ul>';
-    		                   		
+    		                   	    if(todo.people.name==$("#userName").attr("data")){
+    		                   	    	html3+="</ul>"
+    		                   	    }
     		                   	 
-    		                   	 	html=html+html2;
+    		                   	 	html=html+html3+html2;
     								detailId.html(html);
     		                        detailId.toggleClass('open');
     		                        check_input();
@@ -394,9 +412,9 @@ function detail_list(status){
                            html+='	<span class="txt">'+list[i].progress_done+'/'+list[i].progress_total+'</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				if(list[i].status!='End'&&list[i].status!='Suspend')
-                   					html+='<td><a onclick="change_form('+list[i].id+')"><img src="/publ/images/contents/calendar.png" alt="달력으로 보기 콘"></a>'
-                           		html+='<a onclick="post_send('+list[i].id+')"><img src="/publ/images/contents/download.png" alt="다운받기 아이콘" onclick="post_send('+list[i].id+')"></a>';
-                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+list[i].id+')" alt="삭제하기 아이콘"></a></td>';
+                   					html+='<td><a onclick="change_form('+list[i].id+')"><img src="/publ/images/contents/calendar.png" alt="수정하기"></a>';
+                           		html+='<a onclick="post_send('+list[i].id+')"><img src="/publ/images/contents/download.png" alt="저장하기" onclick="post_send('+list[i].id+')"></a>';
+                            	html+='<a onclick="delete_send('+list[i].id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+list[i].id+')" alt="삭제하기"></a></td>';
                    			}
 	      					html+='</tr>';
 	      					html+='<tr id=todo'+list[i].id+'_detail" class="list_detail">';
@@ -419,53 +437,71 @@ function detail_list(status){
 
 //체크저장기능
 function post_send(id) {
-	var temp = document.getElementById("myUL"+id).getElementsByTagName("LI");
-	var count=document.getElementById("DoneUL"+id).getElementsByTagName("LI");
-	var list="";
+	if($("#updateUL"+id).attr("data")=='Y'){
+		var temp=document.getElementById("updateUL"+id).getElementsByTagName("LI");
+	}else{
+		var temp = document.getElementById("myUL"+id).getElementsByTagName("LI");
+	}
+	var count=document.getElementById("DoneUL"+id).getElementsByTagName("LI").length;
+	var checked="";
+	var total=count;
 	var now =new Date();
-	//var to=new Date($('#to_date').attr("data"));
-	 
-// 	 if(now>to){
-// 		alert("기한이 지나 수정이 불가능합니다.");
-// 		document.getElementById("sendBtn").style.display="none";
-// 		return ;
-// 	 }	
-	var total=count.length;
 
+ 	var toDoWriteList={};
+ 	var plan_list=""
+ 	
 	if(temp.length!=0){
-		for (var i in temp) {
-			if(temp[i].className=="checked"){
-				list+=temp[i].id+",";
-				total++;
+		for (var i=0;i<temp.length;i++) {
+			if($("#updateUL"+id).attr("data")=='Y'){
+				//id_변경된계획내용_YN(flag),(구분자)
+				plan_list+=temp[i].children[1].name+"_"+temp[i].children[1].value;
+				if(temp[i].className=="checked"){
+					plan_list+="_Y,";
+					count+=1;
+				}else{
+					plan_list+="_N,";
+				}
+			}else{
+				if(temp[i].className=="checked"){
+					checked+=temp[i].id.slice(1)+",";
+					total+=1;
+				}
 			}
+			
 		}
 	}
 	
-	if(list.length==0&&$("#newEnd"+id).attr("style")==""){
-		alert("변경된 사항이 없습니다.")
-		return;
-	} 
-	//종료날짜 수정했을경우
-	if($("#newEnd"+id).attr("style")!=""){
-		//기존 종료일에 추가된 날짜 더하기
-		 var date=new Date($("#to_date_"+id).attr("value"));
-		 date.setDate(date.getDate()+$("#newEnd"+id).val()*1);
-		 var toDoWrite={};
-		 toDoWrite.to_date2=date;
-		 toDoWrite.id=id;
+	// 수정하여 저장한 경우
+		if($("#updateUL"+id).attr("data")=='Y'){
+			//기존 종료일에 추가된 날짜 더하기
+			 var date=new Date($("#to_date_"+id).attr("value"));
+			 date.setDate(date.getDate()+$("#newEnd"+id).val()*1);
+			 var toDoWrite={};
+			 toDoWrite.to_date2=date;
+			 toDoWrite.id=id;
+			 toDoWrite.progress_done=count;
+			toDoWriteList.plan_list=plan_list.slice(0,-1);
+			toDoWriteList.toDoWrite=toDoWrite;
+
+	
 		 $.ajax({
-		      url:'/moimDetail/moimTodoList/update_date',
+		      url:'/moimDetail/moimTodoList/updateDetail',
 		        type:'post',
-		        data: JSON.stringify(toDoWrite) ,
+		        data: JSON.stringify(toDoWriteList) ,
 		        contentType: "application/json; charset=utf-8",
 		        success:function(data){
 		        	 if(data.code==1){
-		        		if(list.length==0){
-		        		 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
-		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
-		 					 alert("수정되었습니다.");
-		        			 list_click(id);
-		        		}
+		        		 if(total==temp.length+count.length){
+		        			 socket.send('/noti/finishNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+			 				 socket.send('/moim/finishNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+		        		 }else{
+		        			 socket.send('/noti/updateNoti',{},JSON.stringify({moimNo:moimNo, userName: $("#userName").attr("data")}));
+			 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
+			        		 
+		        		 }
+		 					updateTr(data.todo);
+		 					 alert("저장되었습니다.");
+		        			 
 		             }else{
 		                 alert(data.message);
 		             }
@@ -474,11 +510,12 @@ function post_send(id) {
 		        }
 		    });
 		 
-	 }
-	var param={
-			list:list,
-			count:count.length
-	}  
+	 }else{
+		 //수정안하고 저장
+		var param={
+				list:checked,
+				count:count
+		}  
 	
 	var moimNo=$('#moimNo').attr("data-moimNo");
 	     $.ajax({
@@ -496,20 +533,55 @@ function post_send(id) {
 		 				 socket.send('/moim/updateNoti',{},JSON.stringify({moimNo:moimNo, userName:  $("#userName").attr("data") }));
 		        		 
 	        		 }
+	        		 updateTr(data.todo);
+	        		 alert("저장되었습니다.");
 	        		
-	                 location.href='/moimDetail/moimTodoList/'+ moimNo;
 	             }else{
 	                 alert(data.message);
 	             }
 	        }, error:function(e){
 	        }
 	    });  
+			
+		}
 	}
-
+function updateTr(list){
+	var html="";
+	html+='<tr id="todo'+list.id+'" class="list" onclick="list_click('+list.id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
+    html+='<td> <div class="profile_img"><a ><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
+		html+='<td>';
+	 if(list.status=='In Progress')
+		html+=' <span class="status_ico ing">진행중</span>';
+	else if(list.status=='End')
+		html+=' <span class="status_ico end">완료</span>';
+	else if(list.status=='Suspend')
+		html+=' <span class="status_ico stop">중지</span>';
+   html+='</td><td class="title">'+list.plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list.progress+'"></div></div>';
+   html+='	<span class="txt">'+list.progress_done+'/'+list.progress_total+'</span></div></td>';
+		if(list.status!='Suspend'){
+			if(list.status!='End'&&list.status!='Suspend')
+				html+='<td><a onclick="change_form('+list.id+')"><img src="/publ/images/contents/calendar.png" alt="수정하기"></a>';
+   			html+='<a onclick="post_send('+list.id+')"><img src="/publ/images/contents/download.png" alt="저장하기" onclick="post_send('+list.id+')"></a>';
+    		html+='<a onclick="delete_send('+list.id+')"><img src="/publ/images/contents/delete.png" onclick="delete_send('+list.id+')" alt="삭제하기"></a></td>';
+		}
+		html+='</tr>';
+		html+='<tr id=todo'+list.id+'_detail" class="list_detail">';
+		html+='</tr>';       
+		$("#todo"+list.id).replaceWith(html);
+		 list_click(list.id);
+		 progress_bar();
+}
 
 function change_form(id){
-//종료날짜 수정변경 폼 보여주기
-	 	$("#changeDate"+id).show();
+//종료날짜 수정폼과 내용 수정폼이 보이게 
+	 	$("#changeDate"+id).toggle();
+	 	$("#updateUL"+id).toggle();
+	 	if($("#updateUL"+id).attr("data")=='Y')
+	 		$("#updateUL"+id).attr("data","N");
+	 	else
+	 		$("#updateUL"+id).attr("data","Y");
+	 	$("#myUL"+id).toggle();
+	 	
 }
 
 </script>
