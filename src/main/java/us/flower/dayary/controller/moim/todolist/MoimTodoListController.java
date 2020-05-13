@@ -257,14 +257,15 @@ public class MoimTodoListController {
 	 */
 	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
 	public String modelView(@PathVariable("no")long no,Sort sort,Model model) {
-		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
-		List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
-		model.addAttribute("todo", toDoWriteListRepository.findById(no).get());
-		model.addAttribute("detailView",list);	
-		
-		
-		return "moim/popup/sidenav";
-	}
+	      sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
+	      List<MoimBoard> list=moimboardRepository.findByToDoWriteList_id(no);
+	      ToDoWriteList todoList = toDoWriteListRepository.findById(no).get();
+	      model.addAttribute("todo", todoList);
+	      model.addAttribute("detailView",list);
+	      model.addAttribute("moimid", todoList.getMoim().getId());
+
+	      return "moim/popup/sidenav";
+	   }
 
 	/**
 	 * 모달창 todowrite 게시판 글 수정

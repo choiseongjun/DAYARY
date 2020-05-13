@@ -2,51 +2,107 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <div class="sidenav">
                     <div class="detail_header">
-                       	<span th:text="${todo.plan_list}"></span>
-                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="기 닫기" class="sidenav_close"></a>
+                       <input th:value="${moimid}" type="hidden" id="moimid"/>
+                       <input th:value="${todo.id}" type="hidden" id="todoid"/>
+                       <input th:value="${todo.id}" type="hidden" id="planid"/>
+                        <span th:text="${todo.plan_list}"></span>
+                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="湲� �떕湲�" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
                         <div class="detail_view">
                             <div class="detail_view_inner">
-                           	<div th:each="detail  : ${detailView}">
-                                <div th:attr="id=|detail_view${detail.id}|" >
+                              <div th:each="detail  : ${detailView}" class="detail_rows">
+                                <div th:attr="id=|detail_view${detail.id}|">
                                     <div class="wr_info">
                                         <div class="thumb">
-                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="작성자 프로필 이미지"></a>
+                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�옉�꽦�옄 �봽濡쒗븘 �씠誘몄�"></a>
                                         </div>
                                         <span class="wr_name" th:text="${todo.people.name}"></span>
                                     </div>
                                     <div class="wr_conts_area">
-                                    		<span th:text="${detail.memo}"></span>
-                                    		<span th:text="${detail.moimBoardfile}"></span>
-                                    		<span th:text="${detail.createDate}"></span>
-                                    <!-- 		<div th:if="${detail.moimBoardfile}!=null" th:each=" image : ${detail.moimBoardfile[0]}">
-                                    			  <div class="wr_conts">
-                                    			 	 <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png" alt="샘플이미지">
-                                    		      </div>
-                                    		</div> 
-                                   		<div class="conts_info"><span class="date" th:text="${detail.createDate}"></span>&nbsp;&nbsp;<span class="time" th:text="${detail.createDate}"></span></div>
-                               		 -->
-                               		  </div>
+                                          <span th:text="${detail.memo}"></span>
+                                          <div th:if="${#lists.size(detail.moimBoardfile)>0}">
+                                   				<div th:each=" image : ${detail.moimBoardfile[0]}">
+	                                               <div class="wr_conts">
+	                                                  <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png" alt="�깦�뵆�씠誘몄�">
+	                                                </div>
+	                                             </div>
+                                          </div> 
+                                         <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
+                                       </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="detail_write">
-                                <div class="thumb">
-                                    <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="나의 프로필 이미지"></a>
-                             
-                                </div>
-                                <div class="write_area">
-                                    <form name="" action="" method="post">
-                                        <textarea name=""></textarea>
-                                        <a href=""><img src="/publ/images/contents/textarea_text.png" alt="글자 설정" class="wr_font_ico"></a>
-                                        <a href=""><img src="/publ/images/contents/textarea_file.png" alt="파일 업로드" class="wr_file_ico"></a>
-                                        <button type="submit">Comment</button>
-                                    </form>
-                                </div>
-
+                        </div>
+                        <div class="detail_write">
+                            <div class="thumb">
+                                <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�굹�쓽 �봽濡쒗븘 �씠誘몄�"></a>
+                         
                             </div>
+                            <div class="write_area">
+                                <!-- <form  name="" method=""> -->
+                                    <textarea id="write_memo" name="memo"></textarea>
+                                    <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a>
+                                    <a href=""><img src="/publ/images/contents/textarea_file.png" alt="�뙆�씪 �뾽濡쒕뱶" class="wr_file_ico"></a> -->
+                                    <input type="file" id="uploadfile"/>
+                                    <button type="button" onclick="save()">Comment</button>
+                                <!-- </form> -->
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                
+<script>
+//글 작성
+function save(){
+   var moimid=$('#moimid').val();
+   var todoid=$('#todoid').val();
+   
+   var content = $("#write_memo").val();
+   if(content.trim() == ''){
+      alert("내용을 작성하세요");
+      return;
+   }
+   
+   var MoimBoard={};
+   MoimBoard.title=$('#planid').val();
+   MoimBoard.memo= content;
+   alert("planid : "+$('#planid').val());
+   alert("MoimBoard : "+[JSON.stringify(MoimBoard)]);
+   
+   let formData = new FormData();
+
+   formData.append("File", $('#uploadfile')[0].files[0]);
+   formData.append('MoimBoard', new Blob([JSON.stringify(MoimBoard)], {
+      type: "application/json; charset=UTF-8"
+   }));
+   $.ajax({
+         url:'/moimDetail/moimTodoList/modalWrite/'+moimid+'/'+todoid,
+           type:'post',
+           enctype: 'multipart/form-data',
+           processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+           contentType: false,
+           dataType:'json',
+           cache: false,
+           mimeType:"multipart/form-data",
+           data: formData,
+           success:function(data){
+               if(data.code==1){
+                  //modal.style.display = "none";
+                  //get_detail($("#toDoWriteId").val());
+                  $("#write_memo").val("");
+                  $("#uploadfile").val("");
+                  $("#imgList").html("");
+                  array=[];
+                }else{
+                    alert(data.message);
+                }
+           }, error:function(e){
+
+           }
+       });
+   //showBoard();
+}
+</script>              
 </html>
