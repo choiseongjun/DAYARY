@@ -9,7 +9,7 @@
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="湲� �떕湲�" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
-                        <div class="detail_view">
+                        <ul class="detail_view">
                             <li class="detail_view_inner">
                               <div th:each="detail  : ${detailView}" class="detail_rows">
                                 <div th:attr="id=|detail_view${detail.id}|">
@@ -33,7 +33,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </div>
+                        </ul>
                         <div class="detail_write">
                             <div class="thumb">
                                 <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�굹�쓽 �봽濡쒗븘 �씠誘몄�"></a>
@@ -130,7 +130,7 @@ function save(){
        });
 }
 
-var detail_veiw = $('.detail_view_inner');
+/* var detail_veiw = $('.detail_view_inner');
 var $maxHeight, $scrollTop, detailScrollHeight, color;
 detail_veiw.on('scroll', function(e){
 	$maxHeight = $(this).height();
@@ -138,7 +138,7 @@ detail_veiw.on('scroll', function(e){
 	detailScrollHeight = this.scrollHeight;
 	//console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
 	
-});
+}); */
 
 
 </script>              
