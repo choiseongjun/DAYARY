@@ -4,13 +4,13 @@
                     <div class="detail_header">
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
-                       <input th:value="${todo.id}" type="hidden" id="planid"/>
+                       <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
                         <span th:text="${todo.plan_list}"></span>
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="湲� �떕湲�" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
                         <div class="detail_view">
-                            <div class="detail_view_inner">
+                            <li class="detail_view_inner">
                               <div th:each="detail  : ${detailView}" class="detail_rows">
                                 <div th:attr="id=|detail_view${detail.id}|">
                                     <div class="wr_info">
@@ -32,7 +32,7 @@
                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </li>
                         </div>
                         <div class="detail_write">
                             <div class="thumb">
@@ -51,9 +51,37 @@
 
                         </div>
                     </div>
+	                
+	                <ul class="pagination">
+		                <li class="disabled">
+				            <a href="#" aria-label="First">
+				                <span aria-hidden="true">First</span>
+				            </a>
+				        </li>
+		                 <li class="disabled">
+				            <a href="#" aria-label="Previous">
+				                <span aria-hidden="true">PRE</span>
+				            </a>
+				        </li>
+				        <li class="disabled">
+				            <a href="#" aria-label="Next">
+				                <span aria-hidden="true">Next</span>
+				            </a>
+				        </li>
+				        <li class="disabled">
+				            <a href="#" aria-label="Last">
+				                <span aria-hidden="true">Last</span>
+				            </a>
+				        </li>
+	                </ul>
+	                
+	                
                 </div>
                 
+                
 <script>
+
+  // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
 //글 작성
 function save(){
    var moimid=$('#moimid').val();
@@ -68,8 +96,6 @@ function save(){
    var MoimBoard={};
    MoimBoard.title=$('#planid').val();
    MoimBoard.memo= content;
-   alert("planid : "+$('#planid').val());
-   alert("MoimBoard : "+[JSON.stringify(MoimBoard)]);
    
    let formData = new FormData();
 
@@ -102,7 +128,18 @@ function save(){
 
            }
        });
-   //showBoard();
 }
+
+var detail_veiw = $('.detail_view_inner');
+var $maxHeight, $scrollTop, detailScrollHeight, color;
+detail_veiw.on('scroll', function(e){
+	$maxHeight = $(this).height();
+	$scrollTop = $(this).scrollTop();
+	detailScrollHeight = this.scrollHeight;
+	//console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
+	
+});
+
+
 </script>              
 </html>

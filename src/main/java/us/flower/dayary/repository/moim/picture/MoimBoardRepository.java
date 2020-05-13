@@ -20,6 +20,7 @@ import us.flower.dayary.domain.DTO.MoimBoardListDTO;
 public interface MoimBoardRepository extends JpaRepository<MoimBoard, Long>, MoimBoardRepositoryCustom {
 
 	List<MoimBoard> findByToDoWriteList_id(long id);
+	Page<MoimBoard> findBoardByToDoWriteList_id(Pageable page, long id);
 
 	void deleteByToDoWriteList_id(long id);
  
