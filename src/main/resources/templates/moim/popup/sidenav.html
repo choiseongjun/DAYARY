@@ -37,16 +37,19 @@
                         <div class="detail_write">
                             <div class="thumb">
                                 <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�굹�쓽 �봽濡쒗븘 �씠誘몄�"></a>
-                         
                             </div>
                             <div class="write_area">
-                                <!-- <form  name="" method=""> -->
-                                    <textarea id="write_memo" name="memo"></textarea>
-                                    <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a>
-                                    <a href=""><img src="/publ/images/contents/textarea_file.png" alt="�뙆�씪 �뾽濡쒕뱶" class="wr_file_ico"></a> -->
-                                    <input type="file" id="uploadfile"/>
-                                    <button type="button" onclick="save()">Comment</button>
-                                <!-- </form> -->
+                                <textarea id="write_memo" name="memo"></textarea>
+                                <div class="cbox_upload">
+                                	<span class="inputfile">
+		                                <input type="file" id="uploadfile" style="top: -0.5em !important; height: 500px !important;"/>
+                                	</span>
+                                	<span class="textarea_file_ico" style="background-image: url('/publ/images/contents/textarea_file.png') "></span>
+                                </div>
+                                <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a>
+		                                <a href=""><img src="/publ/images/contents/textarea_file.png" alt="�뙆�씪 �뾽濡쒕뱶" class="wr_file_ico"></a>
+                                 -->
+                                <button type="button" onclick="save()">Comment</button>
                             </div>
 
                         </div>
