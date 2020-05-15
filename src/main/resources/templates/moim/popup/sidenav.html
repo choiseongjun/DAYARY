@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <div class="sidenav">
+<style>
+.cbox_upload {
+    position: relative;
+    width: auto;
+    height: 50px;
+    background-color: pink;
+    margin: 10px 0;
+}
+
+#imgePreview{
+    background-color: grey;
+    width: auto;
+    height: 100px;
+}
+.cbox_upload .upload_active{
+	border: 1px solid #E9E9E9;
+	width: auto;
+	height: 50px;
+	position: relative;
+}
+.cbox_upload .upload-btn{
+    height: 50px;
+    position: absolute;
+    cursor: pointer;
+}
+.cbox_upload .upload-btn .upload_area{
+	float: left;
+	display : block;
+}
+.cbox_upload .upload-btn .wr_file_ico {
+    width: 29px;
+    height: 35px;
+}
+.cbox_upload .upload-btn .wr_file_txt {
+    line-height: 45px;
+    padding-left: 10px;
+}
+</style>
+
+
+    <div class="sidenav" style="z-index: 99999;">
                     <div class="detail_header">
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
@@ -22,9 +62,9 @@
                                     <div class="wr_conts_area">
                                           <span th:text="${detail.memo}"></span>
                                           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
-                                   				<div th:each=" image : ${detail.moimBoardfile[0]}">
+                                   				<div th:each=" image : ${detail.moimBoardfile}">
 	                                               <div class="wr_conts">
-	                                                  <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png" alt="�깦�뵆�씠誘몄�">
+	                                                  <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png"/>
 	                                                </div>
 	                                             </div>
                                           </div> 
@@ -36,17 +76,26 @@
                         </ul>
                         <div class="detail_write">
                             <div class="thumb">
-                                <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�굹�쓽 �봽濡쒗븘 �씠誘몄�"></a>
-                         
+                                <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="프로필"></a>
                             </div>
                             <div class="write_area">
-                                <!-- <form  name="" method=""> -->
-                                    <textarea id="write_memo" name="memo"></textarea>
-                                    <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a>
-                                    <a href=""><img src="/publ/images/contents/textarea_file.png" alt="�뙆�씪 �뾽濡쒕뱶" class="wr_file_ico"></a> -->
-                                    <input type="file" id="uploadfile"/>
-                                    <button type="button" onclick="save()">Comment</button>
-                                <!-- </form> -->
+                                <textarea id="write_memo" name="memo"></textarea>
+                                <div class="cbox_upload">
+	                                <div id="imgePreview">
+	                                	<img id="prev_img"/>
+	                                </div>
+                                	<span class="inputfile">
+		                                <input type="file" id="uploadfile" accept="img/*" style="display:none;" required multiple/>
+                                	</span>
+                                	<div class="upload_active">
+				                        <div href="#" class="upload-btn" alt="사진 선택">
+				                        	<span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
+				                        	<span class="wr_file_txt upload_area">사진</span>
+		                                <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a> -->
+				                        </div>
+		                                <button class="comment_btn upload_area" type="button" onclick="save()">Comment</button>
+                                	</div>
+                                </div>
                             </div>
 
                         </div>
@@ -82,6 +131,51 @@
 <script>
 
   // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
+
+// 5.15추가 업로드 버튼 클릭시 file 업로드 기능수행
+const inputBtn = document.querySelector('.upload-btn');
+const realInput = document.querySelector('#uploadfile');
+
+inputBtn.addEventListener('click',()=>{
+	realInput.click();
+});
+
+/////////////// 5.15 사진업로드 추가
+function previewFile(e){
+	var sel_files= [];
+	$('#imgePreview').empty();
+	
+	var files = e.target.files;
+	var fileArr = Array.prototype.slice.call(files);
+	var index = 0;
+	
+	fileArr.forEach(function(f){
+		if(!f.type.match("image/.*")){
+			alert("이미지 확장자만 업로드 가능.");
+			return;
+		}
+		if(files.length<6){
+			sel_files.push(f);
+			var reader = new FileReader();
+			reader.onload = function(e){
+				var html = `<a id=img_${index}><img src=${e.target.result} data-file=${f.name} width="100"/></a>`;
+				$('#imgePreview').append(html);
+				index++;
+			};
+			reader.readAsDataURL(f);
+		}else{
+			alert("최대 5장까지만 업로드 가능.");
+		}
+	});
+	
+	
+	
+}
+
+$('#uploadfile').on('change', previewFile);
+
+/////////////
+
 //글 작성
 function save(){
    var moimid=$('#moimid').val();
@@ -98,11 +192,17 @@ function save(){
    MoimBoard.memo= content;
    
    let formData = new FormData();
-
-   formData.append("File", $('#uploadfile')[0].files[0]);
+   var file_len = $('#uploadfile').get(0).files.length;
+   console.log('0 file_len >>>>>>>>>>'+file_len);
+   
+   for(var x=0; x<file_len; x++){
+	   formData.append("File", $('#uploadfile')[0].files[x]);
+   }
    formData.append('MoimBoard', new Blob([JSON.stringify(MoimBoard)], {
       type: "application/json; charset=UTF-8"
    }));
+   console.log('1  formData>>>>>>>>>>'+formData);
+   
    $.ajax({
          url:'/moimDetail/moimTodoList/modalWrite/'+moimid+'/'+todoid,
            type:'post',
