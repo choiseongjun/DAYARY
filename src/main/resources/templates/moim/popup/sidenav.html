@@ -5,14 +5,16 @@
     position: relative;
     width: auto;
     height: 50px;
-    background-color: pink;
     margin: 10px 0;
 }
 
-#imgePreview{
-    background-color: grey;
+#imgePreview{	
     width: auto;
     height: 100px;
+    position: relative;
+    border: 3px dotted #ffffff;
+    background-color: #ffffff73;
+    border-radius: 0.5em;
 }
 .cbox_upload .upload_active{
 	border: 1px solid #E9E9E9;
@@ -36,6 +38,20 @@
 .cbox_upload .upload-btn .wr_file_txt {
     line-height: 45px;
     padding-left: 10px;
+}
+
+div .images {
+    float: left;
+    width: 18%;
+    height: 100px;
+    overflow: hidden;
+}
+
+div .images:not(:last-child){margin-right: 2.5%;}
+
+.wr_file_ico img {
+	position: absolute;
+	bottom: 16px;
 }
 </style>
 
@@ -64,7 +80,7 @@
                                           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
                                    				<div th:each=" image : ${detail.moimBoardfile}">
 	                                               <div class="wr_conts">
-	                                                  <img th:src="${'/getMoimImage/'+image.real_name}" src="/publ/images/contents/sample2.png"/>
+	                                                  <img th:src="${'/getMoimImage/'+image.filename}" src="/publ/images/contents/sample2.png"/>
 	                                                </div>
 	                                             </div>
                                           </div> 
@@ -133,48 +149,53 @@
   // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
 
 // 5.15추가 업로드 버튼 클릭시 file 업로드 기능수행
-const inputBtn = document.querySelector('.upload-btn');
-const realInput = document.querySelector('#uploadfile');
-
+var inputBtn = document.querySelector('.upload-btn');
+var realInput = document.querySelector('#uploadfile');
 inputBtn.addEventListener('click',()=>{
 	realInput.click();
 });
 
 /////////////// 5.15 사진업로드 추가
+$('#uploadfile').on('change', previewFile);
+var sel_files= [];
+
 function previewFile(e){
-	var sel_files= [];
-	$('#imgePreview').empty();
-	
 	var files = e.target.files;
 	var fileArr = Array.prototype.slice.call(files);
-	var index = 0;
+	//var imgwidth = 200;
 	
+	var imgidx = $('#imgePreview > .images').size();
+	
+	var selectcnt =0;
 	fileArr.forEach(function(f){
 		if(!f.type.match("image/.*")){
 			alert("이미지 확장자만 업로드 가능.");
 			return;
 		}
-		if(files.length<6){
-			sel_files.push(f);
-			var reader = new FileReader();
-			reader.onload = function(e){
-				var html = `<a id=img_${index}><img src=${e.target.result} data-file=${f.name} width="100"/></a>`;
-				$('#imgePreview').append(html);
-				index++;
+		selectcnt+= 1;
+		var this_idx = imgidx+selectcnt;
+		
+		if(this_idx<6){
+				sel_files.push(f);
+				var reader = new FileReader();
+				reader.onload = function(e){
+					var html = `<div class='images img_${this_idx}' onClick=delImg('${this_idx}') id=img_${imgidx+1}><img src=${e.target.result} data-file=${f.name} width="200"/></div>`;
+					$('#imgePreview').append(html);
 			};
 			reader.readAsDataURL(f);
 		}else{
 			alert("최대 5장까지만 업로드 가능.");
 		}
 	});
-	
-	
-	
 }
 
-$('#uploadfile').on('change', previewFile);
-
-/////////////
+// 이미지 하나씩 지우기
+function delImg(index){
+	console.log("delImg: "+index);
+	sel_files.splice(index, 1);
+	var img_class= ".img_"+ index;
+	$(img_class).remove();
+}
 
 //글 작성
 function save(){
@@ -193,7 +214,6 @@ function save(){
    
    let formData = new FormData();
    var file_len = $('#uploadfile').get(0).files.length;
-   console.log('0 file_len >>>>>>>>>>'+file_len);
    
    for(var x=0; x<file_len; x++){
 	   formData.append("File", $('#uploadfile')[0].files[x]);
@@ -201,7 +221,6 @@ function save(){
    formData.append('MoimBoard', new Blob([JSON.stringify(MoimBoard)], {
       type: "application/json; charset=UTF-8"
    }));
-   console.log('1  formData>>>>>>>>>>'+formData);
    
    $.ajax({
          url:'/moimDetail/moimTodoList/modalWrite/'+moimid+'/'+todoid,
@@ -215,8 +234,6 @@ function save(){
            data: formData,
            success:function(data){
                if(data.code==1){
-                  //modal.style.display = "none";
-                  //get_detail($("#toDoWriteId").val());
                   $("#write_memo").val("");
                   $("#uploadfile").val("");
                   $("#imgList").html("");
