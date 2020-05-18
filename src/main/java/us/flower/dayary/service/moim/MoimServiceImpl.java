@@ -38,7 +38,7 @@ public class MoimServiceImpl implements moimService{
 
 	@Value("${moimImagePath}")
 	private String moimImagePath;
-
+    
 	@Autowired
     private PeopleRepository peopleRepository;
 	@Autowired
@@ -75,26 +75,26 @@ public class MoimServiceImpl implements moimService{
         People people = peopleRepository.findByEmail(email);
         Common category=commonRepository.findBycommName(subject);
        
-        //사진이있다면
+        //�궗吏꾩씠�엳�떎硫�
         if(file!=null) {
         	
-        	//이미지파일이름생성
+        	//�씠誘몄��뙆�씪�씠由꾩깮�꽦
 	        String imageName="";
 			while(true){
 	        	imageName=tokenGenerator.getToken();
-				//DB에 파일이름이 존재하지 않으면 moim domain에 set
+				//DB�뿉 �뙆�씪�씠由꾩씠 議댁옱�븯吏� �븡�쑝硫� moim domain�뿉 set
 	        	if(!moimRepository.existsByImageName(imageName)){
 					moim.setImageName(imageName);
 					break; 
 				}
 			}
 	  
-	        //이미지파일확장자추출
+	        //�씠誘몄��뙆�씪�솗�옣�옄異붿텧
 	        String originalFileName = file.getOriginalFilename();
 	        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
 	        moim.setImageExtension(fileExtension);
 	
-	        //파일업로드
+	        //�뙆�씪�뾽濡쒕뱶
 	        try { 
 	            fileManager.fileUpload(file, moimImagePath+"/"+imageName+"."+fileExtension);
 	        } catch (IOException e) {
@@ -110,7 +110,7 @@ public class MoimServiceImpl implements moimService{
 
         moimRepository.save(moim);
         
-        //해시태그
+        //�빐�떆�깭洹�
         String hashtag = moim.getHashtag();
 		String[] hashtagArr = hashtag.split("#");
 		
@@ -154,9 +154,9 @@ public class MoimServiceImpl implements moimService{
 		moimPeople.setJoinrole("study"); 
 		moimPeople.setJoinCondition(joinCondition);
 		if(maker=='Y') {
-			moimPeople.setMaker(maker);//Y가 넘어온경우 모임장인거와 일반유저 구분하기위함
+			moimPeople.setMaker(maker);//Y媛� �꽆�뼱�삩寃쎌슦 紐⑥엫�옣�씤嫄곗� �씪諛섏쑀�� 援щ텇�븯湲곗쐞�븿
 		}else {
-			moimPeople.setMaker(maker);//Y가 넘어온경우 모임장인거와 일반유저 구분하기위함
+			moimPeople.setMaker(maker);//Y媛� �꽆�뼱�삩寃쎌슦 紐⑥엫�옣�씤嫄곗� �씪諛섏쑀�� 援щ텇�븯湲곗쐞�븿
 		}
 		
 		return moimpeopleRepository.save(moimPeople);
@@ -197,11 +197,11 @@ public class MoimServiceImpl implements moimService{
 		return moimRepository.findAll(pageable);
 	}
 
-	// [2020.01.28][hyozkim] 추가
+	// [2020.01.28][hyozkim] 異붽�
 	@Override
 	public Page<Moim> selectMoimByCategory(Pageable pageable, String commonCode) {
 		return moimRepository.findAll(pageable);
-		// 수정 필요
+		// �닔�젙 �븘�슂
 		//return moimRepository.findByCommCode(pageable,commonCode);
 	}
 
@@ -226,26 +226,26 @@ public class MoimServiceImpl implements moimService{
 		   People people = peopleRepository.findByEmail(email);
 	        //Common category=commonRepository.figetMoimElementndBycommName(subject);
 	       
-	        //사진이있다면
+	        //�궗吏꾩씠�엳�떎硫�
 	        if(file!=null) {
 	        	
-	        	//이미지파일이름생성
+	        	//�씠誘몄��뙆�씪�씠由꾩깮�꽦
 		        String imageName="";
 				while(true){
 		        	imageName=tokenGenerator.getToken();
-					//DB에 파일이름이 존재하지 않으면 moim domain에 set
+					//DB�뿉 �뙆�씪�씠由꾩씠 議댁옱�븯吏� �븡�쑝硫� moim domain�뿉 set
 		        	if(!moimRepository.existsByImageName(imageName)){
 						moim.setImageName(imageName);
 						break; 
 					}
 				}
 		  
-		        //이미지파일확장자추출
+		        //�씠誘몄��뙆�씪�솗�옣�옄異붿텧
 		        String originalFileName = file.getOriginalFilename();
 		        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
 		        moim.setImageExtension(fileExtension);
 		
-		        //파일업로드
+		        //�뙆�씪�뾽濡쒕뱶
 		        try { 
 		            fileManager.fileUpload(file, moimImagePath+"/"+imageName+"."+fileExtension);
 		        } catch (IOException e) {
@@ -265,7 +265,7 @@ public class MoimServiceImpl implements moimService{
 	        moimRepository.updateMoim(title,intro,peopleLimit,joincondition,imageName,imageExtension,moimId);
 	        moimTagRepository.deleteByMoim(moim);
 	    	System.out.println("ok");
-	        //해시태그
+	        //�빐�떆�깭洹�
 	        String hashtag = moim.getHashtag();
 			String[] hashtagArr = hashtag.split("#");
 			
