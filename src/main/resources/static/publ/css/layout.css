@@ -129,12 +129,13 @@ table.moimTodoList tbody .list_detail .more_arrow{position:absolute;top:0;right:
 .sidenav .detail_view .wr_conts_area{width:593px;margin:11px 0 0 12px}
 .sidenav .detail_view .wr_conts_area .wr_conts{padding:15px 20px;overflow:hidden;margin-bottom:10px;box-shadow:0 8px 24px rgba(0, 0, 0, 0.03);border-radius:12px;word-break:break-all}
 .sidenav .detail_view .wr_conts_area .conts_info{font-family:Noto Sans KR;font-weight:normal;font-size:14px;text-align:right;color:#828282; margin-top: 10px;}
-.sidenav .detail_write{background:#b3b3b321;overflow:hidden;padding:21px 35px 37px 22px; position: absolute; bottom: 0%; height: 40%;}
+.sidenav .detail_write{background:#dfe7e7;overflow:hidden;padding:21px 35px 37px 22px; position: absolute; bottom: 0%; height: 40%;}
+@media all and (min-height:950px) { .sidenav .detail_write{height: 27%}}
 .sidenav .detail_write .thumb{width:52px;height:52px;margin-right:15px;overflow:hidden;float:left;border-radius:26.5px}
 .sidenav .detail_write .thumb img{width:52px;height:52px}
 .sidenav .detail_write .write_area{position:relative;width:579px;height:auto;float:left;border-radius:3px; }
 .sidenav .detail_write .write_area textarea{width:579px;height:109px;padding:11px 13px;box-sizing:border-box;border:none;border-radius:3px;outline:none;resize:none}
 .sidenav .detail_write .write_area .comment_btn {position:absolute;right:0;bottom:7px;width:113px;height:33px;line-height:33px;background:#03D2B4;border-radius:5px;font-family:Noto Sans KR;font-weight:bold;font-size:17px;text-align:center;color:#FFFFFF;outline:none;border:none;box-shadow:none;cursor:pointer}
-.sidenav .detail_write .write_area img{position:absolute;bottom:16px}
+.sidenav .detail_write .write_area images{position:relative;bottom:16px}
 .sidenav .detail_write .write_area img.wr_font_ico{left:13px}
 .sidenav .detail_write .write_area img.wr_file_ico{left:20px}
