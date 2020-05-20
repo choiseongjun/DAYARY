@@ -206,8 +206,9 @@ function check_input(){
     function list_click(id){
     	 $(this).toggleClass('open')
          var clickId = id;
-      	console.log("clickId"+clickId);
-        // var detailId = $("[id*=todo" + clickId + "_detail]");
+        
+      	 var detailId = $("[id*=todo" + clickId + "_detail]");
+      	 detailId.toggleClass('open');
     	   $.ajax({
     		      url:'/moimDetail/moimTodoList/detail/'+clickId,
     		        contentType: "application/json; charset=utf-8",
