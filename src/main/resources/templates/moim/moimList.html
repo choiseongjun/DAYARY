@@ -143,12 +143,14 @@
 	<script>
 	function postNew(id){
 		var targetWin = window.open('', id);
-	    if(targetWin.location == 'about:blank'){
+		 targetWin.location.href = "/moimlistView/moimdetailView/" + id;
+	        targetWin.focus();
+		/* if(targetWin.location == 'about:blank'){
 	        targetWin.location.href = "/moimlistView/moimdetailView/" + id;
 	        targetWin.focus();
 	    }else {
 	        targetWin.focus();
-	    }
+	    } */
 	}
 	</script>
 </body>
