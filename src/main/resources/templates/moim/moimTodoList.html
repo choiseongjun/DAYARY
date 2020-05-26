@@ -204,7 +204,11 @@ function check_input(){
 /******LIST TOGGLE JS******/
 
     function list_click(id){
-    	 $(this).toggleClass('open')
+		if($("#todo"+id+"_detail").attr("class")=="list_detail open"){
+			$("#todo"+id+"_detail").attr("class","list_detail");
+			return;
+		}
+    	 $(this).toggleClass('open');
          var clickId = id;
         
       	 var detailId = $("[id*=todo" + clickId + "_detail]");
