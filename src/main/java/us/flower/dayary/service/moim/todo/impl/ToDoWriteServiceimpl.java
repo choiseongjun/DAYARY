@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
@@ -240,20 +241,20 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, l
 		board.setCreateDate(new java.sql.Date(System.currentTimeMillis()));
 		board.setMoim(moim);
 		board=moimboardRepository.save(board);
-		
 		if(file.length>0) {
 			for(int i=0;i<file.length;i++) {
 			if(file[i].getOriginalFilename()!=""){
-			
 				MoimBoardFile bf=new MoimBoardFile();
-				String fileName=file[i].getOriginalFilename();
-				fileManager.fileUpload(file[i], moimImagePath+"/"+fileName);
-				
+				String originFileName=file[i].getOriginalFilename();
+				String originFileExtension = originFileName.substring(originFileName.lastIndexOf("."));
+				String storedFileName  = UUID.randomUUID().toString().replaceAll("-", "")+originFileExtension;
 				
 				bf.setMoimBoard(board);
-				bf.setReal_name(fileName);
-				bf.setFile_locate(moimImagePath+"/"+fileName);
+				bf.setReal_name(originFileName);
+				bf.setFilename(storedFileName);
+				bf.setFile_locate(moimImagePath);
 				
+				fileManager.fileUpload(file[i], moimImagePath+'/'+storedFileName);
 				mbRepository.save(bf);
 				
 				}

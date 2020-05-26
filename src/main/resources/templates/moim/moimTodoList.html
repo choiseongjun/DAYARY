@@ -204,10 +204,15 @@ function check_input(){
 /******LIST TOGGLE JS******/
 
     function list_click(id){
-    	 $(this).toggleClass('open')
+		if($("#todo"+id+"_detail").attr("class")=="list_detail open"){
+			$("#todo"+id+"_detail").attr("class","list_detail");
+			return;
+		}
+    	 $(this).toggleClass('open');
          var clickId = id;
-      	console.log("clickId"+clickId);
-         var detailId = $("[id*=todo" + clickId + "_detail]");
+        
+      	 var detailId = $("[id*=todo" + clickId + "_detail]");
+      	 detailId.toggleClass('open');
     	   $.ajax({
     		      url:'/moimDetail/moimTodoList/detail/'+clickId,
     		        contentType: "application/json; charset=utf-8",
@@ -218,7 +223,7 @@ function check_input(){
     		        		 var list= data.list;
     		        		 var writer=data.writer;
     		        		//완료안된 것들 
-    		        		 var html=" <td colspan='6'><input type='hidden' id='to_date_"+todo.id+"' value='"+todo.to_date+"'><div  id='changeDate"+todo.id+"' style='display:none' ><select  id='NewEnd"+todo.id+"'><option value='+1'>+1일</option><option value='+3'>+3일</option><option value='+7'>+7일</option></select></div>"
+    		        		 var html=" <tr id='todo"+todo.id+"_detail' class='list_detail'><td colspan='6'><input type='hidden' id='to_date_"+todo.id+"' value='"+todo.to_date+"'><div  id='changeDate"+todo.id+"' style='display:none' ><select  id='NewEnd"+todo.id+"'><option value='+0'>0일</option><option value='+1'>+1일</option><option value='+3'>+3일</option><option value='+7'>+7일</option></select></div>"
     		        		 		+" <ul id='myUL"+todo.id+"'>";
     		        		 //수정 폼 작성자의 경우에만 
     		        		 var html3="";
@@ -266,9 +271,9 @@ function check_input(){
     		                   	    	html3+="</ul>"
     		                   	    }
     		                   	 
-    		                   	 	html=html+html3+html2;
-    								detailId.html(html);
-    		                        detailId.toggleClass('open');
+    		                   	 	html=html+html3+html2+"</tr>";
+    								$("#todo"+todo.id+"_detail").replaceWith(html);
+    								$("#todo"+todo.id+"_detail").toggleClass('open');
     		                        check_input();
     		             }else{
     		                 alert(data.message);
@@ -285,28 +290,24 @@ function check_input(){
 function fadeOutClass(a) {
 	console.log(a)
     $('.sidenav').fadeOut(300);
-} 
+}
 
 function fadeInClass(id) {
-	   $.ajax({
-	          url:'/moimDetail/moimTodoList/sidenav/'+id,
-	           method: "POST",
-	           headers : {
-	             Accept : "application/json; charset=utf-8",
-	             "Content-Type" : "application/json; charset=utf-8"
-	          },
-	           dataType: "html",
-	           success:function(data){
-	                $('.sidenav').replaceWith(data);
-	                $('.sidenav').fadeIn(300);
-	              
-	              
-	           }, error:function(e){
-	        	   alert(e);
-	           }
-	   });
-	}
 
+	$.ajax({
+	    	url:'/moimDetail/moimTodoList/sidenav/'+id,
+	    	 method: "POST",
+	    	    dataType: "html",
+	        success:function(data){
+   				 $('.sidenav').replaceWith(data);
+   				 $('.sidenav').fadeIn(300);
+	        	
+	        	
+	        }, error:function(e){
+
+	        }
+	});
+}
 $(document).ready(function(){
 	progress_bar();
 	 if(location.href.indexOf('myList')>0){
@@ -401,7 +402,7 @@ function detail_list(status){
 	        		var html=""
 	        			for(var i in list){
 	        			
-	        				html+='<tr id="todo'+list[i].id+'" class="list" onclick="list_click('+list[i].id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
+	        				html+='<tr id="todo'+list[i].id+'" class="list" ><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
                             html+='<td> <div class="profile_img"><a ><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
                  			html+='<td>';
                  			if(list[i].status=='New')
@@ -412,7 +413,7 @@ function detail_list(status){
 		        				html+=' <span class="status_ico end">완료</span>';
 		        			else if(list[i].status=='Suspend')
 		        				html+=' <span class="status_ico stop">중지</span>';
-                           html+='</td><td class="title">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list[i].progress+'"></div></div>';
+                           html+='</td><td class="title" onclick="list_click('+list[i].id+')">'+list[i].plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list[i].progress+'"></div></div>';
                            html+='	<span class="txt">'+list[i].progress_done+'/'+list[i].progress_total+'</span></div></td>';
                    			if(list[i].people.name==$("#userName").attr("data")){
                    				if(list[i].status!='End'&&list[i].status!='Suspend')
@@ -551,7 +552,7 @@ function post_send(id) {
 	}
 function updateTr(list){
 	var html="";
-	html+='<tr id="todo'+list.id+'" class="list" onclick="list_click('+list.id+')"><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
+	html+='<tr id="todo'+list.id+'" class="list" ><td><label class="star_check"> <input type="checkbox">  <span class="checkmark"></span></label></td>';
     html+='<td> <div class="profile_img"><a ><img src="/publ/images/contents/profile_thumb.png" alt="사용자 아이콘"></a></div></td>';
 		html+='<td>';
 	 if(list.status=='In Progress')
@@ -560,7 +561,7 @@ function updateTr(list){
 		html+=' <span class="status_ico end">완료</span>';
 	else if(list.status=='Suspend')
 		html+=' <span class="status_ico stop">중지</span>';
-   html+='</td><td class="title">'+list.plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list.progress+'"></div></div>';
+   html+='</td><td class="title" onclick="list_click('+list.id+')">'+list.plan_title+'</td><td><div class="percentage"><div class="bar"><div class="active" style="width:'+list.progress+'"></div></div>';
    html+='	<span class="txt">'+list.progress_done+'/'+list.progress_total+'</span></div></td>';
 		if(list.status!='Suspend'){
 			if(list.status!='End'&&list.status!='Suspend')
@@ -578,6 +579,8 @@ function updateTr(list){
 
 function change_form(id){
 //종료날짜 수정폼과 내용 수정폼이 보이게 
+	if($("#todo"+id+"_detail").attr("class")!="list_detail open")
+		list_click(id);
 	 	$("#changeDate"+id).toggle();
 	 	$("#updateUL"+id).toggle();
 	 	if($("#updateUL"+id).attr("data")=='Y')
