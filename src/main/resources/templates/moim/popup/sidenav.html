@@ -98,7 +98,7 @@ div .images:hover{
                                         </div>
                                         <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
                                         	<button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
-                                        	<button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button><!-- "del_content('+m[i].id+')" -->
+                                        	<button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button>
                                         </div>
                                     </div>
                                        <div class="wr_conts_area">
@@ -331,9 +331,8 @@ function deletememo(id){
       });
 }
 
-/* var detail_veiw = $('.detail_view');
+/* var detail_veiw = $('.detail_view_inner');
 var $maxHeight, $scrollTop, detailScrollHeight, color;
-
 detail_veiw.on('scroll', function(e){
    $maxHeight = $(this).height();
    $scrollTop = $(this).scrollTop();

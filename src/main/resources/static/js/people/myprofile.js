@@ -44,17 +44,18 @@ function myMoimList(){
 	        contentType: "application/json; charset=utf-8",
 	        processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
 	        success:function(data){
+	        	console.log('this gogogo')
 	        	console.log(data);
 	        	if(data.code==1){
 	        		var joinedMoimListNo=data.joinedMoimListNo;
 	        		var joinedMoimList=data.joinedMoimList;
 	        		var html=""
         			for(var i in joinedMoimList){
-        				html += '<tr>'
-        				html += 	'<td>'
+        				html += '<ul>'
+        				html += 	'<li>'
         				html += 	'<a href="moimlistView/moimdetailView/'+joinedMoimListNo[i]+'">'+joinedMoimList[i]+""+'</a>'
-    					html += 	'</td>'
-		   				html += '</tr>'
+    					html += 	'</li>'
+		   				html += '</ul>'
         			}
 	        		$("#list").html(html);
 	        	}
@@ -72,13 +73,11 @@ function myMoimList(){
 	        		var madeMoimListtitle=data.madeMoimListtitle;
 	        		var html=""
       			for(var i in madeMoimListNo){
-      				html += '<tbody>'
-      				html += '<tr>'
-      				html += 	'<td>'
+      				html += '<ul>'
+      				html += 	'<li>'
       				html += 	'<a href="moimlistView/moimdetailView/'+madeMoimListNo[i]+'">'+madeMoimListtitle[i]+""+'</a>'
-  					html += 	'</td>'
-		   				html += '</tr>'
-      				html += '</tbody>'
+  					html += 	'</li>'
+		   			html += '</ul>'
       			}
 	        		$("#mademoimlist").html(html);
 	        	}
@@ -90,7 +89,6 @@ function myMoimList(){
 
 
 $(document).ready(function(){
-	console.log("여기")
 	var peopleId = $('#peopleId').attr("data-peopleId");
 	
 	$.ajax({

@@ -252,6 +252,7 @@ public class PeopleController {
 				model.addAttribute("message", "회원가입이 완료되었습니다. 인증메일을 확인하고 로그인하세요:)");
 				
 		} catch (Exception e) {
+			e.printStackTrace();
 			model.addAttribute("message", "잠시 후, 다시 시도해주세요:(");
 		}
 		model.addAttribute("code", "true");

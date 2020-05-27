@@ -256,8 +256,8 @@ public class MoimTodoListController {
 	 * @author JY
 	 */
 	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
-	public String modelView(@PathVariable("no") long no, Sort sort, Model model, HttpSession session) {
-//		public String modelView(@PathVariable("no") long no, Sort sort, Model model, Pageable pageable, HttpSession session) {
+	public String modelView(@PathVariable("no") long no, Sort sort, Model model, Pageable pageable, HttpSession session) {
+
 //		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 //		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
 //		pageable = PageRequest.of(page, 3, sort);
