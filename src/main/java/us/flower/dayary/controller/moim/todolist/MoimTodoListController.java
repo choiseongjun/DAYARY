@@ -256,15 +256,18 @@ public class MoimTodoListController {
 	 * @author JY
 	 */
 	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
-	public String modelView(@PathVariable("no") long no, Sort sort, Model model) {
-//		public String modelView(@PathVariable("no") long no, Sort sort, Model model, Pageable pageable) {
+//	public String modelView(@PathVariable("no") long no, Sort sort, Model model, HttpSession session) {
+		public String modelView(@PathVariable("no") long no, Sort sort, Model model, Pageable pageable, HttpSession session) {
 //		sort = sort.and(new Sort(Sort.Direction.DESC, "no"));
 //		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-//		pageable = PageRequest.of(page, 5, sort);
+//		pageable = PageRequest.of(page, 3, sort);
 //		Page<MoimBoard> pagelist = moimboardRepository.findBoardByToDoWriteList_id(pageable, no);
+		
+		long peopleid = (long) session.getAttribute("peopleId");
 		
 		List<MoimBoard> list = moimboardRepository.findByToDoWriteList_id(no);
 		ToDoWriteList todoList = toDoWriteListRepository.findById(no).get();
+		session.setAttribute("peopleid", peopleid);
 		model.addAttribute("todo", todoList);
 		model.addAttribute("detailView", list);
 		model.addAttribute("moimid", todoList.getMoim().getId());
