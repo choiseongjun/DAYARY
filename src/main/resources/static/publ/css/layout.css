@@ -50,34 +50,19 @@ body{font-weight:300;color:#333}
 /*공통>푸터 끝*/
 
 /*200418 - SJ - moimDetail/moimTodoList*/
-.moimDetail .vis_box{padding:85px 0;text-align:center;background:url('../images/contents/main_vis.jpg') no-repeat center center;background-size:cover;position:relative;font-weight:500;font-size:40px;line-height:153%}
-.moimDetail .vis_box h2{display:block;width:1194px;margin:0 auto;font-weight:500;font-size:40px;line-height:153%;text-align:left}
-.tab_header{position:relative;width:1194px;background:#FFFFFF;border:1px solid #C6C0C0}
-.tab_header .tab_box{height:60px;margin-right:120px}
-.tab_header .tab_box .slick-slide{width:124px;height:60px;padding:0}
-.tab_header .tab_box .slick-slide a{display:inline-block;position:relative;width:100%;height:100%;font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;line-height:59px;text-align:center;color:#03D2B4}
-.tab_header .tab_box .slick-slide a:before{content:'';position:absolute;bottom:0;left:0;width:100%;height:4px;background-color:#03D2B4;transition:ease-in-out 0.5s;transform:scaleX(0)}
-.tab_header .tab_box .slick-slide .on a:before,
-.tab_header .tab_box .slick-slide a:hover:before{transform:scaleX(1)}
-.tab_header .control_box{position:absolute;top:0;right:0}
-.tab_header .control_box li{float:left;padding:0;margin:0;width:60px;height:60px;background-repeat:no-repeat;background-position:50%;border-left:1px solid #FAFAFA;text-align:center;line-height:60px;cursor:pointer}
-.tab_header .control_box li.prev{background-image:url('/images/contents/prev_arrow.png')}
-.tab_header .control_box li.next{background-image:url('/images/contents/next_arrow.png')}
-
-table.moimTodoList{width:100%;margin-bottom:60px;text-align:center;border:1px solid #F2F2F2}
-table.moimTodoList tr{border:1px solid #F2F2F2}
-table.moimTodoList tr.list.open {background: #F4FDFB;border: 1px solid #9AEDDE;}
-table.moimTodoList img{vertical-align:middle}
-table.moimTodoList .title{text-align:left;}
-table.moimTodoList .progress{padding-left:10px;text-align:left}
-table.moimTodoList .ico_area img{margin-right:19px;}
-table.moimTodoList thead{background:#F2F2F2;}
-table.moimTodoList thead tr{height:57px}
-table.moimTodoList thead tr td{font-weight:normal;font-size:19px;line-height:normal;color:#828080;vertical-align:middle}
-/*table.moimTodoList tbody tr {border-top: 14px solid #F2F2F2;}
-table.moimTodoList tbody tr:first-child {border-top: 0px solid #F2F2F2;}*/
-table.moimTodoList tbody td{height:62px;font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;text-align:center;color:#000000;vertical-align:middle}
-table.moimTodoList tbody td.contour{height:15px;background:#F2F2F2}
+#container.moimDetail .vis_box{padding:85px 0;text-align:center;background:url('../images/contents/main_vis.jpg') no-repeat center center;background-size:cover;position:relative;font-weight:500;font-size:40px;line-height:153%}
+#container.moimDetail .vis_box h2{display:block;width:1194px;margin:0 auto;font-weight:500;font-size:40px;line-height:153%;text-align:left}
+#container.moimDetail .tab_header{position:relative;width:1194px;background:#FFFFFF;border:1px solid #C6C0C0}
+#container.moimDetail .tab_header .tab_box{height:60px;margin-right:120px}
+#container.moimDetail .tab_header .tab_box .slick-slide{width:124px;height:60px;padding:0}
+#container.moimDetail .tab_header .tab_box .slick-slide a{display:inline-block;position:relative;width:100%;height:100%;font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;line-height:59px;text-align:center;color:#03D2B4}
+#container.moimDetail .tab_header .tab_box .slick-slide a:before{content:'';position:absolute;bottom:0;left:0;width:100%;height:4px;background-color:#03D2B4;transition:ease-in-out 0.5s;transform:scaleX(0)}
+#container.moimDetail .tab_header .tab_box .slick-slide .on a:before,
+#container.moimDetail .tab_header .tab_box .slick-slide a:hover:before{transform:scaleX(1)}
+#container.moimDetail .tab_header .control_box{position:absolute;top:0;right:0}
+#container.moimDetail .tab_header .control_box li{float:left;padding:0;margin:0;width:60px;height:60px;background-repeat:no-repeat;background-position:50%;border-left:1px solid #FAFAFA;text-align:center;line-height:60px;cursor:pointer}
+#container.moimDetail .tab_header .control_box li.prev{background-image:url('/images/contents/prev_arrow.png')}
+#container.moimDetail .tab_header .control_box li.next{background-image:url('/images/contents/next_arrow.png')}
 
 /***** 스타 체크 박스 시작 *****/
 .star_check{display:inline-block;position:relative;cursor:pointer;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;text-align:left}
@@ -92,37 +77,74 @@ table.moimTodoList tbody td.contour{height:15px;background:#F2F2F2}
 .star_check .checkmark:after{left:0;top:0;height:44px;width:44px;background:url('/images/contents/star_o.png');background-position:center;background-repeat:no-repeat}
 /***** The star_check 끝 *****/
 
-table.moimTodoList tbody .profile_img{margin:0 auto;width:44px;height:44px;overflow:hidden;border-radius:22px}
-table.moimTodoList tbody .status_ico{display:inline-block;width:61px;height:29px;margin-top:1px;font-style:normal;font-weight:500;font-size:19px;color:#FFFFFF;line-height:29px}
-table.moimTodoList tbody .status_ico.ing{background:#0DCC20;}
-table.moimTodoList tbody .status_ico.stop{background:#CC180D;}
-table.moimTodoList tbody .status_ico.new{background:#F8CF3E;}
-table.moimTodoList tbody .status_ico.end{background:#0DCCAA;}
+#container.moimDetail .moimTodoList{width:100%;margin-bottom:60px;text-align:center;border:1px solid #F2F2F2}
+#container.moimDetail .moimTodoList tr{border:1px solid #F2F2F2}
+#container.moimDetail .moimTodoList tr.list.open {background: #F4FDFB;border: 1px solid #9AEDDE;}
+#container.moimDetail .moimTodoList img{vertical-align:middle}
+#container.moimDetail .moimTodoList .title{text-align:left;}
+#container.moimDetail .moimTodoList .progress{padding-left:10px;text-align:left}
+#container.moimDetail .moimTodoList .ico_area img{margin-right:19px;}
+#container.moimDetail .moimTodoList thead{background:#F2F2F2;}
+#container.moimDetail .moimTodoList thead tr{height:57px}
+#container.moimDetail .moimTodoList thead tr td{font-weight:normal;font-size:19px;line-height:normal;color:#828080;vertical-align:middle}
+#container.moimDetail .moimTodoListst tbody tr {border-top: 14px solid #F2F2F2;}
+#container.moimDetail .moimTodoList tbody tr:first-child {border-top: 0px solid #F2F2F2;}*/
+#container.moimDetail .moimTodoList tbody td{height:62px;font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;text-align:center;color:#000000;vertical-align:middle}
+#container.moimDetail .moimTodoList tbody td.contour{height:15px;background:#F2F2F2}
+#container.moimDetail .moimTodoList tbody .profile_img{margin:0 auto;width:44px;height:44px;overflow:hidden;border-radius:22px}
+#container.moimDetail .moimTodoList tbody .status_ico{display:inline-block;width:61px;height:29px;margin-top:1px;font-style:normal;font-weight:500;font-size:19px;color:#FFFFFF;line-height:29px}
+#container.moimDetail .moimTodoList tbody .status_ico.ing{background:#0DCC20;}
+#container.moimDetail .moimTodoList tbody .status_ico.stop{background:#CC180D;}
+#container.moimDetail .moimTodoList tbody .status_ico.new{background:#F8CF3E;}
+#container.moimDetail .moimTodoList tbody .status_ico.end{background:#0DCCAA;}
+#container.moimDetail .moimTodoList tbody .percentage{padding: 0;margin: 0}
+#container.moimDetail .moimTodoList tbody .percentage .bar{float:left;margin-top: 12px;width:250px;height:4px;background:#E0E0E0;border-radius:22px;}
+#container.moimDetail .moimTodoList tbody .percentage .txt {position: inherit;font-family: Noto Sans KR;font-style: normal;font-weight: 500;font-size: 19px;text-align: center;}
+#container.moimDetail .moimTodoList tr+.list_detail{border-top:0 solid #F2F2F2}
+#container.moimDetail .moimTodoList tbody .list_detail{display:none;transition:0.5s}
+#container.moimDetail .moimTodoList tbody .list_detail.open{display:table-row;transition:0.5s}
+#container.moimDetail .moimTodoList tbody .list_detail .detail_txt{font-family:Noto Sans KR;font-style:normal;font-weight:normal;font-size:19px;text-align:center;line-height:normal;color:#000000}
+#container.moimDetail .moimTodoList .list_detail{border:0}
+#container.moimDetail .moimTodoList tbody .list_detail ul{max-height: 286px;padding:25px 0;box-sizing: border-box;overflow-y: auto;}
+#container.moimDetail .moimTodoList tbody .list_detail li{position:relative;padding-bottom:24px}
+#container.moimDetail .moimTodoList tbody .list_detail li:last-child{padding-bottom:0}
+#container.moimDetail .moimTodoList tbody .list_detail .checkmark{left:168px}
+#container.moimDetail .moimTodoList tbody .list_detail .cus_check input:checked ~ .checkmark + span{text-decoration:line-through}
+#container.moimDetail .moimTodoList tbody .list_detail .cus_check{padding:0 85px 0 209px;line-height:28px}
+#container.moimDetail .moimTodoList tbody .list_detail .more_arrow{position:absolute;top:0;right:50px}
 
-table.moimTodoList tbody .percentage{padding: 0;margin: 0}
-table.moimTodoList tbody .percentage .bar{float:left;margin-top: 12px;width:250px;height:4px;background:#E0E0E0;border-radius:22px;}
-table.moimTodoList tbody .percentage .active{/* margin-top:-2px; *//* width:101px; *//* height:8px; *//* border-radius:6px; */}
-table.moimTodoList tbody .percentage .txt {position: inherit;font-family: Noto Sans KR;font-style: normal;font-weight: 500;font-size: 19px;text-align: center;}
+/*200524 - SJ - mypage*/
+#container.mypage{background:#F5F4F4}
+#container.mypage #contents{overflow:hidden}
+#container.mypage .mypage_left{position:relative;float:left;width:370px;height:424px;padding:54px 0;background:#FFFFFF;border:2px solid #EBE6E6;text-align:center}
+#container.mypage .mypage_left .thumb{width:130px;height:130px;margin:0 auto 20px;border-radius:76px}
+#container.mypage .mypage_left .name{padding:0 30px;font-weight:normal;font-size:18px;color:#767373}
+#container.mypage .mypage_left .delete{position:absolute;width:351px;height:49px;bottom:9px;left:50%;margin-left:-175.5px;font-weight:normal;font-size:16px;line-height:49px}
+#container.mypage .mypage_left .delete a{color:#FF0A0A}
+#container.mypage .mypage_right{float:right;width:800px;background:#FFFFFF}
+#container.mypage .mypage_right .tab_header .tab_box{overflow:hidden}
+#container.mypage .mypage_right .tab_header .tab_box > div{float:left;width:265px;height:45px;border-right:2px solid #F5F4F4;border-bottom:2px solid #F5F4F4}
+#container.mypage .mypage_right .tab_header .tab_box>div:last-child{border-right:0}
+#container.mypage .mypage_right .tab_header .tab_box a{display:inline-block;width:100%;height:45px;font-weight:normal;font-size:14px;text-align:center;line-height:45px;color:#000000}
+#container.mypage .mypage_right .tab_header .tab_box a.on {border-bottom:3px solid #03D2B4}
+#container.mypage .mypage_right .tab_cont{padding:62px 68px}
+#container.mypage .mypage_right .tab_inner>div{margin-top: 35px;}
+#container.mypage .mypage_right .tab_inner>div:first-child{margin:0}
+#container.mypage .mypage_right .tab_cont span.bo{display:inline-block;width:145px;font-weight:normal;text-align:left}
+#container.mypage .mypage_right .tab_cont input.one {width: 379px;}
+#container.mypage .mypage_right .tab_cont .bl {margin-top: 7px;}
+#container.mypage .mypage_right .tab_cont textarea{width:100%;background:#FBFBFB;border:0}
+#container.mypage .mypage_right .tab_cont .filebox label {display: inline-block;padding: 8px 13px;color: #fff;font-size: inherit;line-height: normal;vertical-align: middle;background-color: #fdfdfd;cursor: pointer;border: 1px solid #ebebeb;border-bottom-color: #e2e2e2;background: #788281;} 
+#container.mypage .mypage_right .tab_cont .filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
+#container.mypage .mypage_right .tab_cont input {padding: 0 5px 3px 5px;border: 0;border-bottom: 1px solid #C4C4C4;font-weight: normal;font-size: 16px;color: #767373;outline: none;}
+#container.mypage .mypage_right .tab_cont input.three {width: 30%;margin-right: 2%;}
+#container.mypage .mypage_right .tab_cont input.three:last-child {width: 29%;margin-right: 0;}
+#container.mypage .mypage_right .tab_inner .btn.submit {width: 185px;height: 43px;background: #03D2B4;font-weight: normal;font-size: 16px;line-height: 43px;align-items: center;text-align: center;color: #FFFFFF;margin: 45px auto 0;cursor: pointer;}
 
-table.moimTodoList tr+.list_detail{border-top:0 solid #F2F2F2}
-table.moimTodoList tbody .list_detail{display:none;transition:0.5s}
-table.moimTodoList tbody .list_detail.open{display:table-row;transition:0.5s}
-table.moimTodoList tbody .list_detail .detail_txt{font-family:Noto Sans KR;font-style:normal;font-weight:normal;font-size:19px;text-align:center;line-height:normal;color:#000000}
-table.moimTodoList .list_detail{border:0}
-table.moimTodoList tbody .list_detail ul{max-height: 286px;padding:25px 0;box-sizing: border-box;overflow-y: auto;}
-table.moimTodoList tbody .list_detail li{position:relative;padding-bottom:24px}
-table.moimTodoList tbody .list_detail li:last-child{padding-bottom:0}
-table.moimTodoList tbody .list_detail .checkmark{left:168px}
-table.moimTodoList tbody .list_detail .cus_check input:checked ~ .checkmark + span{text-decoration:line-through}
-table.moimTodoList tbody .list_detail .cus_check{padding:0 85px 0 209px;line-height:28px}
-table.moimTodoList tbody .list_detail .more_arrow{position:absolute;top:0;right:50px}
-
-.sidenav{display:none;position:fixed;bottom:0;right:0;width:705px;background:#fff;border-radius:5px;box-shadow:5px 5px 14px 0 #cacaca;z-index:1; height: 100%}
+.sidenav{display:none;position:fixed;bottom:0;right:0;width:705px;background:#fff;border-radius:5px;box-shadow:5px 5px 14px 0 #cacaca;z-index:1}
 .sidenav .detail_header{position:relative;padding:20px 150px;border-bottom:1px solid #05DCBD;font-family:Noto Sans KR;font-style:normal;font-weight:bold;font-size:20px;line-height:1.5;text-align:center;color:#000000}
 .sidenav .detail_header .sidenav_close{position:absolute;top:26.65px;right:24.82px}
-.sidenav .detail_view_inner{height:304px;padding:27px 26px;overflow-y:auto;overflow-x:hidden; height: 50%; position: absolute; width: 99%; list-style: none;}
-@media all and (min-height:950px) { .sidenav .detail_view_inner{height: 66%;} }
-.sidenav .detail_view .detail_rows {padding: 20px; border-bottom: 1px solid #d8d8d8;}
+.sidenav .detail_view_inner{height:304px;padding:27px 26px;overflow-y:auto;overflow-x:hidden}
 .sidenav .detail_view .wr_info{font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;display:flex;align-items:center;color:#000000}
 .sidenav .detail_view .wr_info .thumb{float:left;width:100%;height:40px;overflow:hidden;border-radius:20px;margin-right:11.2px}
 .sidenav .detail_view .wr_info .thumb img{width:40px;height:40px}
@@ -141,4 +163,4 @@ table.moimTodoList tbody .list_detail .more_arrow{position:absolute;top:0;right:
 .sidenav .detail_write .write_area .active_btn {position:absolute;right:0;bottom:7px;width:113px;height:33px;line-height:33px;background:#03D2B4;border-radius:5px;font-family:Noto Sans KR;font-weight:bold;font-size:17px;text-align:center;color:#FFFFFF;outline:none;border:none;box-shadow:none;cursor:pointer}
 .sidenav .detail_write .write_area images{position:relative;bottom:16px}
 .sidenav .detail_write .write_area img.wr_font_ico{left:13px}
-.sidenav .detail_write .write_area img.wr_file_ico{left:20px}
+.sidenav .detail_write .write_area img.wr_file_ico{left:50px}

@@ -64,280 +64,116 @@
 }
    </style>
 </head>
-<body>
+<body onload="myMoimList()">
 <div th:replace="layout/header::header"/>
-<div class="login_popup">
-			<p class="popup_main_text"><span>프룻</span>에 오신 것을 환영합니다!</p>
-	        <p class="popup_sub_text">
-	        	<span>비밀번호 변경</span>을 위해 입력하세요.
-	        </p>
-	        <ul class="input_login_box">
-	        	<li><input type="password" name="change" id="change" placeholder="새 비밀번호"></li>
-	            <li><input type="password" name="changeCk" id="changeCk" placeholder="새 비밀번호 확인"></li>
-	        </ul>
-	        <button class="change_btn" >확인</button>
-	        <p th:if="${loginError}" class="error" style="color: red;">일치하지 않는 비밀번호입니다</p>
-	</div>
-<body onload="myMoimList()"><!-- 인원수 세는것 by choiseongjun -->
- <div id="peopleId" th:data="${peopleinfo.id}"></div> 
-<div class="container">
-<div class="row">
-        <div class="col-lg-4">
-           <div class="profile-card-4 z-depth-3">
-            <div class="card">
-              <div class="card-body text-center bg-primary rounded-top">
-               <div class="user-box">
-                <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user avatar"> -->
-            <img th:src="${peopleinfo.imageName!=null} ?${'/getMoimImage/'+peopleinfo.imageName+'.'+peopleinfo.imageExtension} : '/images/default_people.png'"
-											alt="Image" class="img-fluid rounded" id="image_section"
-											style="height: 200px; width: 500px"> 
-              </div>
-              <h5 class="mb-1 text-white" th:text="${peopleinfo.name}"></h5>
-              <h6 class="text-light">Web Developer</h6>
-             </div>
-              <div class="card-body">
-                <ul class="list-group shadow-none">
-                <li class="list-group-item">
-                  <div class="list-icon">
-                    <i class="fa fa-phone-square"></i>
-                  </div>
-                  <div class="list-details">
-                    <span>9910XXXXXX</span>
-                    <small>Mobile Number</small>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  <div class="list-icon">
-                    <i class="fa fa-envelope"></i>
-                  </div>
-                  <div class="list-details">
-                    <span th:text="${peopleinfo.email}"></span>
-                    <small>Email Address</small>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  <div class="list-icon">
-                    <i class="fa fa-globe"></i>
-                  </div>
-                  <div class="list-details">
-                    <span>www.example.com</span>
-                    <small>Website Address</small>
-                  </div>
-                </li>
-                </ul>
-                <div class="row text-center mt-4">
-                  <div class="col p-2">
-                   <h4 class="mb-1 line-height-5">154</h4>
-                    <small class="mb-0 font-weight-bold">내 일정관리</small>
-                   </div>
-                    <div class="col p-2">
-                      <h4 class="mb-1 line-height-5">2.2k</h4>
-                      <small class="mb-0 font-weight-bold" ><button class="open-button" onclick="openForm()">작성한 글 보기</button></small>
-                     
-                    </div>
-                    <div class="col p-2">
-                     <h4 class="mb-1 line-height-5">9.1k</h4>
-                     <small class="mb-0 font-weight-bold">작성한 댓글수</small>
-                    </div>
-                 </div>
-               </div>
-               <div class="card-footer text-center">
-                 <a href="javascript:void()" class="btn-social btn-facebook waves-effect waves-light m-1"><i class="fa fa-facebook"></i></a>
-                 <a href="javascript:void()" class="btn-social btn-google-plus waves-effect waves-light m-1"><i class="fa fa-google-plus"></i></a>
-                 <a href="javascript:void()" class="list-inline-item btn-social btn-behance waves-effect waves-light"><i class="fa fa-behance"></i></a>
-                 <a href="javascript:void()" class="list-inline-item btn-social btn-dribbble waves-effect waves-light"><i class="fa fa-dribbble"></i></a>
-               </div>
-             </div>
-           </div>
-        </div>
-        <div class="col-lg-8">
-           <div class="card z-depth-3">
-            <div class="card-body">
-            <ul class="nav nav-pills nav-pills-primary nav-justified">
-                <li class="nav-item">
-                    <a href="javascript:void();" data-target="#profile" data-toggle="pill" class="nav-link active show"><i class="icon-user"></i> <span class="hidden-xs">내정보</span></a>
-                </li>
-                <li class="nav-item">
-                    <a onclick="javascript:getNoti();" data-target="#messages" data-toggle="pill" class="nav-link"><i class="icon-envelope-open"></i> <span class="hidden-xs"><span class="badge" id="badge" name="badge"></span>알림</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">프로필 수정하기</span></a>
-                </li>
-            </ul>
-            <div class="tab-content p-3">
-                <div class="tab-pane active show" id="profile">
-                    <h5 class="mb-3">User Profile</h5>
-                    <button id="open_popup">비밀번호 변경</button>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>About</h6>
-                            <p>
-                                	취준생/웹개발자 준비
-                            </p>
-                           <table>
-                           <tr>
-							<td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>
-							</tr>
-                           </table>
-                        </div>
-                      <div class="col-md-12">
-                            <h5 class="mt-2 mb-3"><span class="fa fa-clock-o ion-clock float-right"></span> 내가 만든 스터디</h5>
-                            <table class="table table-hover table-striped">
-                                <tbody id="mademoimlist">                                    
-                                    
-                             
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-12">
-                            <h5 class="mt-2 mb-3"><span class="fa fa-clock-o ion-clock float-right"></span> 내가 가입한 스터디</h5>
-                            <table class="table table-hover table-striped">
-                                <tbody id="list">                                    
-                                    
-                             
-                                </tbody>
-                                
-                            </table>
-                        </div>
-                         
-                    </div>
-                    <!--/row-->
-                </div>
-                <div class="tab-pane" id="messages">
-                    <div class="alert alert-info alert-dismissible" role="alert">
-    			   <button type="button" class="close" data-dismiss="alert">×</button>
-				    <div class="alert-icon">
-					 <i class="icon-info"></i>
-				    </div>
-				    <div class="alert-message">
-				      <span><strong>Info!</strong> Lorem Ipsum is simply dummy text.</span>
-				    </div>
-                  </div>
-                    <table class="table table-hover table-striped" >
-                        <tbody id="notiList">                                    
-                             <tr>
-                                <td>
-                                    <span class="float-right font-weight-bold"></span>
-                                </td>
-                            </tr> 
-                            
-                        </tbody> 
-                    </table>
-                </div>
-                <div class="tab-pane" id="edit">
-                    <form>
-                       <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">아이디</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="email" th:value="${peopleinfo.email}" readonly >
+ <!--컨텐츠 시작-->
+        <section id="container" class="mypage">
+            <div id="contents">
+                <div class="inner">
+                    <form action="" method="post">
+                        <div class="mypage_left">
+                            <div class="thumb">
+                                <img src="../images/contents/mypage_profile_thumb.png" alt="사용자 썸네일">
                             </div>
+                            <div class="name">[[${peopleinfo.email}]]</div>
+                            <div class="delete"><a href="">탈퇴하기</a></div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">이름</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="text" th:value="${peopleinfo.name}">
+                        <div class="mypage_right">
+                            <div class="tab_header">
+                                <div class="tab_box">
+                                    <div><a href="javascript:void(0)" onclick="tab(this,'.tab_cont','#tab1')"  class="tab_h on">내정보</a></div>
+                                    <div><a href="javascript:void(0)" onclick="tab(this,'.tab_cont','#tab2')" class="tab_h">알림</a></div>
+                                    <div><a href="javascript:void(0)" onclick="tab(this,'.tab_cont','#tab3')" class="tab_h">프로필수정하기</a></div>
+                                </div>
                             </div>
-                        </div>
-                       
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">사진 바꾸기</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="file" id="profile_image">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">Website</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="url" value="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">Address</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="text" value="" placeholder="Street">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label"></label>
-                            <div class="col-lg-6">
-                                <input class="form-control" type="text" value="" placeholder="City">
-                            </div>
-                            <div class="col-lg-3">
-                                <input class="form-control" type="text" value="" placeholder="State">
-                            </div>
-                        </div>
-                       
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">Username</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" type="text" value="jhonsanmark">
-                            </div>
-                        </div>
-                       
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label"></label>
-                            <div class="col-lg-9">
-                                <input type="button" class="btn btn-primary" id="people_update_btn" value="수정하기">
-                                   <input type="reset" class="btn btn-danger" id="people_delete_btn" value="탈퇴하기">
+                            <div class="tab_cont_box">
+                                <div id="tab1" class="tab_cont">
+                                    <div class="tab_inner">
+                                        <div class="box_name">
+                                            <span class="bo">User profile</span><span>[[${peopleinfo.name}]]</span>
+                                        </div>
+                                        <div class="box_about">
+                                            <span class="bo">About</span><span>[[${peopleinfo.job}]]</span>
+                                        </div>
+                                        <div class="box_made">
+                                            <span class="bo">*내가 만든 스터디</span>
+                                            <div class="bl" id="list">
+                                                <!-- <ul>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                </ul> -->
+                                            </div>
+                                        </div>
+                                        <div class="box_join">
+                                            <span class="bo">*내가 가입한 스터디</span>
+                                            <div class="bl" id="mademoimlist">
+                                                <!-- <ul>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                    <li>코딩 스터디</li>
+                                                </ul> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab2" class="tab_cont" style="display: none">
+                                    <div class="tab_inner">
+
+                                    </div>
+                                </div>
+                                <div id="tab3" class="tab_cont" style="display: none">
+                                    <div class="tab_inner">
+                                        <div class="box_id">
+                                            <span class="bo">*아이디(필수)</span>
+                                            <div class="bl">
+                                                <input type="text" class="one" name="" th:value="${peopleinfo.email}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="box_name">
+                                            <span class="bo">*이름</span>
+                                            <div class="bl">
+                                                <input type="text" class="one" name="" th:value="${peopleinfo.name}">
+                                            </div>
+                                        </div>
+                                        <div class="box_thumb">
+                                            <span class="bo">*사진바꾸기</span>
+                                            <div class="bl">
+                                                <div class="filebox">
+                                                    <label for="ex_file">파일선택 +</label>
+                                                    <input type="file" id="ex_file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box_site">
+                                            <span class="bo">*웹사이트</span>
+                                            <div class="bl">
+                                                <input type="text" class="one" name="" value="회원 사이트">
+                                            </div>
+                                        </div>
+                                        <div class="box_add">
+                                            <span class="bo">*Address</span>
+                                            <div class="bl">
+                                                <input type="text" class="three" name="" value="회원 주소1">
+                                                <input type="text" class="three" name="" value="회원 주소2">
+                                                <input type="text" class="three" name="" value="회원 주소3">
+                                            </div>
+                                        </div>
+                                        <div class="btn submit">
+                                            수정하기
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-      </div>
-      </div>
-        
-    </div>
-</div>
-<div class="form-popup" id="myForm">
-  <form action="/#" class="form-container">
-   <table  style="width:800px"  class="table table-striped table-hover" align="middle">
-	<!-- 	<caption>게시판</caption> -->
-	이쪽은 커뮤니티 게시판 // 모임게시판 분기 처리 할예정
-		<thead>
-			<tr>
-				<th>번호</th> 
-				<th>제목-------</th>
-				<th>게시판구분</th>
-				<th>등록일</th>
-				<th>조회수</th>
-			    <th>이미지</th>
-			</tr>
-		</thead>
-		<tbody>
-
-										  				
-				<tr>
-					<td>
-						1				
-					</td>
-					<td style=" max-width: 50px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-					<a href="${link}">제목</a></td>
-					<td>취업게시판</td>
-					<td>2019-09-20</td>
-					<td>20</td> 
-					<td>1개<button>삭제하기</button></td>
-				</tr>
-			
-			<tr>
-					<td>
-						203				
-					</td>
-					<td style=" max-width: 50px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-					<a href="${link}">B국민은행의 진입으로 알뜰폰 시장(MVNO)이 대기업 중심으로 급속히 재편될 전망이</a></td>
-					<td>타임라인</td>
-					<td>2019-09-22</td>
-					<td>20</td> 
-					<td>3개<button>삭제하기</button></td>
-				</tr>
-				
-		</tbody>
-
-	</table>
-	 <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-  </form>
-</div>
+        </section>
+        <div th:replace="layout/footer::footer"/>
+        <!--컨텐츠 끝-->
 <script src="/js/people/myprofile.js"></script>
    <script type="text/javascript"
 			src="https://www.gstatic.com/charts/loader.js"></script>
@@ -348,6 +184,16 @@ function openForm() {
 }
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
+}
+function tab(e,hide, show) {
+    console.log($(e));
+
+    $(hide).hide(0);
+    $(show).show(0);
+    $(e).removeClass('on');
+    var a = $(e).attr('class');
+    $("."+a).removeClass('on');
+    $(e).addClass('on');
 }
 $("#open_popup").click(function(){
 	$(".login_popup").show()
