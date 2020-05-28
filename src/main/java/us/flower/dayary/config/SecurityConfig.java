@@ -1,12 +1,15 @@
 
 package us.flower.dayary.config;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
+import javax.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,18 +19,23 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.firewall.DefaultHttpFirewall;
-import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.CompositeFilter;
 
+import us.flower.dayary.config.auth.ClientResources;
 import us.flower.dayary.config.handler.LoggingAccessDeniedHandler;
+import us.flower.dayary.config.social.SocialService;
+import us.flower.dayary.config.social.facebook.FacebookOAuth2ClientAuthenticationProcessingFilter;
+import us.flower.dayary.config.social.google.GoogleOAuth2ClientAuthenticationProcessingFilter;
 import us.flower.dayary.security.CustomLoginSuccessHandler;
 import us.flower.dayary.security.CustomUserDetailsService;
 import us.flower.dayary.security.JwtAuthenticationEntryPoint;
@@ -38,8 +46,13 @@ import us.flower.dayary.security.JwtAuthenticationFilter;
  */
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Client
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+	private OAuth2ClientContext oauth2ClientContext;
+    @Autowired
+    private SocialService socialService;
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
 	@Autowired
@@ -70,7 +83,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationSuccessHandler successHandler() {
 	    return new CustomLoginSuccessHandler("/loginSuccess");
 	}
+	private Filter ssoFilter() {
+        CompositeFilter filter = new CompositeFilter();
+        List<Filter> filters = new ArrayList<>();
+        filters.add(ssoFilter(google(), new GoogleOAuth2ClientAuthenticationProcessingFilter(socialService)));
+        filters.add(ssoFilter(facebook(), new FacebookOAuth2ClientAuthenticationProcessingFilter(socialService)));
+        filter.setFilters(filters);
+        return filter;
+    }
 
+    private Filter ssoFilter(ClientResources client, OAuth2ClientAuthenticationProcessingFilter filter) {
+        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
+        filter.setRestTemplate(restTemplate);
+        UserInfoTokenServices tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
+        filter.setTokenServices(tokenServices);
+        tokenServices.setRestTemplate(restTemplate);
+        return filter;
+    }
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -97,7 +127,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 passwordParameter("password").
                 defaultSuccessUrl("/loginSuccess").
                 successHandler(successHandler()).
-		 and().logout()    //logout configuration
+		 and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
+		 .logout()    //logout configuration
 		.logoutUrl("/logout")
 		.invalidateHttpSession(true)
 		.clearAuthentication(true)
@@ -111,26 +142,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
-
+	 @Bean
+	 public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+	     FilterRegistrationBean registration = new FilterRegistrationBean();
+	     registration.setFilter(filter);
+	     registration.setOrder(-100);
+	     return registration;
+	 }
 	@Bean
-	public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
-		List<ClientRegistration> registrations = oAuth2ClientProperties.getRegistration().keySet().stream()
-				.map(client -> getRegistration(oAuth2ClientProperties, client)).filter(Objects::nonNull)
-				.collect(Collectors.toList());
+    @ConfigurationProperties("facebook")
+    public ClientResources facebook() {
+        return new ClientResources();
+    }
 
-		return new InMemoryClientRegistrationRepository(registrations);
-	}
-	@Bean
-	public HttpFirewall defaultHttpFirewall() {
-	    return new DefaultHttpFirewall();
-	}
-
-	private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
-		if ("google".equals(client)) {
-			OAuth2ClientProperties.Registration registration = clientProperties.getRegistration().get("google");
-			return CommonOAuth2Provider.GOOGLE.getBuilder(client).clientId(registration.getClientId())
-					.clientSecret(registration.getClientSecret()).scope("email", "profile").build();
-		}
-		return null;
-	}
+    @Bean
+    @ConfigurationProperties("google")
+    public ClientResources google() {
+        return new ClientResources();
+    }
+    
 }
