@@ -95,10 +95,12 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 	// https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1
 	compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+	// https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
 	
+	compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.7.RELEASE'
 	compile('org.springframework.security:spring-security-oauth2-client')
 	compile('org.springframework.security:spring-security-oauth2-jose')
-	compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.7.RELEASE'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.1.14.RELEASE'
 	// https://mvnrepository.com/artifact/redis.clients/jedis

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import us.flower.dayary.config.social.connection.UserConnection;
 import us.flower.dayary.domain.People;
 
 public interface PeopleRepository extends JpaRepository<People, Long>{
@@ -26,6 +27,8 @@ public interface PeopleRepository extends JpaRepository<People, Long>{
 	People findByName(String username);
 
 	boolean existsByName(String name);
+
+	People findBySocial(UserConnection userConnection);
 
     
  

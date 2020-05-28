@@ -1,7 +1,8 @@
 package us.flower.dayary.domain;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,21 +18,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
+import us.flower.dayary.config.social.connection.UserConnection;
 import us.flower.dayary.domain.common.DateAudit;
 import us.flower.dayary.oauth2.SocialType;
 
@@ -112,10 +110,12 @@ public class People extends DateAudit{
     @Column
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "provider_id", referencedColumnName = "provider_id", nullable = true, updatable = false, unique = true)
+    private UserConnection social;
     @Builder
 	public People(long id, String email, String password, String name, String photo, String imagePath, String imageName,
-			String imageExtension, String activation, String pincipal, SocialType socialType) {
+			String imageExtension, String activation, String pincipal, SocialType socialType,UserConnection social) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -128,6 +128,7 @@ public class People extends DateAudit{
 		this.activation = activation;
 		this.pincipal = pincipal;
 		this.socialType = socialType;
+		this.social = social;
 	}
 
     
@@ -142,6 +143,14 @@ public class People extends DateAudit{
     	this.interests = interests;
     	this.introduce = introduce;
     }
+    public static People signUp(UserConnection userConnection) {
 
+        return People.builder()
+                .email(userConnection.getEmail())
+                .name(userConnection.getDisplayName())
+                .social(userConnection)
+                .build();
+
+    }
 	
 }
