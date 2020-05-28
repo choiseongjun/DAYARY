@@ -1,5 +1,6 @@
 package us.flower.dayary;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class HomeController {
 	moimService moimService;
 	
 	@RequestMapping("/")
-	public String Home(@PageableDefault Pageable pageable,Model model) throws Exception {
+	public String Home(@PageableDefault Pageable pageable,Model model,Principal principal) throws Exception {
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 		pageable = PageRequest.of(page, 2, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 //		Optional<Moim> moim = moimRepository.findById((long) 48);
@@ -81,6 +82,7 @@ public class HomeController {
 			moimList.getContent().get(i).setTodocount(count);
 			}
 		model.addAttribute("moimList", moimList);
+		model.addAttribute("principal",principal);
 		return "main";
 	}
 	//방문자체크 메서드

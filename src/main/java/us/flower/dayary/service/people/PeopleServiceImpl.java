@@ -3,8 +3,8 @@ package us.flower.dayary.service.people;
 import java.util.List;
 import java.util.Random;
 
-import javax.mail.MessagingException;
 import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import us.flower.dayary.config.social.connection.UserConnection;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.repository.people.PeopleRepository;
 @Service
@@ -89,13 +90,32 @@ public class PeopleServiceImpl implements PeopleService {
 				   throw e;
 			   }
 		}
-	  
-
-	
 
 		@Override
 		public List<People> selectAll() {
 			return peopleRepository.findAll();
+		}
+
+
+		@Override
+		public boolean isExistUser(UserConnection userConnection) {
+			final People user = peopleRepository.findBySocial(userConnection);
+	        return (user != null);
+		}
+
+
+		@Override
+		public People findBySocial(UserConnection userConnection) {
+			final People user = peopleRepository.findBySocial(userConnection);
+	        if (user == null) throw new RuntimeException();
+	        return user;
+		}
+
+
+		@Override
+		public People signUp(UserConnection userConnection) {
+			 final People user = People.signUp(userConnection);
+		     return peopleRepository.save(user);
 		}
 
 

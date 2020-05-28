@@ -8,28 +8,39 @@
     margin: 10px 0;
 }
 
-#imgePreview{	
-    width: auto;
-    height: 100px;
+#imgePreview{   
+    width: 100%;
+    line-height: 100px;
     position: relative;
     border: 3px dotted #ffffff;
     background-color: #ffffff73;
     border-radius: 0.5em;
+   text-align: center;
+   display: table;
+    padding: 1%;
+    background: url('../static/images/image_background.jpg') no-repeat center;
+    background-size: cover;
 }
 .cbox_upload .upload_active{
-	border: 1px solid #E9E9E9;
-	width: auto;
-	height: 50px;
-	position: relative;
+   width: auto;
+   height: 50px;
+   position: relative;
 }
+#imgePreview .prev_img {
+   color: white;
+   vertical-align: middle;
+   font-size: 30px;
+    display: inline-block;
+}
+
 .cbox_upload .upload-btn{
     height: 50px;
     position: absolute;
     cursor: pointer;
 }
 .cbox_upload .upload-btn .upload_area{
-	float: left;
-	display : block;
+   float: left;
+   display : block;
 }
 .cbox_upload .upload-btn .wr_file_ico {
     width: 29px;
@@ -39,7 +50,7 @@
     line-height: 45px;
     padding-left: 10px;
 }
-
+   
 div .images {
     float: left;
     width: 18%;
@@ -50,19 +61,30 @@ div .images {
 div .images:not(:last-child){margin-right: 2.5%;}
 
 .wr_file_ico img {
-	position: absolute;
-	bottom: 16px;
+   position: absolute;
+   bottom: 16px;
+   display: table-cell;
+   vertical-align: middle;
+}
+div .images:hover{
+    opacity: 0.5;
+}
+
+.wr_conts_memo {
+   margin-top: 20px;
+   
 }
 </style>
 
 
-    <div class="sidenav" style="z-index: 99999;">
+    <div id="sidebox" class="sidenav" style="z-index: 99999;">
+    	<div id="peopleId" th:data-peopleId="${session.peopleId}"></div>
                     <div class="detail_header">
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
                        <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
                         <span th:text="${todo.plan_list}"></span>
-                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="湲� �떕湲�" class="sidenav_close"></a>
+                        <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
                         <ul class="detail_view">
@@ -71,18 +93,22 @@ div .images:not(:last-child){margin-right: 2.5%;}
                                 <div th:attr="id=|detail_view${detail.id}|">
                                     <div class="wr_info">
                                         <div class="thumb">
-                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="�옉�꽦�옄 �봽濡쒗븘 �씠誘몄�"></a>
+                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
+                                        	<span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
                                         </div>
-                                        <span class="wr_name" th:text="${todo.people.name}"></span>
+                                        <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
+                                        	<button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
+                                        	<button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button>
+                                        </div>
                                     </div>
-                                    <div class="wr_conts_area">
-                                          <span th:text="${detail.memo}"></span>
+                                       <div class="wr_conts_area">
+                                          <div th:attr="id=|detail_memo${detail.id}|" class="wr_conts_memo" th:text="${detail.memo}"></div>
                                           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
-                                   				<div th:each=" image : ${detail.moimBoardfile}">
-	                                               <div class="wr_conts">
-	                                                  <img th:src="${'/getMoimImage/'+image.filename}" src="/publ/images/contents/sample2.png"/>
-	                                                </div>
-	                                             </div>
+                                               <div th:each=" image : ${detail.moimBoardfile}">
+                                                  <div class="wr_conts">
+                                                     <img th:src="${'/getMoimImage/'+image.filename}" src="/publ/images/contents/sample2.png" width="550"/>
+                                                   </div>
+                                                </div>
                                           </div> 
                                          <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
                                        </div>
@@ -91,56 +117,54 @@ div .images:not(:last-child){margin-right: 2.5%;}
                             </li>
                         </ul>
                         <div class="detail_write">
-                            <div class="thumb">
-                                <a><img th:src="${session.people.imageName}!=null ?${'/getMoimImage/'+session.people.imageName+'.'+session.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt="프로필"></a>
-                            </div>
                             <div class="write_area">
                                 <textarea id="write_memo" name="memo"></textarea>
                                 <div class="cbox_upload">
-	                                <div id="imgePreview">
-	                                	<img id="prev_img"/>
-	                                </div>
-                                	<span class="inputfile">
-		                                <input type="file" id="uploadfile" accept="img/*" style="display:none;" required multiple/>
-                                	</span>
-                                	<div class="upload_active">
-				                        <div href="#" class="upload-btn" alt="사진 선택">
-				                        	<span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
-				                        	<span class="wr_file_txt upload_area">사진</span>
-		                                <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲��옄 �꽕�젙" class="wr_font_ico"></a> -->
-				                        </div>
-		                                <button class="comment_btn upload_area" type="button" onclick="save()">Comment</button>
-                                	</div>
+                                   <div id="imgePreview">
+                                      <span class="prev_img"></span>
+                                   </div>
+                                   <span class="inputfile">
+                                      <input type="file" id="uploadfile" accept="img/*" style="display:none;" required multiple/>
+                                   </span>
+                                   <div class="upload_active">
+                                    <div href="#" class="upload-btn" alt="사진 선택">
+                                       <span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
+                                       <span class="wr_file_txt upload_area">사진</span>
+                                      <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲  옄  꽕 젙" class="wr_font_ico"></a> -->
+                                    </div>
+                                      <button id="save_btn" class="active_btn upload_area" type="button" onclick="save()">저장</button>
+                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none">수정</button>
+                                   </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-	                
-	                <ul class="pagination">
-		                <li class="disabled">
-				            <a href="#" aria-label="First">
-				                <span aria-hidden="true">First</span>
-				            </a>
-				        </li>
-		                 <li class="disabled">
-				            <a href="#" aria-label="Previous">
-				                <span aria-hidden="true">PRE</span>
-				            </a>
-				        </li>
-				        <li class="disabled">
-				            <a href="#" aria-label="Next">
-				                <span aria-hidden="true">Next</span>
-				            </a>
-				        </li>
-				        <li class="disabled">
-				            <a href="#" aria-label="Last">
-				                <span aria-hidden="true">Last</span>
-				            </a>
-				        </li>
-	                </ul>
-	                
-	                
+                   
+                   <ul class="pagination">
+                      <li class="disabled">
+                        <a href="#" aria-label="First">
+                            <span aria-hidden="true">First</span>
+                        </a>
+                    </li>
+                       <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">PRE</span>
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a href="#" aria-label="Last">
+                            <span aria-hidden="true">Last</span>
+                        </a>
+                    </li>
+                   </ul>
+                   
+                   
                 </div>
                 
                 
@@ -152,7 +176,7 @@ div .images:not(:last-child){margin-right: 2.5%;}
 var inputBtn = document.querySelector('.upload-btn');
 var realInput = document.querySelector('#uploadfile');
 inputBtn.addEventListener('click',()=>{
-	realInput.click();
+   realInput.click();
 });
 
 /////////////// 5.15 사진업로드 추가
@@ -160,41 +184,41 @@ $('#uploadfile').on('change', previewFile);
 var sel_files= [];
 
 function previewFile(e){
-	var files = e.target.files;
-	var fileArr = Array.prototype.slice.call(files);
-	//var imgwidth = 200;
-	
-	var imgidx = $('#imgePreview > .images').size();
-	
-	var selectcnt =0;
-	fileArr.forEach(function(f){
-		if(!f.type.match("image/.*")){
-			alert("이미지 확장자만 업로드 가능.");
-			return;
-		}
-		selectcnt+= 1;
-		var this_idx = imgidx+selectcnt;
-		
-		if(this_idx<6){
-				sel_files.push(f);
-				var reader = new FileReader();
-				reader.onload = function(e){
-					var html = `<div class='images img_${this_idx}' onClick=delImg('${this_idx}') id=img_${imgidx+1}><img src=${e.target.result} data-file=${f.name} width="200"/></div>`;
-					$('#imgePreview').append(html);
-			};
-			reader.readAsDataURL(f);
-		}else{
-			alert("최대 5장까지만 업로드 가능.");
-		}
-	});
+   var files = e.target.files;
+   var fileArr = Array.prototype.slice.call(files);
+   //var imgwidth = 200;
+   
+   var imgidx = $('#imgePreview > .images').size();
+   
+   var selectcnt =0;
+   fileArr.forEach(function(f){
+      if(!f.type.match("image/.*")){
+         alert("이미지 확장자만 업로드 가능.");
+         return;
+      }
+      selectcnt+= 1;
+      var this_idx = imgidx+selectcnt;
+      
+      if(this_idx<6){
+            sel_files.push(f);
+            var reader = new FileReader();
+            reader.onload = function(e){
+               var html = `<div class='images img_${this_idx}' onClick=delImg('${this_idx}') id=img_${imgidx+1}><img src=${e.target.result} data-file=${f.name} width="200"/></div>`;
+               $('#imgePreview').append(html);
+         };
+         reader.readAsDataURL(f);
+      }else{
+         alert("최대 5장까지만 업로드 가능.");
+      }
+   });
 }
 
 // 이미지 하나씩 지우기
 function delImg(index){
-	console.log("delImg: "+index);
-	sel_files.splice(index, 1);
-	var img_class= ".img_"+ index;
-	$(img_class).remove();
+   console.log("delImg: "+index);
+   sel_files.splice(index, 1);
+   var img_class= ".img_"+ index;
+   $(img_class).remove();
 }
 
 //글 작성
@@ -216,7 +240,7 @@ function save(){
    var file_len = $('#uploadfile').get(0).files.length;
    
    for(var x=0; x<file_len; x++){
-	   formData.append("File", $('#uploadfile')[0].files[x]);
+      formData.append("File", $('#uploadfile')[0].files[x]);
    }
    formData.append('MoimBoard', new Blob([JSON.stringify(MoimBoard)], {
       type: "application/json; charset=UTF-8"
@@ -236,8 +260,7 @@ function save(){
                if(data.code==1){
                   $("#write_memo").val("");
                   $("#uploadfile").val("");
-                  $("#imgList").html("");
-                  array=[];
+                  $(".sidenav").hide();
                 }else{
                     alert(data.message);
                 }
@@ -247,14 +270,75 @@ function save(){
        });
 }
 
+// 수정버튼
+function editmemo(id){
+	var memo = $("#detail_memo"+id).html();
+	
+	$('#save_btn').hide();
+	$("#write_memo").val(memo);
+	$("#editsave_btn").show();
+	$("#editsave_btn").attr("onclick","editsave("+id+")");
+}
+
+// 수정사항 저장
+function editsave(id){
+	let moimBoard = {};
+	moimBoard.memo = $("#write_memo").val();
+	
+	$.ajax({
+		url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
+        type:'PUT',
+        contentType: 'application/json; charset=UTF-8',
+        processData: false,
+        dataType: 'json',
+        data:JSON.stringify(moimBoard),
+        success:function(data){
+            if(data.code == 1){
+                alert(data.message);
+                $('#save_btn').show();
+                $('#editsave_btn').hide();
+                $(".sidenav").hide(); 
+            }else{
+                alert(data.message);
+            }
+        },
+        error:function(e){
+      	  alert(e);
+        }
+    });
+}
+
+// 삭제
+function deletememo(id){
+	 $.ajax({
+         url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
+         type : "DELETE",
+         processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+         contentType: false,
+//         data: baseResponse,
+          success:function(data){
+            if(data.code==1){
+            	$("#detail_view"+id).parent('li').remove();
+            	$("#detail_view"+id).parent('.detail_rows').remove();
+            	$("#detail_view"+id).remove();
+           }else{
+              alert(data.message);
+           }
+          },
+          error:function(e){
+        	  alert(e);
+          }
+      });
+}
+
 /* var detail_veiw = $('.detail_view_inner');
 var $maxHeight, $scrollTop, detailScrollHeight, color;
 detail_veiw.on('scroll', function(e){
-	$maxHeight = $(this).height();
-	$scrollTop = $(this).scrollTop();
-	detailScrollHeight = this.scrollHeight;
-	//console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
-	
+   $maxHeight = $(this).height();
+   $scrollTop = $(this).scrollTop();
+   detailScrollHeight = this.scrollHeight;
+   //console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
+   
 }); */
 
 
