@@ -30,6 +30,11 @@ public class SignUpRequest {
 	
 	private String introduce;
 	
+	private String birth;
+	
+	private String sidocode;
+	
+	private String sigooncode;
 	
     
 }
