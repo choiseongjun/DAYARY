@@ -90,7 +90,18 @@ public class People extends DateAudit{
    	//이미지확장자
    	@Column(name = "IMAGE_EXTENSION", nullable = true)
        private String imageExtension;
+  //시/도
+    @Column(name = "SIDO_CODE")
+     private String sidocode;
+    
+    //구
+    @Column(name = "SIGOON_CODE")
+    private String sigooncode;
 	
+    //생년월일
+	@Column(name = "BIRTH")
+    private String birth;
+
 	
 	@Column(name="ACTIVATION")
 	private String activation;
@@ -106,7 +117,7 @@ public class People extends DateAudit{
    
     @Column
     private String pincipal;
-
+    
     @Column
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
@@ -132,7 +143,7 @@ public class People extends DateAudit{
 	}
 
     
-    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce) {
+    public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce,String birth,String sidocode,String sigooncode) {
     	this.email=email;
     	this.password=password;
     	this.name=name;
@@ -142,6 +153,9 @@ public class People extends DateAudit{
     	this.sex = sex;
     	this.interests = interests;
     	this.introduce = introduce;
+    	this.birth = birth;
+    	this.sidocode = sidocode;
+    	this.sigooncode = sigooncode;
     }
     public static People signUp(UserConnection userConnection) {
 
