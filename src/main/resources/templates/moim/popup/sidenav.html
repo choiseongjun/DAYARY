@@ -98,7 +98,9 @@ div .images:hover{
                                         </div>
                                         <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
                                         	<button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
-                                        	<button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button>
+                                        	<button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
+                                        		data-toggle="modal" data-target="#delModal">삭제</button>
+                                        	<!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
                                         </div>
                                     </div>
                                        <div class="wr_conts_area">
@@ -130,16 +132,60 @@ div .images:hover{
                                     <div href="#" class="upload-btn" alt="사진 선택">
                                        <span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
                                        <span class="wr_file_txt upload_area">사진</span>
-                                      <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲  옄  꽕 젙" class="wr_font_ico"></a> -->
                                     </div>
                                       <button id="save_btn" class="active_btn upload_area" type="button" onclick="save()">저장</button>
-                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none">수정</button>
+                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none"
+                                      	data-toggle="modal" data-target="#editModal">수정</button>
                                    </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
+                    
+                    <!-- Delete Modal -->
+					<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+					      </div>
+					      <div class="modal-body">
+					       		 게시물을 정말 삭제하시겠습니까?
+					      </div>
+					      <div class="modal-footer">
+					      	<input type="hidden" class="detail-id"/>
+					      	<button id="modal-delete" type="button" class="btn btn-primary">삭제</button>
+					       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					
+					<!-- Edit Modal -->
+					<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+					      </div>
+					      <div class="modal-body">
+					       		 게시물을 정말 수정하시겠습니까?
+					      </div>
+					      <div class="modal-footer">
+					      	<input type="hidden" class="detail-id"/>
+					      	<button id="modal-edit" class="active_btn" type="button">수정</button>
+					       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
                    
                    <ul class="pagination">
                       <li class="disabled">
@@ -171,7 +217,11 @@ div .images:hover{
 <script>
 
   // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
-
+function getId(id){
+	//$('.detail-id').val(id);
+	$('#modal-delete').attr("onclick", "deletememo("+id+")");
+}
+  
 // 5.15추가 업로드 버튼 클릭시 file 업로드 기능수행
 var inputBtn = document.querySelector('.upload-btn');
 var realInput = document.querySelector('#uploadfile');
@@ -261,7 +311,7 @@ function save(){
                if(data.code==1){
                   $("#write_memo").val("");
                   $("#uploadfile").val("");
-                  $(".sidenav").hide();
+                  $(".sidenav").fadeOut(500);
                 }else{
                     alert(data.message);
                 }
@@ -278,7 +328,11 @@ function editmemo(id){
 	$('#save_btn').hide();
 	$("#write_memo").val(memo);
 	$("#editsave_btn").show();
-	$("#editsave_btn").attr("onclick","editsave("+id+")");
+	$("#editsave_btn").attr("onclick","confirmEdit("+id+")");
+}
+
+function confirmEdit(id){
+	$("#modal-edit").attr("onclick","editsave("+id+")");
 }
 
 // 수정사항 저장
@@ -295,10 +349,11 @@ function editsave(id){
         data:JSON.stringify(moimBoard),
         success:function(data){
             if(data.code == 1){
-                alert(data.message);
-                $('#save_btn').show();
+ //               $('#save_btn').show();
                 $('#editsave_btn').hide();
-                $(".sidenav").hide(); 
+                $('#editModal').fadeOut(300);
+                $(".sidenav").fadeOut(500);
+                $(".modal-backdrop").hide();
             }else{
                 alert(data.message);
             }
@@ -311,6 +366,7 @@ function editsave(id){
 
 // 삭제
 function deletememo(id){
+	//var id = $('.detail-id').val();
 	 $.ajax({
          url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
          type : "DELETE",
@@ -321,7 +377,8 @@ function deletememo(id){
             if(data.code==1){
             	$("#detail_view"+id).parent('li').remove();
             	$("#detail_view"+id).parent('.detail_rows').remove();
-            	$("#detail_view"+id).remove();
+            	$("#detail_view"+id).remove(300);
+            	$('#delModal').fadeOut(300);
            }else{
               alert(data.message);
            }
@@ -332,15 +389,17 @@ function deletememo(id){
       });
 }
 
-/* var detail_veiw = $('.detail_view_inner');
+var detail_veiw = $('.detail_view_inner');
 var $maxHeight, $scrollTop, detailScrollHeight, color;
 detail_veiw.on('scroll', function(e){
    $maxHeight = $(this).height();
    $scrollTop = $(this).scrollTop();
    detailScrollHeight = this.scrollHeight;
-   //console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
-   
-}); */
+   console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
+   if((detailScrollHeight-($maxHeight+70))<$scrollTop){
+	    console.log('>>>>>>>>>>>>>>>>>> 추가');
+   }
+});
 
 
 </script>              
