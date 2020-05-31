@@ -58,7 +58,7 @@ public class RestPeopleController {
 			if (!peopleRepository.existsByEmail(signUpRequest.getEmail())) {
 				// Creating user's account
 				People user = new People(0, signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getName(),
-						signUpRequest.getPhoto(), signUpRequest.getActivation(), null, null, null, null, null);
+						signUpRequest.getPhoto(), signUpRequest.getActivation(), null, null, null, null, null, null);
  
 				user.setPassword(bcrypt.hashpw(user.getPassword()));
 
