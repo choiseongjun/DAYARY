@@ -83,7 +83,6 @@ public class PeopleInfoController {
 		Map<String, Object> returnData = new HashMap<String, Object>();
 
 		try {
-
 			peopleinfoService.deletePeople(peopleId);// 회원탈퇴
 
 			returnData.put("code", "1");

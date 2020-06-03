@@ -31,6 +31,7 @@
 	        </ul>
 	        <input type="submit" class="login_btn" value="로그인"/>
 	        <p th:if="${loginError}" class="error" style="color: red;">잘못된 아이디 또는 비밀번호입니다</p>
+	        <p th:if="${loginDeleteError}" class="error" style="color: red;">현재 탈퇴된 회원입니다</p>
 	       <p th:if="${code}" class="error" style="color: blue;" th:text="${message}"></p>
   <br>
 	        <div class="footer_login_btn">

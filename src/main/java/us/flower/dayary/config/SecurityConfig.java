@@ -120,6 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/moimlistView/moimdetailView/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/community/**/write").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/community/**/detail/*").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
+		.antMatchers("/myprofileView/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.and().formLogin().  //login configuration
                 loginPage("/signinView").
                 failureUrl("/loginerror").

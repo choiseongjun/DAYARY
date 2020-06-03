@@ -66,6 +66,7 @@
 </head>
 <body onload="myMoimList()">
 <div th:replace="layout/header::header"/>
+ <div id="peopleId" th:data-peopleId="${peopleinfo.id}"></div> 
  <!--컨텐츠 시작-->
         <section id="container" class="mypage">
             <div id="contents">
@@ -76,7 +77,7 @@
                                 <img src="../images/contents/mypage_profile_thumb.png" alt="사용자 썸네일">
                             </div>
                             <div class="name">[[${peopleinfo.email}]]</div>
-                            <div class="delete"><a href="">탈퇴하기</a></div>
+                            <div class="delete"><a id="people_delete_btn">탈퇴하기</a></div>
                         </div>
                         <div class="mypage_right">
                             <div class="tab_header">
