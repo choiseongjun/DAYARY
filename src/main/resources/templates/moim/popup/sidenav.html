@@ -78,31 +78,32 @@ div .images:hover{
 
 
     <div id="sidebox" class="sidenav" style="z-index: 99999;">
-    	<div id="peopleId" th:data-peopleId="${session.peopleId}"></div>
+       <div id="peopleId" th:data-peopleId="${session.peopleId}"></div>
                     <div class="detail_header">
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
                        <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
-                        <span th:text="${todo.plan_list}"></span>
+                       
+                        <span th:text="${todo.plan_list}"></span> 
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
-                        <ul class="detail_view">
-                            <li class="detail_view_inner">
-                              <div th:each="detail  : ${detailView}" class="detail_rows">
-                                <div th:attr="id=|detail_view${detail.id}|">
-                                    <div class="wr_info">
-                                        <div class="thumb">
-                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
-                                        	<span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
-                                        </div>
-                                        <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
-                                        	<button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
-                                        	<button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
-                                        		data-toggle="modal" data-target="#delModal">삭제</button>
-                                        	<!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
-                                        </div>
-                                    </div>
+                        <div class="detail_view">
+                            <div class="detail_view_inner">
+                              <ul th:each="detail  : ${detailView}" class="detail_rows">
+                                   <li th:attr="id=|detail_view${detail.id}|">
+                                       <div class="wr_info">
+                                           <div class="thumb">
+                                               <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
+                                              <span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
+                                           </div>
+                                           <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
+                                              <button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
+                                              <button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
+                                                 data-toggle="modal" data-target="#delModal">삭제</button>
+                                              <!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
+                                           </div>
+                                       </div>
                                        <div class="wr_conts_area">
                                           <div th:attr="id=|detail_memo${detail.id}|" class="wr_conts_memo" th:text="${detail.memo}"></div>
                                           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
@@ -114,10 +115,10 @@ div .images:hover{
                                           </div> 
                                          <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="detail_write">
                             <div class="write_area">
                                 <textarea id="write_memo" name="memo"></textarea>
@@ -135,7 +136,7 @@ div .images:hover{
                                     </div>
                                       <button id="save_btn" class="active_btn upload_area" type="button" onclick="save()">저장</button>
                                       <button id="editsave_btn" class="active_btn" type="button" style="display: none"
-                                      	data-toggle="modal" data-target="#editModal">수정</button>
+                                         data-toggle="modal" data-target="#editModal">수정</button>
                                    </div>
                                 </div>
                             </div>
@@ -143,49 +144,49 @@ div .images:hover{
                         </div>
                     </div>
                     
-                    <!-- Delete Modal -->
-					<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					  <div class="modal-dialog" role="document">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					          <span aria-hidden="true">&times;</span>
-					        </button>
-					      </div>
-					      <div class="modal-body">
-					       		 게시물을 정말 삭제하시겠습니까?
-					      </div>
-					      <div class="modal-footer">
-					      	<input type="hidden" class="detail-id"/>
-					      	<button id="modal-delete" type="button" class="btn btn-primary">삭제</button>
-					       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					
-					<!-- Edit Modal -->
-					<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					  <div class="modal-dialog" role="document">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					          <span aria-hidden="true">&times;</span>
-					        </button>
-					      </div>
-					      <div class="modal-body">
-					       		 게시물을 정말 수정하시겠습니까?
-					      </div>
-					      <div class="modal-footer">
-					      	<input type="hidden" class="detail-id"/>
-					      	<button id="modal-edit" class="active_btn" type="button">수정</button>
-					       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					      </div>
-					    </div>
-					  </div>
-					</div>
+              <!-- Delete Modal 삭제전 확인 모달창 -->
+               <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                 <div class="modal-dialog" role="document">
+                   <div class="modal-content">
+                     <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                       </button>
+                     </div>
+                     <div class="modal-body">
+                             	게시물을 정말 삭제하시겠습니까?
+                     </div>
+                     <div class="modal-footer">
+                        <input type="hidden" class="detail-id"/>
+                        <button id="modal-delete" type="button" class="btn btn-primary">삭제</button>
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               
+               <!-- Edit Modal 수정전 확인 모달창 -->
+               <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                 <div class="modal-dialog" role="document">
+                   <div class="modal-content">
+                     <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                       </button>
+                     </div>
+                     <div class="modal-body">
+                             	게시물을 정말 수정하시겠습니까?
+                     </div>
+                     <div class="modal-footer">
+                        <input type="hidden" class="detail-id"/>
+                        <button id="modal-edit" class="active_btn" type="button">수정</button>
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
                    
                    <ul class="pagination">
                       <li class="disabled">
@@ -213,13 +214,10 @@ div .images:hover{
                    
                 </div>
                 
-                
 <script>
 
-  // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
 function getId(id){
-	//$('.detail-id').val(id);
-	$('#modal-delete').attr("onclick", "deletememo("+id+")");
+   $('#modal-delete').attr("onclick", "deletememo("+id+")");
 }
   
 // 5.15추가 업로드 버튼 클릭시 file 업로드 기능수행
@@ -229,7 +227,7 @@ inputBtn.addEventListener('click',()=>{
    realInput.click();
 });
 
-/////////////// 5.15 사진업로드 추가
+// 5.15 사진업로드 추가
 $('#uploadfile').on('change', previewFile);
 var sel_files= [];
 
@@ -323,25 +321,25 @@ function save(){
 
 // 수정버튼
 function editmemo(id){
-	var memo = $("#detail_memo"+id).html();
-	
-	$('#save_btn').hide();
-	$("#write_memo").val(memo);
-	$("#editsave_btn").show();
-	$("#editsave_btn").attr("onclick","confirmEdit("+id+")");
+   var memo = $("#detail_memo"+id).html();
+   
+   $('#save_btn').hide();
+   $("#write_memo").val(memo);
+   $("#editsave_btn").show();
+   $("#editsave_btn").attr("onclick","confirmEdit("+id+")");
 }
 
 function confirmEdit(id){
-	$("#modal-edit").attr("onclick","editsave("+id+")");
+   $("#modal-edit").attr("onclick","editsave("+id+")");
 }
 
 // 수정사항 저장
 function editsave(id){
-	let moimBoard = {};
-	moimBoard.memo = $("#write_memo").val();
-	
-	$.ajax({
-		url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
+   let moimBoard = {};
+   moimBoard.memo = $("#write_memo").val();
+   
+   $.ajax({
+      url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
         type:'PUT',
         contentType: 'application/json; charset=UTF-8',
         processData: false,
@@ -353,21 +351,20 @@ function editsave(id){
                 $('#editsave_btn').hide();
                 $('#editModal').fadeOut(300);
                 $(".sidenav").fadeOut(500);
-                $(".modal-backdrop").hide();
             }else{
                 alert(data.message);
             }
         },
         error:function(e){
-      	  alert(e);
+           alert(e);
         }
     });
 }
 
 // 삭제
 function deletememo(id){
-	//var id = $('.detail-id').val();
-	 $.ajax({
+   //var id = $('.detail-id').val();
+    $.ajax({
          url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
          type : "DELETE",
          processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
@@ -375,29 +372,84 @@ function deletememo(id){
 //         data: baseResponse,
           success:function(data){
             if(data.code==1){
-            	$("#detail_view"+id).parent('li').remove();
-            	$("#detail_view"+id).parent('.detail_rows').remove();
-            	$("#detail_view"+id).remove(300);
-            	$('#delModal').fadeOut(300);
+               $("#detail_view"+id).parent('li').remove();
+               $("#detail_view"+id).parent('.detail_rows').remove();
+               $("#detail_view"+id).remove(300);
+               $('#delModal').fadeOut(300);
            }else{
               alert(data.message);
            }
           },
           error:function(e){
-        	  alert(e);
+             alert(e);
           }
       });
 }
 
-var detail_veiw = $('.detail_view_inner');
-var $maxHeight, $scrollTop, detailScrollHeight, color;
-detail_veiw.on('scroll', function(e){
-   $maxHeight = $(this).height();
-   $scrollTop = $(this).scrollTop();
-   detailScrollHeight = this.scrollHeight;
-   console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
-   if((detailScrollHeight-($maxHeight+70))<$scrollTop){
-	    console.log('>>>>>>>>>>>>>>>>>> 추가');
+function moreContents(){
+	
+	var no= $('#todoid').val();
+	console.log('>>> no : '+no);
+	
+	$.ajax({
+  		url: '/moimDetail/moimTodoList/boardMore/'+no,
+  		contentType: "application/json; charset=utf-8",
+  		dataType:'json',
+  		type:'GET',
+  		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+  		success:function(data){
+  			if(data.code==1){
+	  			var boardList = data.moimBoardList;
+	  			console.log('>>> boardList : '+JSON.stringify(boardList));
+  			}else{
+  				alert('실패 : '+data.code+' / '+data.message);
+  			}
+  		}, error:function(e){
+			alert(e)
+        }
+	});
+	/* <ul th:each="detail  : ${detailView}" class="detail_rows">
+    <li th:attr="id=|detail_view${detail.id}|">
+        <div class="wr_info">
+            <div class="thumb">
+                <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
+               <span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
+            </div>
+            <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
+               <button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
+               <button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
+                  data-toggle="modal" data-target="#delModal">삭제</button>
+               <!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
+            </div>
+        </div>
+        <div class="wr_conts_area">
+           <div th:attr="id=|detail_memo${detail.id}|" class="wr_conts_memo" th:text="${detail.memo}"></div>
+           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
+                <div th:each=" image : ${detail.moimBoardfile}">
+                   <div class="wr_conts">
+                      <img th:src="${'/getMoimImage/'+image.filename}" src="/publ/images/contents/sample2.png" width="550"/>
+                    </div>
+                 </div>
+           </div> 
+          <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
+        </div>
+     </li>
+ </ul> */
+}
+
+var page = 1;
+// 무한 스크롤 구현
+$('.detail_view_inner').on('scroll', function(e){
+   var scrollHeight = this.scrollHeight;
+   var scrollPosition = $(this).height() + $(this).scrollTop();
+   var offset = $('.wr_info').length;
+   
+   console.log('scrollPosition: '+scrollPosition+', scrollHeight : '+scrollHeight);
+   if( scrollPosition > scrollHeight - 55 ){
+	   page++;
+       console.log('>>> page : ' + page);
+       console.log('>>> offset: '+offset);
+       moreContents();
    }
 });
 

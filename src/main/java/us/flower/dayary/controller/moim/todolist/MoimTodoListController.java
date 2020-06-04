@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONUtil;
 import us.flower.dayary.common.MediaUtils;
@@ -53,7 +54,7 @@ import us.flower.dayary.service.moim.board.MoimBoardService;
 import us.flower.dayary.service.moim.image.MoimImageService;
 import us.flower.dayary.service.moim.todo.ToDoWriteService;
 
-
+@Slf4j
 @Controller
 public class MoimTodoListController {
 	@Autowired 
@@ -230,6 +231,7 @@ public class MoimTodoListController {
 	@PostMapping("/moimDetail/moimTodoList/modalWrite/{moimNo}/{no}")
 	public Map<String, Object> modalWrite(HttpSession session,@RequestPart(name="File",required=false) MultipartFile[] file,@RequestPart(name="MoimBoard") MoimBoard board
 			,@PathVariable("no")long no, @PathVariable("moimNo")long moimNo) {
+		
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		String id =  (String) session.getAttribute("peopleEmail");
 		
@@ -257,6 +259,7 @@ public class MoimTodoListController {
 	 */
 	@PostMapping("/moimDetail/moimTodoList/sidenav/{no}")
 	public String modelView(@PathVariable("no") long no, Sort sort, Model model, Pageable pageable, HttpSession session) {
+		log.info("sidenavstart >>> START");
 
 		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
@@ -271,8 +274,43 @@ public class MoimTodoListController {
 		model.addAttribute("todo", todoList);
 		model.addAttribute("detailView", pagelist);
 		model.addAttribute("moimid", todoList.getMoim().getId());
+		
 
 		return "moim/popup/sidenav";
+	}
+	
+	@ResponseBody
+	@GetMapping("/moimDetail/moimTodoList/boardMore/{no}")
+	public Map<String, Object> getSource(@PathVariable("no") long no, Sort sort, Pageable pageable) {
+		log.info("contents >>> START");
+		
+		Map<String, Object> returnData = new HashMap<String, Object>();
+		
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
+		pageable = PageRequest.of(page, 5, sort);
+		
+		Page<MoimBoard> moimBoardList = null;
+		ToDoWriteList todoList = null;
+		
+//		long peopleid = (long) session.getAttribute("peopleId");
+		
+		try {
+			moimBoardList = moimboardRepository.findBoardByToDoWriteList_id(pageable, no);
+			todoList = toDoWriteListRepository.findById(no).get();
+			returnData.put("moimBoardList", moimBoardList);
+//		  	returnData.put("peopleid", peopleid);
+//		  	returnData.put("moimid", todoList.getMoim().getId());
+//		  	returnData.put("todo", todoList);
+			returnData.put("code", "1");
+			returnData.put("message", "성공");
+
+        } catch (Exception e) {
+        	returnData.put("code", "E3290");
+        	returnData.put("message", "데이터 확인 후 다시 시도해주세요.");
+		}
+
+		return returnData;
 	}
 
 	/**
