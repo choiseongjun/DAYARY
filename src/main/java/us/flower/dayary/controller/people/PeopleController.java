@@ -109,12 +109,15 @@ public class PeopleController {
 //			session.setAttribute("peopleName", dbPeople.getName());// 이름세션저장
 //			session.setAttribute("peopleEmail", dbPeople.getEmail());// ID세션저장
 //			session.setAttribute("people",dbPeople);
+		System.out.println("DeleteYN==="+dbPeople.getDelete_yn());
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			return "redirect:/admin/admini";
 			// mav.setViewName("redirect:/admin/admini");
 		} else {
-			if (dbPeople.getActivation().equals("Y")) {
+			if (dbPeople.getActivation().equals("Y")&&dbPeople.getDelete_yn()=='N') {
 				return "redirect:/";
+			}else if(dbPeople.getDelete_yn()=='Y') {
+				return "redirect:/deletedPeople";
 			} else {
 				return "redirect:/authlogout";
 			}
@@ -358,12 +361,21 @@ public class PeopleController {
 
 		return "people/signin";
 	}
-
+	@RequestMapping("/deletedPeople")
+	public String logout(Model model,HttpSession session) {
+		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
+		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
+		SecurityContext context = SecurityContextHolder.getContext();
+		session.invalidate();
+		context.setAuthentication((Authentication)null);
+		return "people/signin";
+	}
+	
 	/*
 	 * 이메일 인증을 받지않았을떄 이쪽을 탄다
 	 */
 	@GetMapping("/authlogout")
-	public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String authlogout(HttpServletRequest request, HttpServletResponse response, Model model) {
 		HttpSession session = request.getSession(false);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		session.invalidate();
@@ -378,6 +390,7 @@ public class PeopleController {
 	@RequestMapping("/loginerror")
 	public String loginError(Model model) {
 		model.addAttribute("loginError", true);
+		model.addAttribute("loginDeleteError", true);//탈퇴한회원Y
 		model.addAttribute("interests", commonRepository.findByCommHead("CA1"));
 		model.addAttribute("jobs", commonRepository.findByCommHead("CA4"));
 		return "people/signin";
