@@ -30,6 +30,8 @@ import us.flower.dayary.domain.Meetup;
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.MoimPeople;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
+import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.repository.moim.MoimPeopleRepository;
 import us.flower.dayary.repository.moim.MoimRepository;
 import us.flower.dayary.repository.moim.meetup.MoimMeetUpRepository;
@@ -63,36 +65,109 @@ public class RestMoimController {
 	 * @throws Exception
 	 * @author choiseongjun
 	 */
-	@GetMapping("/rest/moimlistView")
-	public ResponseEntity<?> moimListView(@PageableDefault Pageable pageable, HttpSession session
+	@GetMapping("/rest/moimlistView/{commCode}")
+	public ResponseEntity<?> moimListView(@PageableDefault Pageable pageable, HttpSession session,@PathVariable("commCode") String commCode
 			) {
 
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 		pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-
-//		Common common = new Common();
-//		common.setCommCode(category);// 검색조건 해올때 필요하다 by choiseongjun 2019-10-06
-//
-//		if (title != null || category != null || sido_code != null || sigoon_code != null) {
-//			Page<Moim> moimList = moimService.selecttitleList(pageable, title, common, sido_code, sigoon_code);// 타이틀을
-//																												// 검색한
-//																												// 모임리스트
-//																												// 출력한다
-//			//model.addAttribute("moimList", moimList);
-//			long moimListcount = moimList.getTotalElements();// 각각 카운트를 센다
-//			//model.addAttribute("moimListcount", moimListcount);
-//			return new ResponseEntity<>(moimList, HttpStatus.OK);
-//		} else {
-//			Page<Moim> moimList = moimService.selectListAll(pageable);// 모든 모임리스트 출력한다
-//			//model.addAttribute("moimList", moimList);
-//			long moimListcount = moimList.getTotalElements();
-//			//model.addAttribute("moimListcount", moimListcount);
-//			return new ResponseEntity<>(moimList, HttpStatus.OK);
-//		}
-		Page<Moim> moimList = moimrepository.findAll(pageable);
-		
 		JSONObject returnData = new JSONObject();
-		returnData.put("moimList", moimList);
+		if(commCode.equals("01")) {
+			Page<Moim> moimList = moimService.selectMoimAll(pageable);// 모든 모임리스트 출력한다
+
+			for(int i=0;i<moimList.getNumberOfElements();i++) {
+				
+				
+				List<ToDoWrite> todowrite =  moimList.getContent().get(i).getTodowrite();
+				double progresstotalSum=0;
+				double progresstotal=0;
+				double progressbefore = 0;
+				double progress = 0;
+				long count = 0; 
+				
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+				Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+					hashtag +="#"+tags.getName();
+				}
+				for(ToDoWrite j: todowrite) {
+					Map<String, Object> tempMap = new HashMap<String, Object>();
+					tempMap.put("progress_done", j.getProgress_done());
+					tempMap.put("sametodoid",j.getMoim().getId());
+					progresstotalSum+=j.getProgress_done();
+					progresstotal+=j.getProgress_total();
+					progressbefore += j.getProgress();
+					count++;
+				}
+				if(count==0) {
+				count = 0;
+				}
+				
+					double progressPercent=0;
+					//progress = Double.parseDouble(String.format("%.2f",progressbefore / count));
+					progressPercent = Math.round(((progresstotalSum/progresstotal)*100)*100)/100.0;
+					moimList.getContent().get(i).setProgresssum((long)progresstotalSum);
+					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
+					moimList.getContent().get(i).setProgresspercent(progressPercent);
+					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
+				}
+			
+			returnData.put("moimList", moimList);
+			long moimListcount = moimList.getTotalElements();
+			returnData.put("moimListcount", moimListcount);
+		}else {
+			Page<Moim> moimList = moimService.selectMoimCate(pageable,commCode);// 카테고리별로 모임리스트 출력한다
+			
+
+			
+			for(int i=0;i<moimList.getNumberOfElements();i++) {
+				
+				List<ToDoWrite> todowrite =  moimList.getContent().get(i).getTodowrite();
+				double progresstotalSum=0;
+				double progresstotal=0;
+				double progressbefore = 0;
+				double progress = 0;
+				long count = 0;
+				
+				//Set<Tag> tags = moimList.getContent().get(i).getTags();
+				String hashtag="";
+				for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+					Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+						hashtag +="#"+tags.getName();
+				}
+				for(ToDoWrite j: todowrite) {
+					Map<String, Object> tempMap = new HashMap<String, Object>();
+					tempMap.put("progress_done", j.getProgress_done());
+					tempMap.put("sametodoid",j.getMoim().getId());
+					progresstotalSum+=j.getProgress_done();
+					progresstotal+=j.getProgress_total();
+					progressbefore += j.getProgress();
+					count++;
+				}
+				if(count==0) {
+				count = 0;
+				}
+				
+					double progressPercent=0;
+					//progress = Double.parseDouble(String.format("%.2f",progressbefore / count));
+					progressPercent = Math.round(((progresstotalSum/progresstotal)*100)*100)/100.0;
+					moimList.getContent().get(i).setProgresssum((long)progresstotalSum);
+					moimList.getContent().get(i).setProgresstotal((long)progresstotal);
+					moimList.getContent().get(i).setProgresspercent(progressPercent);
+					moimList.getContent().get(i).setTodocount(count);
+					moimList.getContent().get(i).setHashtag(hashtag);
+				}
+			
+			
+			
+			returnData.put("moimList", moimList);
+			long moimListcount = moimList.getTotalElements();
+			returnData.put("moimListcount", moimListcount);
+			returnData.put("test", "on");
+			
+			
+		}
 		
 		 return new ResponseEntity<>(returnData, HttpStatus.OK);
 
@@ -124,25 +199,23 @@ public class RestMoimController {
 		 return new ResponseEntity<>(returnData, HttpStatus.OK);
 	}
 	@PostMapping("/rest/moimMake")
-	public Map<String, Object> RestmoimMake(@RequestParam("title") String title,@RequestParam("intro") String intro, 
+	public Map<String, Object> RestmoimMake(@RequestPart("moim") Moim moim, 
 			@RequestPart(name = "file", required = false) MultipartFile file,@RequestHeader (name="Authorization", required=false) String token) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
-		Moim moim = new Moim();
 		if(tokenProvider.validateToken(token)) {
 			Long PeopleNo=tokenProvider.getUserIdFromJWT(token);
 			Optional<People> people = peopleRepository.findById(PeopleNo);
 			String email = people.get().getEmail();
 			String subject = "영어";
 			
-			moim.setTitle(title);
-			moim.setIntro(intro);
 			moim.setRecruitStatus("모집중");
 			
-			moimService.saveMoim(email, subject, moim, file);
+			//moimService.saveMoim(email, subject, moim, file);
 		}
+		System.out.println(moim.getTitle());
+		System.out.println(moim.getIntro());
 		System.out.println("Controlloer");
-		System.out.println(title+"/"+intro);
 		System.out.println(file.getOriginalFilename());
 		System.out.println(file.getSize());
 		

@@ -12,8 +12,8 @@
 	<div th:fragment="center">
 	<div id="wrap">
 	<section id="container">
-		<div class="vis_box">
-			<h2 class="title">Hello~ Everyone<br>Let's Fruit</h2>
+		<div class="vis_box"> 
+			<h2 class="title">Team Platform <br>Let's Fruit</h2>
             <form th:action="@{/moimlistView/01}">
 	            <div class="search_input_box">
 	            	<input type="text" placeholder="입력하세요" name="title"><button>Search</button>
@@ -26,7 +26,7 @@
         <div class="crew_chart">
         	<div class="crew_chart_bg"></div>
         	<div class="inner_2">
-            	<p class="crew_chart_name">Crew name</p>
+            	<p class="crew_chart_name"><!-- Crew name --></p>
                 <div class="slider-counter"></div>
                 <div>
                 <div class="slider owl-carousel owl-theme">
@@ -121,7 +121,7 @@
                 	<div class="title_main_box">
 						<span class="title_main">크루 둘러보기</span>
                         
-                        <a href="#" class="more_crew_list">더보기</a>
+                        <a href="/moimlistView/01" class="more_crew_list">더보기</a>
                     </div>
 					<div class="bottom_box">
 						<div class="grid_item_box">

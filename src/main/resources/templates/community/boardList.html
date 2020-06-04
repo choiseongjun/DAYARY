@@ -6,7 +6,7 @@
     <css th:replace="layout/header::headerCss"/>
       <link th:href="@{/css/community/sidemenu.css}" rel="stylesheet" /><!-- 사이드메뉴css -->
 	<link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
-
+<div th:replace="layout/header::header"/>
 <style>
  #container {
       width: 70%;
@@ -115,7 +115,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div th:replace="layout/header::header"/>
+
 
 <div class="container1" style="margin-left:300px; max-width:1180px">
 <div th:replace="community/sidemenu::sidemenu"/>
