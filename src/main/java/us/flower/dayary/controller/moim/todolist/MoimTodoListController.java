@@ -281,29 +281,31 @@ public class MoimTodoListController {
 	
 	@ResponseBody
 	@GetMapping("/moimDetail/moimTodoList/boardMore/{no}")
-	public Map<String, Object> getSource(@PathVariable("no") long no, Sort sort, Pageable pageable) {
-		log.info("contents >>> START");
-		
+	public Map<String, Object> getSource(@PathVariable("no") long no, Sort sort, @RequestParam(value="pagenum") int pagenum
+			, Pageable pageable, HttpSession session) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
-		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+//		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+		int page = (pagenum == 0) ? 0 : (pagenum - 1);
 		sort = sort.and(new Sort(Sort.Direction.DESC, "id"));
 		pageable = PageRequest.of(page, 5, sort);
 		
 		Page<MoimBoard> moimBoardList = null;
 		ToDoWriteList todoList = null;
 		
-//		long peopleid = (long) session.getAttribute("peopleId");
+		long peopleid = (long) session.getAttribute("peopleId");
 		
 		try {
 			moimBoardList = moimboardRepository.findBoardByToDoWriteList_id(pageable, no);
 			todoList = toDoWriteListRepository.findById(no).get();
-			returnData.put("moimBoardList", moimBoardList);
-//		  	returnData.put("peopleid", peopleid);
+			returnData.put("moimBoardList", moimBoardList.get());
+		  	returnData.put("peopleid", peopleid);
 //		  	returnData.put("moimid", todoList.getMoim().getId());
 //		  	returnData.put("todo", todoList);
 			returnData.put("code", "1");
 			returnData.put("message", "성공");
+			returnData.put("returnPage", page);
+			returnData.put("returnData", pagenum);
 
         } catch (Exception e) {
         	returnData.put("code", "E3290");

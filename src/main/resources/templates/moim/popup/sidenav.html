@@ -94,8 +94,8 @@ div .images:hover{
                                    <li th:attr="id=|detail_view${detail.id}|">
                                        <div class="wr_info">
                                            <div class="thumb">
-                                               <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
-                                              <span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
+                                               <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'"></a>
+                                              <span class="wr_name" th:text="${detail.people.name}" style="margin-left: 10px;"></span>
                                            </div>
                                            <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
                                               <button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
@@ -117,6 +117,7 @@ div .images:hover{
                                        </div>
                                     </li>
                                 </ul>
+                                <div class="detail_rows"></div>
                             </div>
                         </div>
                         <div class="detail_write">
@@ -188,31 +189,7 @@ div .images:hover{
                  </div>
                </div>
                    
-                   <ul class="pagination">
-                      <li class="disabled">
-                        <a href="#" aria-label="First">
-                            <span aria-hidden="true">First</span>
-                        </a>
-                    </li>
-                       <li class="disabled">
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">PRE</span>
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">Next</span>
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a href="#" aria-label="Last">
-                            <span aria-hidden="true">Last</span>
-                        </a>
-                    </li>
-                   </ul>
-                   
-                   
-                </div>
+       </div>
                 
 <script>
 
@@ -234,7 +211,6 @@ var sel_files= [];
 function previewFile(e){
    var files = e.target.files;
    var fileArr = Array.prototype.slice.call(files);
-   //var imgwidth = 200;
    
    var imgidx = $('#imgePreview > .images').size();
    
@@ -347,7 +323,6 @@ function editsave(id){
         data:JSON.stringify(moimBoard),
         success:function(data){
             if(data.code == 1){
- //               $('#save_btn').show();
                 $('#editsave_btn').hide();
                 $('#editModal').fadeOut(300);
                 $(".sidenav").fadeOut(500);
@@ -361,7 +336,7 @@ function editsave(id){
     });
 }
 
-// 삭제
+// board 삭제
 function deletememo(id){
    //var id = $('.detail-id').val();
     $.ajax({
@@ -369,8 +344,7 @@ function deletememo(id){
          type : "DELETE",
          processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
          contentType: false,
-//         data: baseResponse,
-          success:function(data){
+         success:function(data){
             if(data.code==1){
                $("#detail_view"+id).parent('li').remove();
                $("#detail_view"+id).parent('.detail_rows').remove();
@@ -386,21 +360,52 @@ function deletememo(id){
       });
 }
 
-function moreContents(){
+// sleep 적용
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// 무한스크롤 컨텐츠 생성
+async function moreContents(){
+	// 0.3ms sleep	
+	await sleep(300);
 	
 	var no= $('#todoid').val();
-	console.log('>>> no : '+no);
+	// 페이지 데이터를 넘겨준다.
+	var param = "pagenum="+page;
 	
 	$.ajax({
   		url: '/moimDetail/moimTodoList/boardMore/'+no,
   		contentType: "application/json; charset=utf-8",
   		dataType:'json',
+  		data: param,
   		type:'GET',
   		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
   		success:function(data){
   			if(data.code==1){
-	  			var boardList = data.moimBoardList;
-	  			console.log('>>> boardList : '+JSON.stringify(boardList));
+	  			var boardLists = data.moimBoardList;
+	  			console.log('boardList length : '+boardLists.length);
+	  			var fid = 0;
+	  			if(boardLists.length<1){
+	  				return;
+	  			}
+  				var sessionId = data.peopleid;
+	  			
+	  			var imgsrc= '/publ/images/contents/profile_thumb.png';
+	  			
+	  			var html = "";
+	  			for(var i=0; i<boardLists.length; i++){
+	  				var board = boardLists[i];
+	  				var filelist = board.moimBoardfile;
+	  				// 이미지 경로 
+		  			if(board.people.imageName!=null){
+		  				imgsrc = '/getMoimImage/'+board.people.imageName;
+		  			}
+	  				// html 생성
+		  			html = makeMore(sessionId, board, filelist, imgsrc);
+	  			}
+	  			
+	  			$("#sidebox .detail_rows:last").after(html);
   			}else{
   				alert('실패 : '+data.code+' / '+data.message);
   			}
@@ -408,47 +413,50 @@ function moreContents(){
 			alert(e)
         }
 	});
-	/* <ul th:each="detail  : ${detailView}" class="detail_rows">
-    <li th:attr="id=|detail_view${detail.id}|">
-        <div class="wr_info">
-            <div class="thumb">
-                <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
-               <span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
-            </div>
-            <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
-               <button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
-               <button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
-                  data-toggle="modal" data-target="#delModal">삭제</button>
-               <!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
-            </div>
-        </div>
-        <div class="wr_conts_area">
-           <div th:attr="id=|detail_memo${detail.id}|" class="wr_conts_memo" th:text="${detail.memo}"></div>
-           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
-                <div th:each=" image : ${detail.moimBoardfile}">
-                   <div class="wr_conts">
-                      <img th:src="${'/getMoimImage/'+image.filename}" src="/publ/images/contents/sample2.png" width="550"/>
-                    </div>
-                 </div>
-           </div> 
-          <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
-        </div>
-     </li>
- </ul> */
 }
 
-var page = 1;
+// 더보기 html 생성
+function makeMore(sessionId, board, filelist, imgsrc){
+	var html='';
+	html+= '<ul class="detail_rows">'
+	html+= '<li id=detail_view'+board.id+'>'
+	html+='<div class="wr_info">'
+	html+='<div class="thumb">'
+	html+='<a><img src="'+imgsrc+'"/></a>'
+	html+='<span class="wr_name" style="margin-left: 10px;">'+board.people.name+'</span>'
+	html+='</div>';
+	if(board.people.id==sessionId){
+		html+='<div class="buttons">'
+		html+='<button id="edit_btn" type="button" onclick="'+editmemo(board.id)+'" class="btn btn-primary">수정</button>'
+		html+='<button id="del_btn" type="button" th:onclick="'+getId(board.id)+'" class="btn btn-primary" data-toggle="modal" data-target="#delModal">삭제</button>'
+		html+='</div>'
+	}
+	html+='</div>'
+	html+='<div class="wr_conts_area">'
+	html+='<div id="detail_memo'+board.id+'" class="wr_conts_memo">'+board.memo+'</div>'
+	if(filelist.length>0){
+		html+='<div>'
+		for(var image; image<filelist.length; image++){
+			html+='<div class="wr_conts">'
+			html+='<img src="/getMoimImage/'+image.filename+'" width="550"/>'
+			html+='</div>'
+		}
+		html+='</div>'}
+	html+='<div class="conts_info"><span class="time"'+board.createDate+'"></span></div>'
+	html+='</div></li></ul>'
+	return html;
+}
+
+var page = 0;
 // 무한 스크롤 구현
 $('.detail_view_inner').on('scroll', function(e){
    var scrollHeight = this.scrollHeight;
    var scrollPosition = $(this).height() + $(this).scrollTop();
    var offset = $('.wr_info').length;
    
-   console.log('scrollPosition: '+scrollPosition+', scrollHeight : '+scrollHeight);
+   //console.log('scrollPosition: '+scrollPosition+', scrollHeight : '+scrollHeight);
    if( scrollPosition > scrollHeight - 55 ){
 	   page++;
-       console.log('>>> page : ' + page);
-       console.log('>>> offset: '+offset);
        moreContents();
    }
 });
