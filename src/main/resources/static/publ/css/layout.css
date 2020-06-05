@@ -144,7 +144,9 @@ body{font-weight:300;color:#333}
 .sidenav{display:none;position:fixed;bottom:0;right:0;width:705px;background:#fff;border-radius:5px;box-shadow:5px 5px 14px 0 #cacaca;z-index:1; height: 100%}
 .sidenav .detail_header{position:relative;padding:20px 150px;border-bottom:1px solid #05DCBD;font-family:Noto Sans KR;font-style:normal;font-weight:bold;font-size:20px;line-height:1.5;text-align:center;color:#000000}
 .sidenav .detail_header .sidenav_close{position:absolute;top:26.65px;right:24.82px}
-.sidenav .detail_view_inner{height:304px;padding:27px 26px;overflow-y:auto;overflow-x:hidden}
+.sidenav .detail_view{position: absolute; height: 100%}
+.sidenav .detail_view_inner{height:54%; padding:27px 26px;overflow-y:auto;overflow-x:hidden}
+@media all and (min-height:950px) {.sidenav .detail_view_inner{height:65%;}}
 .sidenav .detail_view .wr_info{font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;display:flex;align-items:center;color:#000000}
 .sidenav .detail_view .wr_info .thumb{float:left;width:100%;height:40px;overflow:hidden;border-radius:20px;margin-right:11.2px}
 .sidenav .detail_view .wr_info .thumb img{width:40px;height:40px}

@@ -72,35 +72,38 @@ div .images:hover{
 
 .wr_conts_memo {
    margin-top: 20px;
-   
+   word-break: break-all;
 }
 </style>
 
 
     <div id="sidebox" class="sidenav" style="z-index: 99999;">
-    	<div id="peopleId" th:data-peopleId="${session.peopleId}"></div>
+       <div id="peopleId" th:data-peopleId="${session.peopleId}"></div>
                     <div class="detail_header">
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
                        <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
-                        <span th:text="${todo.plan_list}"></span>
+                       
+                        <span th:text="${todo.plan_list}"></span> 
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="" class="sidenav_close"></a>
                     </div>
                     <div class="detail_body">
-                        <ul class="detail_view">
-                            <li class="detail_view_inner">
-                              <div th:each="detail  : ${detailView}" class="detail_rows">
-                                <div th:attr="id=|detail_view${detail.id}|">
-                                    <div class="wr_info">
-                                        <div class="thumb">
-                                            <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'" src="/publ/images/contents/detail_thumb.png" alt=""></a>
-                                        	<span class="wr_name" th:text="${todo.people.name}" style="margin-left: 10px;"></span>
-                                        </div>
-                                        <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
-                                        	<button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
-                                        	<button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button>
-                                        </div>
-                                    </div>
+                        <div class="detail_view">
+                            <div class="detail_view_inner">
+                              <ul th:each="detail  : ${detailView}" class="detail_rows">
+                                   <li th:attr="id=|detail_view${detail.id}|">
+                                       <div class="wr_info">
+                                           <div class="thumb">
+                                               <a><img th:src="${detail.people.imageName}!=null ?${'/getMoimImage/'+detail.people.imageName+'.'+detail.people.imageExtension} : '/publ/images/contents/profile_thumb.png'"></a>
+                                              <span class="wr_name" th:text="${detail.people.name}" style="margin-left: 10px;"></span>
+                                           </div>
+                                           <div th:if="${session.peopleId}==${detail.people.id}" class="buttons">
+                                              <button id="edit_btn" type="button" th:onclick="'javascript:editmemo('+${detail.id}+');'" class="btn btn-primary">수정</button>
+                                              <button id="del_btn" type="button" th:onclick="'javascript:getId('+${detail.id}+');'" class="btn btn-primary"
+                                                 data-toggle="modal" data-target="#delModal">삭제</button>
+                                              <!-- <button id="del_btn" type="button" th:onclick="'javascript:deletememo('+${detail.id}+');'" class="btn btn-primary">삭제</button> -->
+                                           </div>
+                                       </div>
                                        <div class="wr_conts_area">
                                           <div th:attr="id=|detail_memo${detail.id}|" class="wr_conts_memo" th:text="${detail.memo}"></div>
                                           <div th:if="${#lists.size(detail.moimBoardfile)>0}">
@@ -112,10 +115,11 @@ div .images:hover{
                                           </div> 
                                          <div class="conts_info"><span class="time" th:text="${detail.createDate}"></span></div>
                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                    </li>
+                                </ul>
+                                <div class="detail_rows"></div>
+                            </div>
+                        </div>
                         <div class="detail_write">
                             <div class="write_area">
                                 <textarea id="write_memo" name="memo"></textarea>
@@ -130,48 +134,69 @@ div .images:hover{
                                     <div href="#" class="upload-btn" alt="사진 선택">
                                        <span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
                                        <span class="wr_file_txt upload_area">사진</span>
-                                      <!-- <a href=""><img src="/publ/images/contents/textarea_text.png" alt="湲  옄  꽕 젙" class="wr_font_ico"></a> -->
                                     </div>
                                       <button id="save_btn" class="active_btn upload_area" type="button" onclick="save()">저장</button>
-                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none">수정</button>
+                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none"
+                                         data-toggle="modal" data-target="#editModal">수정</button>
                                    </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
+                    
+              <!-- Delete Modal 삭제전 확인 모달창 -->
+               <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                 <div class="modal-dialog" role="document">
+                   <div class="modal-content">
+                     <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                       </button>
+                     </div>
+                     <div class="modal-body">
+                             	게시물을 정말 삭제하시겠습니까?
+                     </div>
+                     <div class="modal-footer">
+                        <input type="hidden" class="detail-id"/>
+                        <button id="modal-delete" type="button" class="btn btn-primary">삭제</button>
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               
+               <!-- Edit Modal 수정전 확인 모달창 -->
+               <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                 <div class="modal-dialog" role="document">
+                   <div class="modal-content">
+                     <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                       </button>
+                     </div>
+                     <div class="modal-body">
+                             	게시물을 정말 수정하시겠습니까?
+                     </div>
+                     <div class="modal-footer">
+                        <input type="hidden" class="detail-id"/>
+                        <button id="modal-edit" class="active_btn" type="button">수정</button>
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
                    
-                   <ul class="pagination">
-                      <li class="disabled">
-                        <a href="#" aria-label="First">
-                            <span aria-hidden="true">First</span>
-                        </a>
-                    </li>
-                       <li class="disabled">
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">PRE</span>
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">Next</span>
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a href="#" aria-label="Last">
-                            <span aria-hidden="true">Last</span>
-                        </a>
-                    </li>
-                   </ul>
-                   
-                   
-                </div>
-                
+       </div>
                 
 <script>
 
-  // 페이징 구현 https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/ 
-
+function getId(id){
+   $('#modal-delete').attr("onclick", "deletememo("+id+")");
+}
+  
 // 5.15추가 업로드 버튼 클릭시 file 업로드 기능수행
 var inputBtn = document.querySelector('.upload-btn');
 var realInput = document.querySelector('#uploadfile');
@@ -179,14 +204,13 @@ inputBtn.addEventListener('click',()=>{
    realInput.click();
 });
 
-/////////////// 5.15 사진업로드 추가
+// 5.15 사진업로드 추가
 $('#uploadfile').on('change', previewFile);
 var sel_files= [];
 
 function previewFile(e){
    var files = e.target.files;
    var fileArr = Array.prototype.slice.call(files);
-   //var imgwidth = 200;
    
    var imgidx = $('#imgePreview > .images').size();
    
@@ -216,6 +240,7 @@ function previewFile(e){
 // 이미지 하나씩 지우기
 function delImg(index){
    console.log("delImg: "+index);
+   alert("삭제됩니다.");
    sel_files.splice(index, 1);
    var img_class= ".img_"+ index;
    $(img_class).remove();
@@ -260,7 +285,7 @@ function save(){
                if(data.code==1){
                   $("#write_memo").val("");
                   $("#uploadfile").val("");
-                  $(".sidenav").hide();
+                  $(".sidenav").fadeOut(500);
                 }else{
                     alert(data.message);
                 }
@@ -272,21 +297,25 @@ function save(){
 
 // 수정버튼
 function editmemo(id){
-	var memo = $("#detail_memo"+id).html();
-	
-	$('#save_btn').hide();
-	$("#write_memo").val(memo);
-	$("#editsave_btn").show();
-	$("#editsave_btn").attr("onclick","editsave("+id+")");
+   var memo = $("#detail_memo"+id).html();
+   
+   $('#save_btn').hide();
+   $("#write_memo").val(memo);
+   $("#editsave_btn").show();
+   $("#editsave_btn").attr("onclick","confirmEdit("+id+")");
+}
+
+function confirmEdit(id){
+   $("#modal-edit").attr("onclick","editsave("+id+")");
 }
 
 // 수정사항 저장
 function editsave(id){
-	let moimBoard = {};
-	moimBoard.memo = $("#write_memo").val();
-	
-	$.ajax({
-		url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
+   let moimBoard = {};
+   moimBoard.memo = $("#write_memo").val();
+   
+   $.ajax({
+      url : '/moimDetail/moimTodoList/updateModalBoard/'+id,
         type:'PUT',
         contentType: 'application/json; charset=UTF-8',
         processData: false,
@@ -294,52 +323,143 @@ function editsave(id){
         data:JSON.stringify(moimBoard),
         success:function(data){
             if(data.code == 1){
-                alert(data.message);
-                $('#save_btn').show();
                 $('#editsave_btn').hide();
-                $(".sidenav").hide(); 
+                $('#editModal').fadeOut(300);
+                $(".sidenav").fadeOut(500);
             }else{
                 alert(data.message);
             }
         },
         error:function(e){
-      	  alert(e);
+           alert(e);
         }
     });
 }
 
-// 삭제
+// board 삭제
 function deletememo(id){
-	 $.ajax({
+   //var id = $('.detail-id').val();
+    $.ajax({
          url : '/moimDetail/moimTodoList/deleteModalBoard/'+id, 
          type : "DELETE",
          processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
          contentType: false,
-//         data: baseResponse,
-          success:function(data){
+         success:function(data){
             if(data.code==1){
-            	$("#detail_view"+id).parent('li').remove();
-            	$("#detail_view"+id).parent('.detail_rows').remove();
-            	$("#detail_view"+id).remove();
+               $("#detail_view"+id).parent('li').remove();
+               $("#detail_view"+id).parent('.detail_rows').remove();
+               $("#detail_view"+id).remove(300);
+               $('#delModal').fadeOut(300);
            }else{
               alert(data.message);
            }
           },
           error:function(e){
-        	  alert(e);
+             alert(e);
           }
       });
 }
 
-/* var detail_veiw = $('.detail_view_inner');
-var $maxHeight, $scrollTop, detailScrollHeight, color;
-detail_veiw.on('scroll', function(e){
-   $maxHeight = $(this).height();
-   $scrollTop = $(this).scrollTop();
-   detailScrollHeight = this.scrollHeight;
-   //console.log($maxHeight + " "+ $scrollTop+ " "+ detailScrollHeight);
+// sleep 적용
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// 무한스크롤 컨텐츠 생성
+async function moreContents(){
+	// 0.3ms sleep	
+	await sleep(300);
+	
+	var no= $('#todoid').val();
+	// 페이지 데이터를 넘겨준다.
+	var param = "pagenum="+page;
+	
+	$.ajax({
+  		url: '/moimDetail/moimTodoList/boardMore/'+no,
+  		contentType: "application/json; charset=utf-8",
+  		dataType:'json',
+  		data: param,
+  		type:'GET',
+  		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
+  		success:function(data){
+  			if(data.code==1){
+	  			var boardLists = data.moimBoardList;
+	  			console.log('boardList length : '+boardLists.length);
+	  			var fid = 0;
+	  			if(boardLists.length<1){
+	  				return;
+	  			}
+  				var sessionId = data.peopleid;
+	  			
+	  			var imgsrc= '/publ/images/contents/profile_thumb.png';
+	  			
+	  			var html = "";
+	  			for(var i=0; i<boardLists.length; i++){
+	  				var board = boardLists[i];
+	  				var filelist = board.moimBoardfile;
+	  				// 이미지 경로 
+		  			if(board.people.imageName!=null){
+		  				imgsrc = '/getMoimImage/'+board.people.imageName;
+		  			}
+	  				// html 생성
+		  			html = makeMore(sessionId, board, filelist, imgsrc);
+	  			}
+	  			
+	  			$("#sidebox .detail_rows:last").after(html);
+  			}else{
+  				alert('실패 : '+data.code+' / '+data.message);
+  			}
+  		}, error:function(e){
+			alert(e)
+        }
+	});
+}
+
+// 더보기 html 생성
+function makeMore(sessionId, board, filelist, imgsrc){
+	var html='';
+	html+= '<ul class="detail_rows">'
+	html+= '<li id=detail_view'+board.id+'>'
+	html+='<div class="wr_info">'
+	html+='<div class="thumb">'
+	html+='<a><img src="'+imgsrc+'"/></a>'
+	html+='<span class="wr_name" style="margin-left: 10px;">'+board.people.name+'</span>'
+	html+='</div>';
+	if(board.people.id==sessionId){
+		html+='<div class="buttons">'
+		html+='<button id="edit_btn" type="button" onclick="'+editmemo(board.id)+'" class="btn btn-primary">수정</button>'
+		html+='<button id="del_btn" type="button" th:onclick="'+getId(board.id)+'" class="btn btn-primary" data-toggle="modal" data-target="#delModal">삭제</button>'
+		html+='</div>'
+	}
+	html+='</div>'
+	html+='<div class="wr_conts_area">'
+	html+='<div id="detail_memo'+board.id+'" class="wr_conts_memo">'+board.memo+'</div>'
+	if(filelist.length>0){
+		html+='<div>'
+		for(var image; image<filelist.length; image++){
+			html+='<div class="wr_conts">'
+			html+='<img src="/getMoimImage/'+image.filename+'" width="550"/>'
+			html+='</div>'
+		}
+		html+='</div>'}
+	html+='<div class="conts_info"><span class="time"'+board.createDate+'"></span></div>'
+	html+='</div></li></ul>'
+	return html;
+}
+
+var page = 0;
+// 무한 스크롤 구현
+$('.detail_view_inner').on('scroll', function(e){
+   var scrollHeight = this.scrollHeight;
+   var scrollPosition = $(this).height() + $(this).scrollTop();
+   var offset = $('.wr_info').length;
    
-}); */
+   //console.log('scrollPosition: '+scrollPosition+', scrollHeight : '+scrollHeight);
+   if( scrollPosition > scrollHeight - 55 ){
+	   page++;
+       moreContents();
+   }
+});
 
 
 </script>              

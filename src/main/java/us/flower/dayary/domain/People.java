@@ -103,8 +103,10 @@ public class People extends DateAudit{
     private String birth;
 
 	
-	@Column(name="ACTIVATION")
+	@Column(name="ACTIVATION",columnDefinition = "default 'N'")
 	private String activation;
+	@Column(name="DELETE_YN",nullable=false, columnDefinition = "char(1) default 'N'")
+	private char delete_yn;
 	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "people")
 	@JsonIgnore
 	private List<MoimPeople> moimpeople;
