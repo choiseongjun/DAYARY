@@ -260,18 +260,17 @@ function save(){
    var MoimBoard={};
    MoimBoard.title=$('#planid').val();
    MoimBoard.memo= content;
-   
    let formData = new FormData();
-   var file_len = $('#uploadfile').get(0).files.length;
    
-   for(var x=0; x<file_len; x++){
-      formData.append("File", $('#uploadfile')[0].files[x]);
+   //sel_files[] 안에 파일이 담김(그래서 다중파일첨부가능)-choiseongjun
+   for(var i=0;i<sel_files.length;i++){
+	   formData.append("File", sel_files[i]);
    }
    formData.append('MoimBoard', new Blob([JSON.stringify(MoimBoard)], {
       type: "application/json; charset=UTF-8"
    }));
    
-   $.ajax({
+    $.ajax({
          url:'/moimDetail/moimTodoList/modalWrite/'+moimid+'/'+todoid,
            type:'post',
            enctype: 'multipart/form-data',
@@ -292,7 +291,7 @@ function save(){
            }, error:function(e){
 
            }
-       });
+       }); 
 }
 
 // 수정버튼
