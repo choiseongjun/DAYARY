@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,12 +49,12 @@ public class MoimPeople extends DateAudit{
 	@Column(name = "ID")
 	private long id;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false,fetch = FetchType.LAZY)
 	@JoinColumn(name = "MOIM_ID")
 	@JsonIgnore
 	private Moim moim;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false,fetch = FetchType.LAZY)
 	@JoinColumn(name = "PEOPLE_ID")
 	@JsonIgnore
 	private People people;

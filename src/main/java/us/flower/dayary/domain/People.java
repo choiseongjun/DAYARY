@@ -123,7 +123,7 @@ public class People extends DateAudit{
     @Column
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id", referencedColumnName = "provider_id", nullable = true, updatable = false, unique = true)
     private UserConnection social;
     @Builder
