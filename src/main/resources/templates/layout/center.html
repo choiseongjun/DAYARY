@@ -144,7 +144,8 @@
 										<p><td
 													th:text="${#strings.length(moimList.intro)>10} ? ${#strings.substring(moimList.intro,0,10)+'...'} : ${moimList.intro}"
 													id="moimtitle" /></p>
-										<div class="tag"><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span><span>#해시태그</span></div>
+										<div class="tag"><span>
+														[[${moimList.hashtag}]]</span></div>
 										<div class="percentage">
 											<div class="bar">
 												<div class="active"></div>
