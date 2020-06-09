@@ -61,8 +61,7 @@ public class PeopleServiceImpl implements PeopleService {
 		   try {
 			   message.setFrom(new InternetAddress("choisjjunjun2702@gmail.com"));
 			   message.setSubject("[본인인증]Fruit인증메일","utf-8");
-			   message.setText(new StringBuffer().append("안녕하세요").append(people.getName()).append("님사이트 이용을 위해 히단의 url을 눌러 인증을 진행하세요.")
-					   .append("<a href='http://49.50.173.236/auth/").append(key).append("/").append(people.getEmail()).append("'>메일인증</a>").toString());
+			   message.setContent("안녕하세요.<hr>"+people.getName()+"님 사이트 이용을 위해 히단의 url을 눌러 인증을 진행하세요. <hr><a href='http://www.fruitteams.com/auth/"+key+"/"+people.getEmail()+"'>메일인증</a>", "text/html;charset=utf-8");
 			   message.addRecipient(RecipientType.TO,new InternetAddress(people.getEmail()));
 			   mailSender.send(message);
 			   return key;
@@ -80,8 +79,7 @@ public class PeopleServiceImpl implements PeopleService {
 			   try {
 				   message.setFrom(new InternetAddress("choisjjunjun2702@gmail.com"));
 				   message.setSubject("[임시비밀번호]Fruit임시비밀번호메일","utf-8");
-				   message.setText(new StringBuffer().append("<h2>안녕하세요</h2><h3>").append(people.getName()).append("님</h3> 해당임시비밀번호로 로그인하세요.")
-						   .append("임시비밀번호:").append(key).toString());
+				   message.setContent("<h2>안녕하세요</h2><h3>"+people.getName()+"님</h3> 해당임시비밀번호로 로그인하세요.<hr> 임시비밀번호:"+key,"text/html;charset=utf-8");
 				   message.addRecipient(RecipientType.TO,new InternetAddress(people.getEmail()));
 				   mailSender.send(message);
 				   return key;
