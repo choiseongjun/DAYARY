@@ -24,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import us.flower.dayary.domain.Moim;
 import us.flower.dayary.domain.People;
+import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.VisitCheck;
 import us.flower.dayary.repository.moim.MoimRepository;
@@ -50,13 +51,21 @@ public class HomeController {
 		VisitCheck vo=new VisitCheck();
 		insertVisitor(vo);
 		Page<Moim> moimList = moimService.selectMoimAll(pageable);// 모든 모임리스트 출력한다
+		
 		for(int i=0;i<moimList.getNumberOfElements();i++) {
+			
 			List<ToDoWrite> todowrite =  moimList.getContent().get(i).getTodowrite();
 			double progresstotalSum=0;
 			double progresstotal=0;
 			double progressbefore = 0;
 			double progress = 0;
 			long count = 0;
+			
+			String hashtag="";
+			for(int j=0;j<moimList.getContent().get(i).getMoimtag().size();j++) {
+			Tag tags =moimList.getContent().get(i).getMoimtag().get(j).getTag();
+				hashtag +="#"+tags.getName();
+			}
 			for(ToDoWrite j: todowrite) {
 				Map<String, Object> tempMap = new HashMap<String, Object>();
 				tempMap.put("progress_done", j.getProgress_done());
@@ -66,21 +75,19 @@ public class HomeController {
 				progressbefore += j.getProgress();
 				count++;
 			}
-
 			if(count==0) {
 			count = 0;
 			}
-
-		//progress = Double.parseDouble(String.format("%.2f",progressbefore / count));
-
-			double progressPercent=0;
-
-			progressPercent = Math.round(((progresstotalSum/progresstotal)*100)*100)/100.0;
-			moimList.getContent().get(i).setProgresssum((long)progresstotalSum);
-			moimList.getContent().get(i).setProgresstotal((long)progresstotal);
-			moimList.getContent().get(i).setProgresspercent(progressPercent);
-			moimList.getContent().get(i).setTodocount(count);
-			}
+			
+				double progressPercent=0;
+				//progress = Double.parseDouble(String.format("%.2f",progressbefore / count));
+				progressPercent = Math.round(((progresstotalSum/progresstotal)*100)*100)/100.0;
+				moimList.getContent().get(i).setProgresssum((long)progresstotalSum);
+				moimList.getContent().get(i).setProgresstotal((long)progresstotal);
+				moimList.getContent().get(i).setProgresspercent(progressPercent);
+				moimList.getContent().get(i).setTodocount(count);
+				moimList.getContent().get(i).setHashtag(hashtag);
+		}
 		model.addAttribute("moimList", moimList);
 		model.addAttribute("principal",principal);
 		return "main";
