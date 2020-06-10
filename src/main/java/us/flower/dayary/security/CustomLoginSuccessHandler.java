@@ -24,6 +24,11 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         setDefaultTargetUrl(defaultTargetUrl);
     }
     
+    /*
+     * 시큐리티 컨피그에 로그인해야하는 부분은 여기를탐
+     * 인터셉터로 인해 로그인화면 가는 직인데 성공후 작성해야하는 로직
+     * 2020-06-10 choiseongjun
+     * */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
         Authentication authentication) throws ServletException, IOException {
@@ -38,16 +43,24 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 		session.setAttribute("peopleEmail", dbPeople.getEmail());// ID세션저장
 		session.setAttribute("people",dbPeople);
 		
-		
         String redirectUrl = (String) session.getAttribute("savePage");
-        
-        if (redirectUrl != null) {
-            session.removeAttribute("savePage");
-            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
-        } else {
-            super.onAuthenticationSuccess(request, response, authentication);
-        }
-       
+        if (dbPeople.getActivation().equals("Y")&&dbPeople.getDelete_yn()=='N') {	//회원 인증이 되었고 탈퇴회원이 아닐경우
+	        
+        	if (redirectUrl != null) {
+	        	
+	            session.removeAttribute("savePage");
+	            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+	        } else {
+	            super.onAuthenticationSuccess(request, response, authentication);
+	        }
+        	
+        }else if(dbPeople.getDelete_yn()=='Y') {							//탈퇴회원일경우
+			redirectUrl= "/deletedPeople";
+			getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+		} else {
+			redirectUrl= "/authlogout";
+			getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+		}
     }
     
     public static String getClientIp(HttpServletRequest request) {

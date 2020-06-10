@@ -118,6 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
 		.antMatchers("/moimMakeView").access("hasAnyRole('USER')")
 		.antMatchers("/moimlistView/moimdetailView/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
+		.antMatchers("/moimDetail/moimTodoList/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/community/**/write").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/community/**/detail/*").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/myprofileView/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
@@ -128,7 +129,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 successHandler(new CustomLoginSuccessHandler("/")).
                 usernameParameter("email").
                 passwordParameter("password").
-                defaultSuccessUrl("/loginSuccess").
                 successHandler(successHandler()).
 		 and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
 		 .logout()    //logout configuration
