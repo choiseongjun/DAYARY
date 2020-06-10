@@ -65,10 +65,11 @@ function check2(){
 }
 //시작일이 지난날짜인경우
 function check1(){
-
+	
 	var from =new Date($( "#from_date" ).val());
 	var to=new Date($( "#to_date" ).val());
-	if(from<=d){
+	
+	if(from.getDate()<d.getDate() ){
 		alert("이미 지난 날짜입니다.");
 		$( "#from_date" ).val("");
 	}
