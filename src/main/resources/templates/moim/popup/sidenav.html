@@ -479,24 +479,22 @@ var boardList_length = $(".detail_rows").length;
 // 모두 확인했을경우 한번만 html 생성
 var checkMsgCnt = 0;
 
-//async sleep 적용 -- 2020.06.12 제거
-//function sleep(ms) {
-//  return new Promise(resolve => setTimeout(resolve, ms));
-//}
-
 // 무한 스크롤 구현
 $('.detail_view_inner').on('scroll', function(e){
    var scrollHeight = this.scrollHeight;
    var scrollPosition = $(this).height() + $(this).scrollTop();
-   var offset = $('.wr_info').length; // 리스트 마지막 값
-   
-   // page 만큼 현재 뿌려진 리스트 갯수
+  
+   // 현재 뿌려진 리스트 갯수
+   let offset = $('.wr_info').length;
+   // page 만큼 현재 뿌려져야 할 리스트 갯수
    let loaded_cnt = (page-1)*5 + boardList_length;
    
    console.log("offset: "+ offset+" page : "+ page + ", boardList_length: "+ boardList_length);
    console.log('scrollPosition: '+scrollPosition+', scrollHeight-60 : '+ (scrollHeight-60));
    
+   // 스크롤이 바닥에 닿도록 계산
    if( scrollPosition > (scrollHeight - 60) ){
+	   // 현재뿌려진 리스트갯수와 뿌려져야할 리스트 갯수가 같을 때만 page++
 	   if(offset == loaded_cnt){
 		   page++;
 	   }
