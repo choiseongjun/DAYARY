@@ -83,6 +83,7 @@ div .images:hover{
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
                        <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
+                       <input th:value="${#lists.size(detailView)}" id="board_len">
                        
                         <span th:text="${todo.plan_list}"></span> 
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="" class="sidenav_close"></a>
@@ -135,9 +136,16 @@ div .images:hover{
                                        <span class="wr_file_ico upload_area"><img src="/publ/images/contents/textarea_file.png"></span>
                                        <span class="wr_file_txt upload_area">사진</span>
                                     </div>
-                                      <button id="save_btn" class="active_btn upload_area" type="button" onclick="save()">저장</button>
-                                      <button id="editsave_btn" class="active_btn" type="button" style="display: none"
-                                         data-toggle="modal" data-target="#editModal">수정</button>
+                                      <button id="save_btn" class="active_btn upload_area" type="button" 
+                                      	onclick="save()"  style="right:0;">저장</button>
+                                      <div style="">
+	                                      <button id="editsave_btn" class="active_btn" type="button"
+	                                         data-toggle="modal" data-target="#editModal" 
+	                                         style="display: none; right:90px; width: 80px">수정</button>
+	                                      <button id="editcancle_btn" class="active_btn" type="button" 
+	                                      	style="display: none; right:0; width: 80px"
+	                                      	onclick="clickEditCancle()">취소</button>
+                                      </div>
                                    </div>
                                 </div>
                             </div>
@@ -147,7 +155,7 @@ div .images:hover{
                     
               <!-- Delete Modal 삭제전 확인 모달창 -->
                <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                 <div class="modal-dialog" role="document">
+                 <div class="modal-dialog" role="document">	
                    <div class="modal-content">
                      <div class="modal-header">
                        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
@@ -172,7 +180,7 @@ div .images:hover{
                  <div class="modal-dialog" role="document">
                    <div class="modal-content">
                      <div class="modal-header">
-                       <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                       <h5 class="modal-title" id="exampleModalLabel">게시물 수정</h5>
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                        </button>
@@ -182,7 +190,7 @@ div .images:hover{
                      </div>
                      <div class="modal-footer">
                         <input type="hidden" class="detail-id"/>
-                        <button id="modal-edit" class="active_btn" type="button">수정</button>
+                        <button id="modal-edit" class="btn btn-primary" type="button">수정</button>
                          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                      </div>
                    </div>
@@ -301,7 +309,17 @@ function editmemo(id){
    $('#save_btn').hide();
    $("#write_memo").val(memo);
    $("#editsave_btn").show();
+   $("#editcancle_btn").show();
    $("#editsave_btn").attr("onclick","confirmEdit("+id+")");
+   $(".detail_write").css('background','#cbd7d7');
+}
+
+function clickEditCancle(){
+   $("#editsave_btn").hide();
+   $("#editcancle_btn").hide();
+	$('#save_btn').show();
+   $("#write_memo").val('');
+   $(".detail_write").css('background','#dfe7e7');
 }
 
 function confirmEdit(id){
@@ -324,7 +342,9 @@ function editsave(id){
             if(data.code == 1){
                 $('#editsave_btn').hide();
                 $('#editModal').fadeOut(300);
+                $('.modal-backdrop').fadeOut(300);
                 $(".sidenav").fadeOut(500);
+                $(".detail_write").css('background','#dfe7e7');
             }else{
                 alert(data.message);
             }
@@ -348,7 +368,9 @@ function deletememo(id){
                $("#detail_view"+id).parent('li').remove();
                $("#detail_view"+id).parent('.detail_rows').remove();
                $("#detail_view"+id).remove(300);
+               $('.modal-backdrop').removeClass('show',500);
                $('#delModal').fadeOut(300);
+               $('.modal-backdrop').fadeOut(300);
            }else{
               alert(data.message);
            }
@@ -359,15 +381,9 @@ function deletememo(id){
       });
 }
 
-// sleep 적용
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
+var hasmore = true;
 // 무한스크롤 컨텐츠 생성
-async function moreContents(){
-	// 0.3ms sleep	
-	await sleep(300);
+function moreContents(){
 	
 	var no= $('#todoid').val();
 	// 페이지 데이터를 넘겨준다.
@@ -382,17 +398,20 @@ async function moreContents(){
   		processData: false, //데이터를 쿼리 문자열로 변환하는 jQuery 형식 방지
   		success:function(data){
   			if(data.code==1){
+  				$('.loading').hide();
+	  			var html = "";
 	  			var boardLists = data.moimBoardList;
 	  			console.log('boardList length : '+boardLists.length);
-	  			var fid = 0;
 	  			if(boardLists.length<1){
+	  				console.log(">>> no action, page"+page);
+	  				hasmore = false;
 	  				return;
 	  			}
+	  			console.log(">>>>>> ADD !");
   				var sessionId = data.peopleid;
 	  			
 	  			var imgsrc= '/publ/images/contents/profile_thumb.png';
 	  			
-	  			var html = "";
 	  			for(var i=0; i<boardLists.length; i++){
 	  				var board = boardLists[i];
 	  				var filelist = board.moimBoardfile;
@@ -401,6 +420,7 @@ async function moreContents(){
 		  				imgsrc = '/getMoimImage/'+board.people.imageName;
 		  			}
 	  				// html 생성
+	  				console.log("board.id : "+ board.id);
 		  			html = makeMore(sessionId, board, filelist, imgsrc);
 	  			}
 	  			
@@ -418,7 +438,7 @@ async function moreContents(){
 function makeMore(sessionId, board, filelist, imgsrc){
 	var html='';
 	html+= '<ul class="detail_rows">'
-	html+= '<li id=detail_view'+board.id+'>'
+	html+= '<li id="detail_view'+board.id+'">'
 	html+='<div class="wr_info">'
 	html+='<div class="thumb">'
 	html+='<a><img src="'+imgsrc+'"/></a>'
@@ -426,8 +446,8 @@ function makeMore(sessionId, board, filelist, imgsrc){
 	html+='</div>';
 	if(board.people.id==sessionId){
 		html+='<div class="buttons">'
-		html+='<button id="edit_btn" type="button" onclick="'+editmemo(board.id)+'" class="btn btn-primary">수정</button>'
-		html+='<button id="del_btn" type="button" th:onclick="'+getId(board.id)+'" class="btn btn-primary" data-toggle="modal" data-target="#delModal">삭제</button>'
+		html+='<button id="edit_btn" type="button" onclick="editmemo('+board.id+')" class="btn btn-primary" style="margin-right: 5px;">수정</button>'
+		html+='<button id="del_btn" type="button" onclick="getId('+board.id+')" class="btn btn-primary" data-toggle="modal" data-target="#delModal">삭제</button>'
 		html+='</div>'
 	}
 	html+='</div>'
@@ -446,18 +466,44 @@ function makeMore(sessionId, board, filelist, imgsrc){
 	return html;
 }
 
+
+// [start] 무한스크롤 관련
 var page = 0;
+
+// 모두 확인했을경우 한번만 html 생성
+var checkMsgCnt = 0;
+
+//async sleep 적용
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // 무한 스크롤 구현
-$('.detail_view_inner').on('scroll', function(e){
+$('.detail_view_inner').on('scroll', async function(e){
    var scrollHeight = this.scrollHeight;
    var scrollPosition = $(this).height() + $(this).scrollTop();
    var offset = $('.wr_info').length;
+   var boardLen = $("#board_len").val();
+   console.log("boardLen : "+boardLen +" offset: "+ offset);
    
-   //console.log('scrollPosition: '+scrollPosition+', scrollHeight : '+scrollHeight);
-   if( scrollPosition > scrollHeight - 55 ){
-	   page++;
-       moreContents();
+   console.log('scrollPosition: '+scrollPosition+', scrollHeight-60 : '+ (scrollHeight-60));
+   if( scrollPosition > (scrollHeight - 60) ){
+	   console.log("page >> "+ page);
+	   if(page >= 0){page++;}
+	   if(page>1 && hasmore){
+		   let isLoad = '<div class="loading">====== 로딩중  ======</div>';
+		   $("#sidebox .detail_rows:last").after(isLoad);
+	       moreContents();
+	   }else if(!hasmore){
+		   if(checkMsgCnt==0){
+			   checkMsgCnt++;
+			   let checkAll = '<div class="checkAll">====== 컨텐츠를 모두 확인  ======</div>';
+			   $("#sidebox .detail_rows:last").after(checkAll);
+		   }
+	   }
    }
+// 0.5ms sleep	?? 체크필요
+   //await sleep(100);
 });
 
 

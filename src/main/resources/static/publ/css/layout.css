@@ -145,7 +145,7 @@ body{font-weight:300;color:#333}
 .sidenav .detail_header{position:relative;padding:20px 150px;border-bottom:1px solid #05DCBD;font-family:Noto Sans KR;font-style:normal;font-weight:bold;font-size:20px;line-height:1.5;text-align:center;color:#000000}
 .sidenav .detail_header .sidenav_close{position:absolute;top:26.65px;right:24.82px}
 .sidenav .detail_view{position: absolute; height: 100%}
-.sidenav .detail_view_inner{height:54%; padding:27px 26px;overflow-y:auto;overflow-x:hidden}
+.sidenav .detail_view_inner{height:52.5%; padding:27px 26px;overflow-y:auto;overflow-x:hidden}
 @media all and (min-height:950px) {.sidenav .detail_view_inner{height:65%;}}
 .sidenav .detail_view .wr_info{font-family:Noto Sans KR;font-style:normal;font-weight:500;font-size:19px;display:flex;align-items:center;color:#000000}
 .sidenav .detail_view .wr_info .thumb{float:left;width:100%;height:40px;overflow:hidden;border-radius:20px;margin-right:11.2px}
@@ -162,7 +162,7 @@ body{font-weight:300;color:#333}
 .sidenav .detail_write .thumb img{width:52px;height:52px}
 .sidenav .detail_write .write_area{position:relative;width:100%;height:auto;float:left;border-radius:3px; }
 .sidenav .detail_write .write_area textarea{width:100%;height:109px;padding:11px 13px;box-sizing:border-box;border:none;border-radius:3px;outline:none;resize:none}
-.sidenav .detail_write .write_area .active_btn {position:absolute;right:0;bottom:7px;width:113px;height:33px;line-height:33px;background:#03D2B4;border-radius:5px;font-family:Noto Sans KR;font-weight:bold;font-size:17px;text-align:center;color:#FFFFFF;outline:none;border:none;box-shadow:none;cursor:pointer}
+.sidenav .detail_write .write_area .active_btn {position:absolute;bottom:7px;width:113px;height:33px;line-height:33px;background:#03D2B4;border-radius:5px;font-family:Noto Sans KR;font-weight:bold;font-size:17px;text-align:center;color:#FFFFFF;outline:none;border:none;box-shadow:none;cursor:pointer}
 .sidenav .detail_write .write_area images{position:relative;bottom:16px}
 .sidenav .detail_write .write_area img.wr_font_ico{left:13px}
 .sidenav .detail_write .write_area img.wr_file_ico{left:50px}
