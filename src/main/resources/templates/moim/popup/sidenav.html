@@ -74,6 +74,12 @@ div .images:hover{
    margin-top: 20px;
    word-break: break-all;
 }
+
+div .detail_rows{
+	margin-bottom: 40px;
+    padding: 20px 0px;
+    border-bottom: 1px solid #c3c3c3;
+}
 </style>
 
 
@@ -83,7 +89,6 @@ div .images:hover{
                        <input th:value="${moimid}" type="hidden" id="moimid"/>
                        <input th:value="${todo.id}" type="hidden" id="todoid"/>
                        <input th:value="${todo.plan_list}" type="hidden" id="planid"/>
-                       <input th:value="${#lists.size(detailView)}" id="board_len">
                        
                         <span th:text="${todo.plan_list}"></span> 
                         <a href="javascript:void(0)" onclick="fadeOutClass('sidenav')"><img src="/publ/images/contents/close_x.png" alt="" class="sidenav_close"></a>
@@ -118,7 +123,6 @@ div .images:hover{
                                        </div>
                                     </li>
                                 </ul>
-                                <div class="detail_rows"></div>
                             </div>
                         </div>
                         <div class="detail_write">
@@ -402,6 +406,8 @@ function moreContents(){
 	  			var html = "";
 	  			var boardLists = data.moimBoardList;
 	  			console.log('boardList length : '+boardLists.length);
+	  			boardList_length = boardLists.length;
+	  			
 	  			if(boardLists.length<1){
 	  				console.log(">>> no action, page"+page);
 	  				hasmore = false;
@@ -420,11 +426,10 @@ function moreContents(){
 		  				imgsrc = '/getMoimImage/'+board.people.imageName;
 		  			}
 	  				// html 생성
-	  				console.log("board.id : "+ board.id);
 		  			html = makeMore(sessionId, board, filelist, imgsrc);
+	  				$("#sidebox .detail_rows:last").after(html);
 	  			}
 	  			
-	  			$("#sidebox .detail_rows:last").after(html);
   			}else{
   				alert('실패 : '+data.code+' / '+data.message);
   			}
@@ -436,6 +441,7 @@ function moreContents(){
 
 // 더보기 html 생성
 function makeMore(sessionId, board, filelist, imgsrc){
+	console.log("board.id : "+ board.id);
 	var html='';
 	html+= '<ul class="detail_rows">'
 	html+= '<li id="detail_view'+board.id+'">'
@@ -468,29 +474,34 @@ function makeMore(sessionId, board, filelist, imgsrc){
 
 
 // [start] 무한스크롤 관련
-var page = 0;
-
+var page = 1;
+var boardList_length = $(".detail_rows").length;
 // 모두 확인했을경우 한번만 html 생성
 var checkMsgCnt = 0;
 
-//async sleep 적용
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+//async sleep 적용 -- 2020.06.12 제거
+//function sleep(ms) {
+//  return new Promise(resolve => setTimeout(resolve, ms));
+//}
 
 // 무한 스크롤 구현
-$('.detail_view_inner').on('scroll', async function(e){
+$('.detail_view_inner').on('scroll', function(e){
    var scrollHeight = this.scrollHeight;
    var scrollPosition = $(this).height() + $(this).scrollTop();
-   var offset = $('.wr_info').length;
-   var boardLen = $("#board_len").val();
-   console.log("boardLen : "+boardLen +" offset: "+ offset);
+   var offset = $('.wr_info').length; // 리스트 마지막 값
    
+   // page 만큼 현재 뿌려진 리스트 갯수
+   let loaded_cnt = (page-1)*5 + boardList_length;
+   
+   console.log("offset: "+ offset+" page : "+ page + ", boardList_length: "+ boardList_length);
    console.log('scrollPosition: '+scrollPosition+', scrollHeight-60 : '+ (scrollHeight-60));
+   
    if( scrollPosition > (scrollHeight - 60) ){
-	   console.log("page >> "+ page);
-	   if(page >= 0){page++;}
-	   if(page>1 && hasmore){
+	   if(offset == loaded_cnt){
+		   page++;
+	   }
+	   
+	   if(page>=1 && hasmore){
 		   let isLoad = '<div class="loading">====== 로딩중  ======</div>';
 		   $("#sidebox .detail_rows:last").after(isLoad);
 	       moreContents();
@@ -502,8 +513,6 @@ $('.detail_view_inner').on('scroll', async function(e){
 		   }
 	   }
    }
-// 0.5ms sleep	?? 체크필요
-   //await sleep(100);
 });
 
 
