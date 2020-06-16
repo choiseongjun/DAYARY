@@ -312,10 +312,12 @@ public void writeBoard(MultipartFile[] file,MoimBoard board,long no,String id, l
 	      for(int i=0;i< list.size();i++) {
 	         ToDoWrite todo=list.get(i);
 	         Date endDate= (todo.getTo_date2()==null)?todo.getTo_date():todo.getTo_date2();
-	         if(date.compareTo(endDate)>0&&todo.getProgress()!=100) {
-	            todo.setStatus("Suspend");
+	         if(endDate!=null) {
+		         if(date.compareTo(endDate)>0&&todo.getProgress()!=100) {
+		            todo.setStatus("Suspend");
+		         }
+		         toDowriteRepository.save(todo);
 	         }
-	         toDowriteRepository.save(todo);
 	      }
 	}
 	@Override
