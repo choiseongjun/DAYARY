@@ -413,7 +413,8 @@ function moreContents(){
 	  				hasmore = false;
 	  				return;
 	  			}
-	  			console.log(">>>>>> ADD !");
+				
+	  			console.log(">>> ADD CONTENTS !");
   				var sessionId = data.peopleid;
 	  			
 	  			var imgsrc= '/publ/images/contents/profile_thumb.png';
@@ -475,6 +476,7 @@ function makeMore(sessionId, board, filelist, imgsrc){
 
 // [start] 무한스크롤 관련
 var page = 1;
+var nextPage =0;
 var boardList_length = $(".detail_rows").length;
 // 모두 확인했을경우 한번만 html 생성
 var checkMsgCnt = 0;
@@ -489,17 +491,18 @@ $('.detail_view_inner').on('scroll', function(e){
    // page 만큼 현재 뿌려져야 할 리스트 갯수
    let loaded_cnt = (page-1)*5 + boardList_length;
    
-   console.log("offset: "+ offset+" page : "+ page + ", boardList_length: "+ boardList_length);
-   console.log('scrollPosition: '+scrollPosition+', scrollHeight-60 : '+ (scrollHeight-60));
-   
    // 스크롤이 바닥에 닿도록 계산
    if( scrollPosition > (scrollHeight - 60) ){
+	   console.log("page: "+page+" offset: "+offset+" loaded_cnt: "+loaded_cnt);
+	   console.log("--------------------------------------------")
 	   // 현재뿌려진 리스트갯수와 뿌려져야할 리스트 갯수가 같을 때만 page++
 	   if(offset == loaded_cnt){
 		   page++;
 	   }
 	   
-	   if(page>=1 && hasmore){
+	   // 같은 페이지 중복호출 막기 nextPage!=page
+	   if(page>=1 && nextPage!=page && hasmore){
+		   nextPage = page 
 		   let isLoad = '<div class="loading">====== 로딩중  ======</div>';
 		   $("#sidebox .detail_rows:last").after(isLoad);
 	       moreContents();
