@@ -1,9 +1,9 @@
 # DAYARY
-개발환경
-language:Java1.8
-framework:spring boot 2.1.x  and gradle
-orm:JPA
-view:thymeleaf
+개발환경<br>
+language:Java1.8<br>
+framework:spring boot 2.1.x  and gradle<br>
+orm:JPA<br>
+view:thymeleaf<br>
 
 
 주제:
