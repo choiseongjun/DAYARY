@@ -86,8 +86,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private Filter ssoFilter() {
         CompositeFilter filter = new CompositeFilter();
         List<Filter> filters = new ArrayList<>();
-        filters.add(ssoFilter(google(), new GoogleOAuth2ClientAuthenticationProcessingFilter(socialService)));
-        filters.add(ssoFilter(facebook(), new FacebookOAuth2ClientAuthenticationProcessingFilter(socialService)));
+//        filters.add(ssoFilter(google(), new GoogleOAuth2ClientAuthenticationProcessingFilter(socialService)));
+//        filters.add(ssoFilter(facebook(), new FacebookOAuth2ClientAuthenticationProcessingFilter(socialService)));
         filter.setFilters(filters);
         return filter;
     }
@@ -122,6 +122,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/community/**/write").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/community/**/detail/*").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
 		.antMatchers("/myprofileView/**").access("hasAnyRole('USER') or hasAnyRole('ADMIN')")
+		.antMatchers("/google").hasAuthority("")
+		.and().oauth2Login()
+		.authorizationEndpoint()
+        .baseUri("/oauth2/authorization/google")
+        .and()
+		.defaultSuccessUrl("/test")
 		.and().formLogin().  //login configuration
                 loginPage("/signinView").
                 failureUrl("/loginerror").
@@ -145,23 +151,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
-	 @Bean
-	 public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-	     FilterRegistrationBean registration = new FilterRegistrationBean();
-	     registration.setFilter(filter);
-	     registration.setOrder(-100);
-	     return registration;
-	 }
-	@Bean
-    @ConfigurationProperties("facebook")
-    public ClientResources facebook() {
-        return new ClientResources();
-    }
-
-    @Bean
-    @ConfigurationProperties("google")
-    public ClientResources google() {
-        return new ClientResources();
-    }
-    
+//	 @Bean
+//	 public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+//	     FilterRegistrationBean registration = new FilterRegistrationBean();
+//	     registration.setFilter(filter);
+//	     registration.setOrder(-100);
+//	     return registration;
+//	 }
+//	@Bean
+//    @ConfigurationProperties("facebook")
+//    public ClientResources facebook() {
+//        return new ClientResources();
+//    }
+//
+//    @Bean
+//    @ConfigurationProperties("google")
+//    public ClientResources google() {
+//        return new ClientResources();
+//    }
+//    
 }

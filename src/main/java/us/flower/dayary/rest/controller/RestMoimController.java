@@ -203,6 +203,9 @@ public class RestMoimController {
 			@RequestPart(name = "file", required = false) MultipartFile file,@RequestHeader (name="Authorization", required=false) String token) {
 		Map<String, Object> returnData = new HashMap<String, Object>();
 		
+		System.out.println(token);
+		System.out.println(moim.toString());
+		System.out.println(file.getOriginalFilename());
 		if(tokenProvider.validateToken(token)) {
 			Long PeopleNo=tokenProvider.getUserIdFromJWT(token);
 			Optional<People> people = peopleRepository.findById(PeopleNo);

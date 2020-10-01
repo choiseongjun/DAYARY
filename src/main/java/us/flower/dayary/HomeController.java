@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import us.flower.dayary.domain.Moim;
-import us.flower.dayary.domain.People;
 import us.flower.dayary.domain.Tag;
 import us.flower.dayary.domain.ToDoWrite;
 import us.flower.dayary.domain.VisitCheck;
@@ -39,17 +38,21 @@ public class HomeController {
 	MoimRepository moimRepository;
 	@Autowired
 	moimService moimService;
-	
+	@RequestMapping("/aaaa")
+	public Principal Homedd(Principal principal) {
+		System.out.println("principal====="+principal);
+		return principal;
+	}
 	@RequestMapping("/")
-	public String Home(@PageableDefault Pageable pageable,Model model,Principal principal) throws Exception {
+	public String Home(@PageableDefault Pageable pageable,Model model,Principal principal
+			,Authentication authentication) throws Exception {
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 		pageable = PageRequest.of(page, 2, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 //		Optional<Moim> moim = moimRepository.findById((long) 48);
 //		return moim.get();
-
+//		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//			System.out.println("getPassword@@!#"+userDetails.getUsername());
 		
-		VisitCheck vo=new VisitCheck();
-		insertVisitor(vo);
 		Page<Moim> moimList = moimService.selectMoimAll(pageable);// 모든 모임리스트 출력한다
 		
 		for(int i=0;i<moimList.getNumberOfElements();i++) {
@@ -89,7 +92,6 @@ public class HomeController {
 				moimList.getContent().get(i).setHashtag(hashtag);
 		}
 		model.addAttribute("moimList", moimList);
-		model.addAttribute("principal",principal);
 		return "main";
 	}
 	//방문자체크 메서드

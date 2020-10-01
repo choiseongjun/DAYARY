@@ -123,26 +123,9 @@ public class People extends DateAudit{
     @Column
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "provider_id", referencedColumnName = "provider_id", nullable = true, updatable = false, unique = true)
     private UserConnection social;
-    @Builder
-	public People(long id, String email, String password, String name, String photo, String imagePath, String imageName,
-			String imageExtension, String activation, String pincipal, SocialType socialType,UserConnection social) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.photo = photo;
-		this.imagePath = imagePath;
-		this.imageName = imageName;
-		this.imageExtension = imageExtension;
-		this.activation = activation;
-		this.pincipal = pincipal;
-		this.socialType = socialType;
-		this.social = social;
-	}
 
     
     public People(String email,String password,String name,String photo,String activation,String job,String sex,String interests,String introduce,String birth,String sidocode,String sigooncode) {
@@ -159,14 +142,12 @@ public class People extends DateAudit{
     	this.sidocode = sidocode;
     	this.sigooncode = sigooncode;
     }
-    public static People signUp(UserConnection userConnection) {
 
-        return People.builder()
-                .email(userConnection.getEmail())
-                .name(userConnection.getDisplayName())
-                .social(userConnection)
-                .build();
 
-    }
+	public People(int i, String email2, String password2, String name2, String photo2, String activation2, Object sex2,
+			Object interests2, Object introduce2, Object birth2, Object sidocode2, Object sigooncode2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	
 }

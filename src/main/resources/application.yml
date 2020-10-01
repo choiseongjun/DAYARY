@@ -32,7 +32,7 @@ spring:
       url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/fruit"
       #url: "jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/jpatest"
       username: csj2702
-      password: tjdwns2702
+      password: 
   jpa:
         show-sql: false
         hibernate:
@@ -86,8 +86,8 @@ facebook:
 
 google :
   client :
-    clientId : 881218558153-ndr868i68rlofoo4l2gb488ksabi5q23.apps.googleusercontent.com
-    clientSecret: kq6zIo0myJotHK5_0irhtYnW
+    clientId : 
+    clientSecret: 
     accessTokenUri: https://www.googleapis.com/oauth2/v4/token
     userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
     clientAuthenticationScheme: form
@@ -103,7 +103,7 @@ mail:
     host: smtp.gmail.com
     port: 587
     username: fruitteamsup@gmail.com
-    password: tjdwns2702!@
+    password: teamfruit!@
     protocol: smtp
     default-encoding: UTF-8
     smtp: 

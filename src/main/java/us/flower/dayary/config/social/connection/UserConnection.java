@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import us.flower.dayary.config.social.facebook.FacebookUserDetails;
 import us.flower.dayary.config.social.google.GoogleUserDetails;
 
@@ -22,6 +23,7 @@ import us.flower.dayary.config.social.google.GoogleUserDetails;
 @Table(name = "user_connection")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class UserConnection implements Serializable{
 
     /**

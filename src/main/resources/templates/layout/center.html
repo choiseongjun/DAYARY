@@ -22,7 +22,6 @@
 			<p></p>
             <img src="/publ/images/layout/down.png" class="down_icon">
 		</div>
-        [[${principal}]]
         <div class="crew_chart">
         	<div class="crew_chart_bg"></div>
         	<div class="inner_2">
@@ -126,7 +125,7 @@
 					<div class="bottom_box">
 						<div class="grid_item_box">
 						<div class="grid_item add_team"><a href="/moimMakeView"><div class="add_box"><div class="add_cont"><span class="icon"></span>새로운 팀을<br />만들어보세요!</div></div></a></div>
-							<tr th:each="moimList : ${moimList}">
+						 <tr th:each="moimList : ${moimList}">
 							<div class="grid_item card">
 								<a th:href="@{'/moimlistView/moimdetailView/' + ${moimList.id}}">
 									<div class="img_box">
@@ -159,7 +158,7 @@
 									</div>
 								</a>
 							</div>
-							</tr>
+							</tr> 
 						</div>
 					
 					</div>

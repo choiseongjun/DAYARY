@@ -1,5 +1,6 @@
 package us.flower.dayary.controller.moim;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -307,7 +308,7 @@ public class MoimController {
 		
 		return "moim/moimDetail";
 	}
-
+	
 	/**
 	* 모임 리스트 출력(Paging 처리)
 	*
@@ -320,10 +321,12 @@ public class MoimController {
 	@GetMapping("/moimlistView/{commCode}")
 	public String moimListView(@PageableDefault Pageable pageable, HttpSession session, Model model,
 	@RequestParam(required = false) String title, @PathVariable("commCode") String commCode,String status,
-	@RequestParam(required = false) String sido_code, @RequestParam(required = false) String sigoon_code) {
+	@RequestParam(required = false) String sido_code, @RequestParam(required = false) String sigoon_code
+	,Principal principal) {
 
-		
-		
+	model.addAttribute("principal",principal);
+	System.out.println("gdsgsdgsdgsd#@!@$!@$");
+		System.out.println(principal);
 		
 	int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 	pageable = PageRequest.of(page, 9, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다

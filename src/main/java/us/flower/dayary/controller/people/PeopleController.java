@@ -109,7 +109,6 @@ public class PeopleController {
 //			session.setAttribute("peopleName", dbPeople.getName());// 이름세션저장
 //			session.setAttribute("peopleEmail", dbPeople.getEmail());// ID세션저장
 //			session.setAttribute("people",dbPeople);
-		System.out.println("DeleteYN==="+dbPeople.getDelete_yn());
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			return "redirect:/admin/admini";
 			// mav.setViewName("redirect:/admin/admini");
@@ -158,8 +157,6 @@ public class PeopleController {
 					returnData.put("people", dbPeople);
 					returnData.put("code", "1");
 					String jwt = tokenProvider.generateToken(authentication);
-					JwtAuthenticationResponse csj = new JwtAuthenticationResponse(jwt);
-					model.addAttribute("csj", csj);
 					String savePage = (String) session.getAttribute("savePage");
 //					    	RoleName rolename = null;
 //					    	Role roles =new Role();

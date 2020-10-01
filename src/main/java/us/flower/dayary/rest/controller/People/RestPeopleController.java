@@ -27,6 +27,7 @@ import us.flower.dayary.payload.SignUpRequest;
 import us.flower.dayary.repository.people.PeopleRepository;
 import us.flower.dayary.repository.people.RoleRepository;
 import us.flower.dayary.security.JwtTokenProvider;
+import us.flower.dayary.service.people.PeopleService;
 
 @RestController
 public class RestPeopleController {
@@ -37,6 +38,8 @@ public class RestPeopleController {
 	JwtTokenProvider tokenProvider;
 	@Autowired
 	RoleRepository roleRepository;
+	@Autowired
+	PeopleService service;
 	
 	@Autowired
     private TokenGenerator tokenGenerator;
@@ -57,8 +60,9 @@ public class RestPeopleController {
 		try {
 			if (!peopleRepository.existsByEmail(signUpRequest.getEmail())) {
 				// Creating user's account
-				People user = new People(0, signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getName(),
-						signUpRequest.getPhoto(), signUpRequest.getActivation(), null, null, null, null, null, null);
+				People user = new People(signUpRequest.getEmail(), signUpRequest.getPassword(), signUpRequest.getName(),
+						signUpRequest.getPhoto(), signUpRequest.getActivation(), signUpRequest.getJob(),
+						signUpRequest.getSex(), signUpRequest.getInterests(),signUpRequest.getIntroduce(),signUpRequest.getBirth(),signUpRequest.getSidocode(),signUpRequest.getSigooncode());
  
 				user.setPassword(bcrypt.hashpw(user.getPassword()));
 
@@ -69,17 +73,19 @@ public class RestPeopleController {
 
 				
 						
+				String key = service.sendAuthUrlMail(user);
+				user.setActivation(key);
 				People result = peopleRepository.save(user);
-
-				URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{username}")
-						.buildAndExpand(result.getId()).toUri();
+//				URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{username}")
+//						.buildAndExpand(result.getId()).toUri();
 				returnData.put("code", "1");
-				returnData.put("message", "가입완료:)");
+				returnData.put("message", "회원가입이 완료되었습니다. 인증메일을 확인하고 로그인하세요:):)");
 			} else {
 				returnData.put("code", "2");
 				returnData.put("message", "이미 가입 된 아이디입니다:(");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			returnData.put("code", "E3290");
 			returnData.put("message", "잠시 후, 다시 시도해주세요:(");
 		}

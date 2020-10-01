@@ -11,11 +11,13 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import us.flower.dayary.config.social.connection.UserConnection;
 import us.flower.dayary.domain.People;
 import us.flower.dayary.repository.people.PeopleRepository;
 @Service
+@Transactional
 public class PeopleServiceImpl implements PeopleService {
 	 @Autowired
 	 private JavaMailSender mailSender;
@@ -112,7 +114,9 @@ public class PeopleServiceImpl implements PeopleService {
 
 		@Override
 		public People signUp(UserConnection userConnection) {
-			 final People user = People.signUp(userConnection);
+			System.out.println("peopleSErviceImpl====");
+			System.out.println(userConnection);
+			 final People user = null;
 		     return peopleRepository.save(user);
 		}
 

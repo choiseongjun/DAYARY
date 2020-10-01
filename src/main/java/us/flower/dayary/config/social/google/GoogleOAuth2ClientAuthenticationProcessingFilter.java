@@ -32,7 +32,7 @@ public class GoogleOAuth2ClientAuthenticationProcessingFilter extends OAuth2Clie
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         // super.successfulAuthentication(request, response, chain, authResult);
         // Nearly a no-op, but if there is a ClientTokenServices then the token will now be stored
-
+    	
         final OAuth2AccessToken accessToken = restTemplate.getAccessToken();
         final OAuth2Authentication auth = (OAuth2Authentication) authResult;
         final Object details = auth.getUserAuthentication().getDetails();
@@ -42,8 +42,11 @@ public class GoogleOAuth2ClientAuthenticationProcessingFilter extends OAuth2Clie
         final UserConnection userConnection = UserConnection.valueOf(userDetails);
 
         final UsernamePasswordAuthenticationToken authenticationToken = socialService.doAuthentication(userConnection);
+        System.out.println("userConnection#@@#!@#");
+        System.out.println(userConnection.toString());
+       
         super.successfulAuthentication(request, response, chain, authenticationToken);
-
+       
     }
 
 }

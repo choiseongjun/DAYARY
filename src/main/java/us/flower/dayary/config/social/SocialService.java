@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import us.flower.dayary.config.social.connection.UserConnection;
@@ -17,7 +18,7 @@ import us.flower.dayary.domain.People;
 import us.flower.dayary.service.people.PeopleService;
 
 @Component
-@AllArgsConstructor
+@Transactional
 public class SocialService {
 
 	@Autowired
