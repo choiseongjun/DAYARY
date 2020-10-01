@@ -4,15 +4,16 @@ language:Java1.8<br>
 framework:spring boot 2.1.x  and gradle<br>
 orm:JPA<br>
 view:thymeleaf<br>
+database: mariadb
 
 
 주제:
 스터디 및 모임을 찾는 사이트
 
 erd:https://www.erdcloud.com/d/K3yd7YMxYKrprE9L7
-<img src="./IMAGE/erd.png" width="90%"></img>
-<img src="./IMAGE/main.png" width="90%"></img>
-<img src="./IMAGE/list.png" width="90%"></img>
+<img src="src/main/resources/static/introimage/erd.png" width="90%"></img>
+<img src="src/main/resources/static/introimage/main.png" width="90%"></img>
+<img src="src/main/resources/static/introimage/list.png" width="90%"></img>
 
 스프링 시큐리티
 타임리프
@@ -59,5 +60,5 @@ erd:https://www.erdcloud.com/d/K3yd7YMxYKrprE9L7
 6.- [x]좋아요 기능<br />
 7.- [x] 좋아요 기능 취소<br />
 
--알림처리
+-알림처리<br />
 알림처리는 websocket에 stomp로 처리하였음
